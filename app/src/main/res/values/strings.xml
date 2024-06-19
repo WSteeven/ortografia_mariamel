@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Ortografia Mariamel</string>
+    <string name="caratula"> </string>
+    <string name="datos_usuario">Datos</string>
+    <string name="menu">Menu</string>
+    <string name="unidad1">Unidad 1</string>
+    <string name="unidad2">Unidad 2</string>
+    <string name="unidad3">Unidad 3</string>
+    <string name="unidad4">Unidad 4</string>
+    <string name="contenido">Contenido</string>
+    <string name="actividad">Actividad</string>
+    <string name="evaluacion">Evaluación</string>
+    <string name="siguiente">Siguiente</string>
+    <string name="atras">Atrás</string>
+
+</resources>
