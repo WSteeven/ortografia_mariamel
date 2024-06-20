@@ -1,6 +1,7 @@
 package com.example.ortografiamariamel.ui
 
 import androidx.lifecycle.ViewModel
+import com.example.ortografiamariamel.AppScreen
 import com.example.ortografiamariamel.ui.data.AppUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,6 +25,13 @@ class AppViewModel: ViewModel() {
         _uiState.update { currentState->
             currentState.copy(
                 edad = edad,
+            )
+        }
+    }
+    fun setUnidadActual(unidad: AppScreen){
+        _uiState.update { currentState->
+            currentState.copy(
+                menu = unidad,
             )
         }
     }

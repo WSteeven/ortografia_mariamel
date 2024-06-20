@@ -13,9 +13,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -43,6 +47,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.ortografiamariamel.ui.AppViewModel
+import com.example.ortografiamariamel.ui.views.Actividad1
 import com.example.ortografiamariamel.ui.views.DatosJugadorScreen
 import com.example.ortografiamariamel.ui.views.InicioScreen
 import com.example.ortografiamariamel.ui.views.MenuScreen
@@ -63,9 +68,11 @@ enum class AppScreen {
     DatosJugador,
     Menu,
     Unidad1,
-//    Unidad2,
-//    Unidad3,
-//    Unidad4,
+    Actividad1,
+    Evaluacion1,
+    Unidad2,
+    Unidad3,
+    Unidad4,
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -156,7 +163,8 @@ fun App(
 ) {
     // variables
     val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentScreen =AppScreen.valueOf(backStackEntry?.destination?.route ?: AppScreen.Inicio.name)
+    val currentScreen =
+        AppScreen.valueOf(backStackEntry?.destination?.route ?: AppScreen.Inicio.name)
 
 
 
@@ -168,7 +176,7 @@ fun App(
                 puedeNavegarAtras = navController.previousBackStackEntry != null,
                 navigateUp = { navController.navigateUp() })
         },
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) { innerPadding ->
         val uiState by viewModel.uiState.collectAsState()
 
@@ -190,7 +198,6 @@ fun App(
                         .padding(dimensionResource(R.dimen.padding_medium))
                 )
             }
-
             // 2da pantalla
             composable(route = AppScreen.DatosJugador.name) {
                 DatosJugadorScreen(
@@ -201,10 +208,10 @@ fun App(
                     modifier = Modifier
                 )
             }
-
             // 3ra pantalla
             composable(route = AppScreen.Menu.name) {
                 MenuScreen(
+                    viewModel = viewModel,
                     onPrevButtonClicked = {
                         navController.navigateUp()
                     },
@@ -214,20 +221,43 @@ fun App(
                     modifier = Modifier
                 )
             }
-
-            // 3ra pantalla
+            // 4ta pantalla - UNIDAD I
             composable(route = AppScreen.Unidad1.name) {
                 UnidadI(
                     onPrevButtonClicked = {
                         navController.navigateUp()
                     },
                     onNextButtonClicked = {
-                        navController.navigate(AppScreen.Menu.name)
+                        navController.navigate(AppScreen.Actividad1.name)
                     },
                     modifier = Modifier
                 )
             }
-
+            // 5ta pantalla - ACTIVIDAD UNIDAD I
+            composable(route = AppScreen.Actividad1.name) {
+                Actividad1(
+                    viewModel = viewModel,
+                    onPrevButtonClicked = {
+                        navController.navigateUp()
+                    },
+                    onNextButtonClicked = {
+                        navController.navigateUp()
+                    },
+                    modifier = Modifier
+                )
+            }
+            // 6ta pantalla - UNIDAD II
+            composable(route = AppScreen.Unidad2.name) {
+                UnidadI(
+                    onPrevButtonClicked = {
+                        navController.navigateUp()
+                    },
+                    onNextButtonClicked = {
+                        navController.navigate(uiState.menu.name)
+                    },
+                    modifier = Modifier
+                )
+            }
         }
     }
 }
