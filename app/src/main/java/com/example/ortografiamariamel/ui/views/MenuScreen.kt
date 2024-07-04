@@ -51,9 +51,9 @@ fun MenuScreen(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-//                ButtonComponent(onClick = { showButton = !showButton })
+
         Image(
-            painter = painterResource(id = R.drawable.caratula_lengua_literatura),
+            painter = painterResource(id = R.drawable.caratula_libro_literatura),
             contentDescription = null,
             modifier = Modifier.size(300.dp)
         )

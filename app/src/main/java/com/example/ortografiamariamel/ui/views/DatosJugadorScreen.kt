@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
@@ -15,6 +16,7 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -32,11 +34,14 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.ortografiamariamel.AppScreen
 import com.example.ortografiamariamel.R
 import com.example.ortografiamariamel.ui.AppViewModel
+import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 
 
 @Composable
@@ -45,17 +50,21 @@ fun DatosJugadorScreen(
     onNextButtonClicked: () -> Unit,
     modifier: Modifier
 ) {
+    val uiState by viewModel.uiState.collectAsState()
     val imageLogo = painterResource(R.drawable.lapiz8)
-    var playerName by remember { mutableStateOf("") }
+    var playerName by remember { mutableStateOf(uiState.nombreJugador) }
     var sliderValue by remember { mutableFloatStateOf(8f) }
     Column(modifier = modifier) {
-        Image(
-            painter = imageLogo,
-            contentDescription = null,
-            modifier = Modifier
-                .padding(16.dp)
-                .align(alignment = Alignment.CenterHorizontally)
-        )
+        ContinuousSlideAnimation(modifier=Modifier
+            .fillMaxSize(.6f)
+            .align(alignment = Alignment.CenterHorizontally))
+//        Image(
+//            painter = imageLogo,
+//            contentDescription = null,
+//            modifier = Modifier
+//                .padding(16.dp)
+//                .align(alignment = Alignment.CenterHorizontally)
+//        )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = "INGRESA TU NOMBRE",
@@ -69,6 +78,7 @@ fun DatosJugadorScreen(
         TextField(
             value = playerName,
             onValueChange = { playerName = it },
+            singleLine = true,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .border(BorderStroke(width = 2.dp, color = Color(255, 168, 0))),
@@ -80,8 +90,8 @@ fun DatosJugadorScreen(
         Slider(
             value = sliderValue,
             onValueChange = { sliderValue = it },
-            valueRange = 4f..10f,
-            steps = 5,
+            valueRange = 4f..12f,
+            steps = 7,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
         Text(
@@ -102,6 +112,7 @@ fun DatosJugadorScreen(
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(
+            enabled = playerName.isNotEmpty(),
             onClick = {
                 viewModel.setNombreJugador(playerName)
                 viewModel.setEdad(sliderValue.toInt())
@@ -116,6 +127,14 @@ fun DatosJugadorScreen(
         ) {
             Text(text = stringResource(R.string.siguiente), fontSize = 30.sp)
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DatosJugadorPreview() {
+    OrtografiaMariamelTheme {
+        DatosJugadorScreen(viewModel(),{},modifier = Modifier)
     }
 }
 
