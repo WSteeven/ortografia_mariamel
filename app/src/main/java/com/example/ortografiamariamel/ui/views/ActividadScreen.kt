@@ -1,13 +1,19 @@
 package com.example.ortografiamariamel.ui.views
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardElevation
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Snackbar
@@ -15,6 +21,7 @@ import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -34,8 +41,14 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ortografiamariamel.AppScreen
 import com.example.ortografiamariamel.R
+import com.example.ortografiamariamel.model.CardModel
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
+private val companion = Modifier
 
 @Composable
 fun Actividad1(
@@ -45,9 +58,70 @@ fun Actividad1(
     modifier: Modifier = Modifier
 ) {
     val imagen = painterResource(R.drawable.actividad_unidad1)
-    Column(modifier = modifier
-        .padding(top = 16.dp)
-        .padding(horizontal = 8.dp)) {
+    Column(
+        modifier = modifier
+            .padding(top = 16.dp)
+            .padding(horizontal = 8.dp)
+    ) {
+        Text(
+            text = "ACTIVIDAD", fontWeight = FontWeight.Bold, fontSize = 30.sp, modifier = modifier
+                .align(Alignment.CenterHorizontally)
+        )
+        Text(
+            text = "Elija la carta correcta de acuerdo al monosílabo",
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 18.sp,
+            textAlign = TextAlign.Justify,
+            fontFamily = FontFamily.SansSerif,
+            letterSpacing = 1.sp,
+            color = Color(230, 170, 75),
+            modifier = modifier
+                .align(Alignment.CenterHorizontally)
+
+        )
+//        MatchPairsItems(onNextButtonClicked)
+//        SentenceCompletionList(onNextButtonClicked)
+        MemoryGame()
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(dimensionResource(R.dimen.padding_medium)),
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
+            verticalAlignment = Alignment.Bottom
+        ) {
+            OutlinedButton(
+                modifier = Modifier.weight(1f),
+                onClick = onPrevButtonClicked
+            ) {
+                Text(stringResource(R.string.atras))
+            }
+            Button(
+                modifier = Modifier.weight(1f),
+                // the button is enabled when the user makes a selection
+                onClick = {
+                    viewModel.setUnidadActual(AppScreen.Menu)
+                    onNextButtonClicked()
+                }
+            ) {
+                Text(stringResource(R.string.siguiente))
+            }
+        }
+    }
+}
+
+@Composable
+fun Actividad1Old(
+    viewModel: AppViewModel,
+    onPrevButtonClicked: () -> Unit,
+    onNextButtonClicked: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val imagen = painterResource(R.drawable.actividad_unidad1)
+    Column(
+        modifier = modifier
+            .padding(top = 16.dp)
+            .padding(horizontal = 8.dp)
+    ) {
         Text(
             text = "ACTIVIDAD", fontWeight = FontWeight.Bold, fontSize = 30.sp, modifier = modifier
                 .align(Alignment.CenterHorizontally)
@@ -92,9 +166,136 @@ fun Actividad1(
     }
 }
 
+@Composable
+fun MatchPairsItems(onNextButtonClicked: () -> Unit) {
+    CardContent(onClick = { /*TODO*/ })
+}
 
 @Composable
-fun SentenceCompletionList(onNextButtonClicked:()->Unit) {
+fun CardContent(onClick: () -> Unit, modifier: Modifier = Modifier) {
+    var color by remember {
+        mutableStateOf(Color.White)
+    }
+    Card(
+        modifier = Modifier
+            .padding(16.dp)
+            .clickable {
+                color = if (color == Color.White) {
+                    Color.Yellow
+                } else {
+                    Color.White
+                }
+            },
+        colors = CardDefaults.cardColors(containerColor = color),
+        elevation = CardDefaults.cardElevation(2.dp)
+    ) {
+        Box(
+            modifier = Modifier
+        ) {
+            Text(text = "Hola")
+        }
+    }
+}
+
+@Composable
+fun CardItem(
+    card: CardModel,
+    onClick: (CardModel) -> Unit
+) {
+    var backgroundColor = remember {
+        mutableStateOf(Color.White)
+    }
+//    when {
+//        card.isMatched -> Color.Green // Si el par ha sido encontrado
+//        card.isSelected -> Color.Yellow // Si la carta está seleccionada
+//        else -> Color.White // Color por defecto
+//    }
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .clickable {
+
+                onClick(card)
+                backgroundColor = {when{
+                    card.isMatched -> Color.Green
+                    card.isSelected -> Color.Yellow
+                    else -> Color.White
+                }}
+            },
+        colors = CardDefaults.cardColors(containerColor = backgroundColor.value)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(text = card.number.toString() + " " + card.isSelected.toString(), fontSize = 24.sp)
+        }
+    }
+}
+
+@Composable
+fun MemoryGame() {
+    // Lista de cartas en el juego
+    val cards = remember {
+        mutableStateListOf(
+            CardModel(1, 1),
+            CardModel(2, 2),
+            CardModel(3, 1),
+            CardModel(4, 2),
+            CardModel(5, 3),
+            CardModel(6, 3)
+        )
+    }
+
+    // Estado para mantener el id de la última carta seleccionada
+    var lastSelectedCardId by remember { mutableStateOf(-1) }
+
+    // Lógica para manejar el clic en la carta
+    val onCardClick: (CardModel) -> Unit = { clickedCard ->
+        if (!clickedCard.isSelected && !clickedCard.isMatched) {
+            // Marcar la carta como seleccionada
+            clickedCard.isSelected = true
+
+            // Si hay otra carta seleccionada, verificar si hacen match
+            if (lastSelectedCardId != -1) {
+                val lastSelectedCard = cards.find { it.id == lastSelectedCardId }
+                if (lastSelectedCard != null && lastSelectedCard.number == clickedCard.number) {
+                    // Si hacen match, marcar ambas como matched
+                    lastSelectedCard.isMatched = true
+                    clickedCard.isMatched = true
+                } else {
+                    // Si no hacen match, deseleccionar ambas después de un tiempo
+                    GlobalScope.launch {
+                        delay(1000) // Esperar un segundo antes de deseleccionar
+                        lastSelectedCard?.isSelected = false
+                        clickedCard.isSelected = false
+                    }
+                }
+                // Reiniciar el id de la última carta seleccionada
+                lastSelectedCardId = -1
+            } else {
+                // Si no hay otra carta seleccionada, actualizar el id de la última carta seleccionada
+                lastSelectedCardId = clickedCard.id
+            }
+        }
+    }
+
+    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
+        // Mostrar las cartas en una cuadrícula (por ejemplo, en filas de a dos)
+        for (i in cards.indices step 2) {
+            Row {
+                CardItem(card = cards[i], onClick = onCardClick)
+                CardItem(card = cards.getOrNull(i + 1) ?: CardModel(-1, -1), onClick = onCardClick)
+            }
+        }
+    }
+}
+
+
+@Composable
+fun SentenceCompletionList(onNextButtonClicked: () -> Unit) {
     var selectedOption1 by remember { mutableStateOf("") }
     var selectedOption2 by remember { mutableStateOf("") }
     var selectedOption3 by remember { mutableStateOf("") }
