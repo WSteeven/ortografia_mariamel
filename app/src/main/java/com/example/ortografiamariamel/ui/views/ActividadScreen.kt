@@ -1,5 +1,6 @@
 package com.example.ortografiamariamel.ui.views
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -41,26 +42,32 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ortografiamariamel.AppScreen
 import com.example.ortografiamariamel.R
-import com.example.ortografiamariamel.model.CardModel
+import com.example.ortografiamariamel.data.Carta
+
 import com.example.ortografiamariamel.ui.AppViewModel
+import com.example.ortografiamariamel.ui.AppViewModelProvider
+import com.example.ortografiamariamel.ui.game.MatchPairs
+import com.example.ortografiamariamel.ui.navigation.NavigationDestination
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-private val companion = Modifier
-
+object ActividadIDestination : NavigationDestination {
+    override val route = "actividad1"
+    override val title = "Actividad I"
+}
 @Composable
 fun Actividad1(
-    viewModel: AppViewModel,
+    viewModel: AppViewModel = viewModel(factory = AppViewModelProvider.Factory),
     onPrevButtonClicked: () -> Unit,
     onNextButtonClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val imagen = painterResource(R.drawable.actividad_unidad1)
+DrawerState(content = {
     Column(
         modifier = modifier
-            .padding(top = 16.dp)
+            .padding(top = 120.dp)
             .padding(horizontal = 8.dp)
     ) {
         Text(
@@ -77,11 +84,8 @@ fun Actividad1(
             color = Color(230, 170, 75),
             modifier = modifier
                 .align(Alignment.CenterHorizontally)
-
         )
-//        MatchPairsItems(onNextButtonClicked)
-//        SentenceCompletionList(onNextButtonClicked)
-        MemoryGame()
+        MatchPairs()
         Row(
             modifier = modifier
                 .fillMaxWidth()
@@ -107,6 +111,7 @@ fun Actividad1(
             }
         }
     }
+}, modifier = modifier)
 }
 
 @Composable
@@ -199,28 +204,31 @@ fun CardContent(onClick: () -> Unit, modifier: Modifier = Modifier) {
 
 @Composable
 fun CardItem(
-    card: CardModel,
-    onClick: (CardModel) -> Unit
+    card: Carta,
+    onClick: (Carta) -> Unit
 ) {
     var backgroundColor = remember {
         mutableStateOf(Color.White)
     }
-//    when {
-//        card.isMatched -> Color.Green // Si el par ha sido encontrado
-//        card.isSelected -> Color.Yellow // Si la carta está seleccionada
-//        else -> Color.White // Color por defecto
-//    }
+    when {
+        card.isMatched -> Color.Green // Si el par ha sido encontrado
+        card.isSelected -> Color.Yellow // Si la carta está seleccionada
+        else -> Color.White // Color por defecto
+    }
     Card(
-        modifier = Modifier
+        border = BorderStroke(2.dp, Color.Black),
+        modifier = Modifier.fillMaxSize(.4f)
             .padding(8.dp)
             .clickable {
 
                 onClick(card)
-                backgroundColor = {when{
-                    card.isMatched -> Color.Green
-                    card.isSelected -> Color.Yellow
-                    else -> Color.White
-                }}
+                backgroundColor = mutableStateOf(
+                    when {
+                        card.isMatched -> Color.Green
+                        card.isSelected -> Color.Yellow
+                        else -> Color.White
+                    }
+                )
             },
         colors = CardDefaults.cardColors(containerColor = backgroundColor.value)
     ) {
@@ -240,12 +248,12 @@ fun MemoryGame() {
     // Lista de cartas en el juego
     val cards = remember {
         mutableStateListOf(
-            CardModel(1, 1),
-            CardModel(2, 2),
-            CardModel(3, 1),
-            CardModel(4, 2),
-            CardModel(5, 3),
-            CardModel(6, 3)
+            Carta(2, "2", number = 2),
+            Carta(3, "1", number = 1),
+            Carta(4, "2", number = 2),
+            Carta(5, "3", number = 3),
+            Carta(6, "3", number = 3),
+            Carta(1, "1", number = 1),
         )
     }
 
@@ -253,7 +261,7 @@ fun MemoryGame() {
     var lastSelectedCardId by remember { mutableStateOf(-1) }
 
     // Lógica para manejar el clic en la carta
-    val onCardClick: (CardModel) -> Unit = { clickedCard ->
+    val onCardClick: (Carta) -> Unit = { clickedCard ->
         if (!clickedCard.isSelected && !clickedCard.isMatched) {
             // Marcar la carta como seleccionada
             clickedCard.isSelected = true
@@ -282,12 +290,12 @@ fun MemoryGame() {
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
+    Column(modifier = Modifier, verticalArrangement = Arrangement.Center) {
         // Mostrar las cartas en una cuadrícula (por ejemplo, en filas de a dos)
         for (i in cards.indices step 2) {
             Row {
                 CardItem(card = cards[i], onClick = onCardClick)
-                CardItem(card = cards.getOrNull(i + 1) ?: CardModel(-1, -1), onClick = onCardClick)
+                CardItem(card = cards.getOrNull(i + 1) ?: Carta(-1, "-1",-1), onClick = onCardClick)
             }
         }
     }

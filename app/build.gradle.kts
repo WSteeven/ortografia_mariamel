@@ -70,6 +70,9 @@ dependencies {
 
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    // Dependencia de Lottie
+    implementation("com.airbnb.android:lottie:6.4.1")
+    implementation("com.airbnb.android:lottie-compose:5.2.0")
 
 
 }

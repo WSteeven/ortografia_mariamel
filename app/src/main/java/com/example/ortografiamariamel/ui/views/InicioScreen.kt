@@ -24,8 +24,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import com.example.ortografiamariamel.ui.screens.AppTopBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -36,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -46,8 +51,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ortografiamariamel.R
+import com.example.ortografiamariamel.ui.navigation.NavigationDestination
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 
+object InicioDestination : NavigationDestination {
+    override val route = "home"
+    override val title = "Inicio"
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InicioScreen(
     modifier: Modifier = Modifier,
@@ -55,11 +67,25 @@ fun InicioScreen(
 ) {
 //    val imageColegio = painterResource(R.drawable.logo_colegio)
 //    val imageLogo = painterResource(R.drawable.lapiz8)
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    Scaffold(
+        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            AppTopBar(
+                puedeNavegarAtras = false,
+                modifier = modifier,
+                mostrarEncabezado = false,
+                mostrarMenu = false
+            )
+        }
+    ) { innerPadding ->
 
-    Column(modifier = modifier) {
-        SlideInFromTopAnimation(R.drawable.logo_colegio, modifier = Modifier
-                .padding(16.dp)
-                .align(alignment = Alignment.CenterHorizontally))
+        Column(modifier = modifier.padding(innerPadding)) {
+            SlideInFromTopAnimation(
+                R.drawable.logo_colegio, modifier = Modifier
+                    .padding(16.dp)
+                    .align(alignment = Alignment.CenterHorizontally)
+            )
 //        Image1(
 //            painter = imageColegio,
 //            contentDescription = null,
@@ -67,10 +93,12 @@ fun InicioScreen(
 //                .padding(16.dp)
 //                .align(alignment = Alignment.CenterHorizontally)
 //        )
-        Spacer(modifier = Modifier.height(16.dp))
-        ContinuousSlideAnimation(modifier=Modifier
-                .fillMaxSize(.6f)
-                .align(alignment = Alignment.CenterHorizontally))
+            Spacer(modifier = Modifier.height(16.dp))
+            ContinuousSlideAnimation(
+                modifier = Modifier
+                    .fillMaxSize(.6f)
+                    .align(alignment = Alignment.CenterHorizontally)
+            )
 //        SlideInFromRightAnimation(
 //            Modifier
 //                .fillMaxSize(.6f)
@@ -85,27 +113,29 @@ fun InicioScreen(
 //                .padding(16.dp)
 //                .align(alignment = Alignment.CenterHorizontally)
 //        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "Bienvenid@ a",
-            modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
-        )
-        BasicMarqueeNombreApp()
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "Bienvenid@ a",
+                modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
+            )
+            BasicMarqueeNombreApp()
 
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = onNextButtonClicked,
-            modifier = Modifier
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                onClick = onNextButtonClicked,
+                modifier = Modifier
 //                .height(64.dp)
-                .align(Alignment.CenterHorizontally),
-            border = BorderStroke(4.dp, Color(244, 225, 220)),
-            shape = MaterialTheme.shapes.extraLarge,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(240, 150, 55), contentColor = Color.White
-            ),
-        ) {
-            Text(text = "Comenzar", fontSize = 30.sp)
-        }
+                    .align(Alignment.CenterHorizontally),
+                border = BorderStroke(4.dp, Color(244, 225, 220)),
+                shape = MaterialTheme.shapes.extraLarge,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(240, 150, 55), contentColor = Color.White
+                ),
+            ) {
+                Text(text = "Comenzar", fontSize = 30.sp)
+            }
 
+        }
     }
 }
 
@@ -116,15 +146,21 @@ fun BasicMarqueeNombreApp() {
     Column(Modifier.width(400.dp)) {
         Text(
             buildAnnotatedString {
-                withStyle(style = SpanStyle(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 44.sp,
-                    fontFamily = FontFamily.SansSerif
-                )){append("ORTOGRAFÍA ")}
-                withStyle(style = SpanStyle(color = Color(240, 150, 44),
-                    fontSize = 44.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily.SansSerif)) {
+                withStyle(
+                    style = SpanStyle(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 44.sp,
+                        fontFamily = FontFamily.SansSerif
+                    )
+                ) { append("ORTOGRAFÍA ") }
+                withStyle(
+                    style = SpanStyle(
+                        color = Color(240, 150, 44),
+                        fontSize = 44.sp,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = FontFamily.SansSerif
+                    )
+                ) {
                     append("MARIA")
                 }
                 withStyle(
@@ -142,6 +178,7 @@ fun BasicMarqueeNombreApp() {
         )
     }
 }
+
 @Composable
 fun ContinuousSlideAnimation(modifier: Modifier) {
     val infiniteTransition = rememberInfiniteTransition(label = "")
@@ -160,8 +197,9 @@ fun ContinuousSlideAnimation(modifier: Modifier) {
         SlideInFromRightAnimation(offsetX, modifier)
     }
 }
+
 @Composable
-private fun SlideInFromRightAnimation(offsetX:Float, modifier: Modifier) {
+private fun SlideInFromRightAnimation(offsetX: Float, modifier: Modifier) {
     val painter = painterResource(id = R.drawable.lapiz8)
 //    var isVisible by remember { mutableStateOf(false) }
 
@@ -175,13 +213,13 @@ private fun SlideInFromRightAnimation(offsetX:Float, modifier: Modifier) {
         Image(
             painter = painter,
             contentDescription = null, // Puedes agregar una descripción accesible aquí
-            modifier = modifier.offset(x = (offsetX*200).dp)
+            modifier = modifier.offset(x = (offsetX * 200).dp)
         )
     }
 }
 
 @Composable
-fun SlideInFromTopAnimation(imageResId: Int, modifier : Modifier) {
+fun SlideInFromTopAnimation(imageResId: Int, modifier: Modifier) {
     var isVisible by remember { mutableStateOf(false) }
 
     // Animación de desplazamiento vertical desde arriba

@@ -2,6 +2,7 @@ package com.example.ortografiamariamel.ui
 
 import androidx.lifecycle.ViewModel
 import com.example.ortografiamariamel.AppScreen
+import com.example.ortografiamariamel.data.Carta
 import com.example.ortografiamariamel.ui.data.AppUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,5 +35,9 @@ class AppViewModel: ViewModel() {
                 menu = unidad,
             )
         }
+    }
+
+    fun actualizarCarta(carta:Carta){
+
     }
 }
