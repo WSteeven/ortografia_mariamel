@@ -15,16 +15,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -299,82 +295,6 @@ fun BotonAtras(onClick: () -> Unit, imagen: Int) {
     }
 }
 
-@Composable
-fun ButtonComponent(onClick: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-    ) {
-        IconButton(onClick = onClick) {
-            Icon(
-                imageVector = Icons.Filled.Menu,
-                contentDescription = "Menú"
-            )
-        }
-    }
-}
-
-@Composable
-fun MenuLateral(modifier: Modifier = Modifier) {
-    ModalNavigationDrawer(
-        drawerContent = {
-            ModalDrawerSheet(modifier = modifier, drawerContainerColor = Color(235, 179, 72, 255)) {
-                Text(
-                    "Ortografía Mariamel",
-                    style = TextStyle(fontWeight = FontWeight.Bold),
-                    modifier = Modifier.padding(16.dp)
-                )
-                Divider()
-                NavigationDrawerItem(
-                    label = {
-                        Text(
-                            text = "Unidad 1",
-                            style = TextStyle(fontWeight = FontWeight.Bold)
-                        )
-                    },
-                    selected = false,
-                    onClick = { /*TODO*/ },
-                    modifier = modifier
-                )
-                NavigationDrawerItem(
-                    label = {
-                        Text(
-                            text = "Unidad 2",
-                            style = TextStyle(fontWeight = FontWeight.Bold)
-                        )
-                    },
-                    selected = false,
-                    onClick = { /*TODO*/ },
-                    modifier = modifier
-                )
-                NavigationDrawerItem(
-                    label = {
-                        Text(
-                            text = "Unidad 3",
-                            style = TextStyle(fontWeight = FontWeight.Bold)
-                        )
-                    },
-                    selected = false,
-                    onClick = { /*TODO*/ },
-                    modifier = modifier
-                )
-                NavigationDrawerItem(
-                    label = {
-                        Text(
-                            text = "Unidad 4",
-                            style = TextStyle(fontWeight = FontWeight.Bold)
-                        )
-                    },
-                    selected = false,
-                    onClick = { /*TODO*/ },
-                    modifier = modifier
-                )
-                // ...other drawer items
-            }
-        }
-    ) {}
-}
 
 @Preview(showBackground = true)
 @Composable

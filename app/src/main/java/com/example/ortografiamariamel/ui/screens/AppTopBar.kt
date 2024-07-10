@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -39,7 +40,15 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.ortografiamariamel.R
+import com.example.ortografiamariamel.ui.navigation.AppNavHost
+import com.example.ortografiamariamel.ui.theme.onPrimaryLight
+import com.example.ortografiamariamel.ui.theme.primaryContainerLight
+import com.example.ortografiamariamel.ui.theme.scrimLight
+import com.example.ortografiamariamel.ui.views.InicioDestination
 import com.example.ortografiamariamel.ui.views.unidad1.UnidadIDestination
+import com.example.ortografiamariamel.ui.views.unidad2.UnidadIIDestination
+import com.example.ortografiamariamel.ui.views.unidad3.UnidadIIIDestination
+import com.example.ortografiamariamel.ui.views.unidad4.UnidadIVDestination
 import kotlinx.coroutines.launch
 
 @Composable
@@ -142,36 +151,49 @@ fun AppTopBar(
 
 @Composable
 fun MenuItems(){
+    val colors =  NavigationDrawerItemDefaults.colors(
+        unselectedContainerColor = Color(253, 233, 59),
+        unselectedTextColor = scrimLight
+    )
     val navController: NavHostController= rememberNavController()
     ModalDrawerSheet(drawerContainerColor = Color(255, 168, 0),
         drawerContentColor = Color.Yellow) { /* Drawer content */
-        Text("Ortografía Mariamel", modifier = Modifier.padding(16.dp))
+        Text("Ortografía Mariamel", modifier = Modifier.padding(16.dp), fontWeight = FontWeight.Bold, color = Color.White)
         Divider()
+        Spacer(modifier = Modifier.padding(4.dp))
         NavigationDrawerItem(
-            colors = NavigationDrawerItemDefaults.colors(selectedContainerColor = Color.Yellow),
-            label = { Text(text = "Portada") },
+            colors = colors,
+            label = { Text(text = "Portada", fontWeight = FontWeight.Bold) },
             selected = false,
-            onClick = { navController.navigate(UnidadIDestination.route) }
+            onClick = { navController.navigate(InicioDestination.route) }
         )
+        Spacer(modifier = Modifier.padding(4.dp))
         NavigationDrawerItem(
-            label = { Text(text = "Unidad 1") },
+            colors = colors,
+            label = { Text(text = "Unidad 1", fontWeight = FontWeight.Bold) },
             selected = false,
-            onClick = { /*TODO*/ }
+            onClick = { navController.navigate(UnidadIDestination.route)}
         )
+        Spacer(modifier = Modifier.padding(4.dp))
         NavigationDrawerItem(
-            label = { Text(text = "Unidad 2") },
+            colors = colors,
+            label = { Text(text = "Unidad 2", fontWeight = FontWeight.Bold) },
             selected = false,
-            onClick = { /*TODO*/ }
+            onClick = { navController.navigate(UnidadIIDestination.route) }
         )
+        Spacer(modifier = Modifier.padding(4.dp))
         NavigationDrawerItem(
-            label = { Text(text = "Unidad 3") },
+            colors = colors,
+            label = { Text(text = "Unidad 3",fontWeight = FontWeight.Bold) },
             selected = false,
-            onClick = { /*TODO*/ }
+            onClick = { navController.navigate(UnidadIIIDestination.route) }
         )
+        Spacer(modifier = Modifier.padding(4.dp))
         NavigationDrawerItem(
-            label = { Text(text = "Unidad 4") },
+            colors = colors,
+            label = { Text(text = "Unidad 4",fontWeight = FontWeight.Bold) },
             selected = false,
-            onClick = { /*TODO*/ }
+            onClick = { navController.navigate(UnidadIVDestination.route) }
         )
 
     }
