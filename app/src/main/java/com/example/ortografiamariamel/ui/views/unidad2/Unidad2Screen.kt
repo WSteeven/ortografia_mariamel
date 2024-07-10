@@ -1,10 +1,10 @@
-package com.example.ortografiamariamel.ui.views
+package com.example.ortografiamariamel.ui.views.unidad2
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -22,8 +22,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -32,27 +30,29 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ortografiamariamel.R
 import com.example.ortografiamariamel.ui.navigation.NavigationDestination
+import com.example.ortografiamariamel.ui.screens.AppTopBar
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
+import com.example.ortografiamariamel.ui.views.DrawerState
 
-object UnidadIDestination : NavigationDestination {
-    override val route = "unidad1"
-    override val title = "Unidad I"
+object UnidadIIDestination : NavigationDestination {
+    override val route = "unidad2"
+    override val title = "Unidad II"
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
-fun UnidadI(
-    onPrevButtonClicked: () -> Unit,
-    onNextButtonClicked: () -> Unit,
-    modifier: Modifier = Modifier
-) {
+@OptIn(ExperimentalMaterial3Api::class)
+fun UnidadII(onPrevButtonClicked: () -> Unit,
+             onNextButtonClicked: () -> Unit,
+             modifier: Modifier = Modifier
+){
     DrawerState(content = {
         val tildeDiacrita = painterResource(R.drawable.imagen_tema_unidad1)
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
         Scaffold(
             modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = {
-                com.example.ortografiamariamel.ui.screens.AppTopBar(
+                AppTopBar(
                     puedeNavegarAtras = false,
                     modifier = modifier,
                     mostrarEncabezado = false,
@@ -62,14 +62,14 @@ fun UnidadI(
         ) { innerPadding ->
             Column(modifier = modifier.padding(innerPadding)) {
                 Text(
-                    text = "TEMA:",
+                    text = "UNIDAD II - TEMA:",
                     fontWeight = FontWeight.Bold,
                     fontSize = 30.sp,
                     modifier = modifier
                         .align(Alignment.CenterHorizontally)
                 )
                 Text(
-                    text = "Tílde Diacrítica en los Monosílabos",
+                    text = "Tema Unidad II",
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 25.sp,
                     textAlign = TextAlign.Center,
@@ -80,30 +80,13 @@ fun UnidadI(
                         .align(Alignment.CenterHorizontally)
                 )
                 Image(
-                    painter = tildeDiacrita, contentDescription = "Unidad I",
+                    painter = tildeDiacrita, contentDescription = "Unidad II",
                     modifier = modifier
                         .align(Alignment.CenterHorizontally)
                         .padding(top = 16.dp),
                     contentScale = ContentScale.FillBounds
                 )
-                Text(
-                    text = stringResource(id = R.string.parrafo1_unidad1),
-                    style = TextStyle(
-                        textAlign = TextAlign.Justify,
-                        fontFamily = FontFamily.SansSerif,
-                        letterSpacing = 2.sp
-                    ),
-                    modifier = Modifier.padding(16.dp)
-                )
-                Text(
-                    text = stringResource(id = R.string.parrafo2_unidad1),
-                    style = TextStyle(
-                        textAlign = TextAlign.Justify,
-                        fontFamily = FontFamily.SansSerif,
-                        letterSpacing = 2.sp
-                    ),
-                    modifier = Modifier.padding(16.dp)
-                )
+                Text("Aquí va el texto de la unidad II", modifier = Modifier.fillMaxHeight(.5f).padding(16.dp))
                 Row(
                     modifier = modifier
                         .fillMaxWidth()
@@ -127,15 +110,14 @@ fun UnidadI(
                 }
             }
         }
-        /*TODO*/
     }, modifier = modifier)
 }
 
 
 @Preview(showBackground = true)
 @Composable
-fun UnidadIScreenPreview() {
+fun UnidadIIScreenPreview() {
     OrtografiaMariamelTheme {
-        UnidadI(onPrevButtonClicked = { /*TODO*/ }, onNextButtonClicked = { /*TODO*/ })
+        UnidadII(onPrevButtonClicked = { /*TODO*/ }, onNextButtonClicked = { /*TODO*/ })
     }
 }

@@ -132,9 +132,7 @@ fun MenuContent(
 //        Spacer(modifier = Modifier.height(4.dp))
         Row(
             horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().padding(48.dp)
         ) {
 //            Boton Atrás
             BotonAtras(onClick = onPrevButtonClicked, imagen = R.drawable.back)

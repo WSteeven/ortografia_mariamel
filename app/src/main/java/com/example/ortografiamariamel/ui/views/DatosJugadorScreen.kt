@@ -37,6 +37,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -80,7 +82,7 @@ fun DatosJugadorScreen(
         Column(modifier = modifier.padding(innerPadding)) {
             ContinuousSlideAnimation(
                 modifier = Modifier
-                    .fillMaxSize(.6f)
+                    .fillMaxSize(.5f)
                     .align(alignment = Alignment.CenterHorizontally)
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -103,6 +105,8 @@ fun DatosJugadorScreen(
                     .align(Alignment.CenterHorizontally)
                     .border(BorderStroke(width = 2.dp, color = Color(255, 168, 0))),
                 keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Sentences,
+                    autoCorrect = true,
                     imeAction = ImeAction.Done
                 ),
             )

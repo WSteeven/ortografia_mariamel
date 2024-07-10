@@ -1,7 +1,6 @@
-package com.example.ortografiamariamel.ui.views
+package com.example.ortografiamariamel.ui.views.unidad1
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,13 +11,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,7 +24,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -42,13 +36,14 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ortografiamariamel.AppScreen
 import com.example.ortografiamariamel.R
-import com.example.ortografiamariamel.data.Carta
+import com.example.ortografiamariamel.model.Carta
 
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
 import com.example.ortografiamariamel.ui.game.MatchPairs
 import com.example.ortografiamariamel.ui.navigation.NavigationDestination
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
+import com.example.ortografiamariamel.ui.views.DrawerState
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -59,10 +54,10 @@ object ActividadIDestination : NavigationDestination {
 }
 @Composable
 fun Actividad1(
+    modifier: Modifier = Modifier,
     viewModel: AppViewModel = viewModel(factory = AppViewModelProvider.Factory),
     onPrevButtonClicked: () -> Unit,
     onNextButtonClicked: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
 DrawerState(content = {
     Column(
@@ -238,7 +233,7 @@ fun CardItem(
                 .padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = card.number.toString() + " " + card.isSelected.toString(), fontSize = 24.sp)
+            Text(text = card.id.toString() + " " + card.isSelected.toString(), fontSize = 24.sp)
         }
     }
 }
@@ -248,12 +243,12 @@ fun MemoryGame() {
     // Lista de cartas en el juego
     val cards = remember {
         mutableStateListOf(
-            Carta(2, "2", number = 2),
-            Carta(3, "1", number = 1),
-            Carta(4, "2", number = 2),
-            Carta(5, "3", number = 3),
-            Carta(6, "3", number = 3),
-            Carta(1, "1", number = 1),
+            Carta(2, "2"),
+            Carta(3, "1"),
+            Carta(4, "2"),
+            Carta(5, "3"),
+            Carta(6, "3"),
+            Carta(1, "1"),
         )
     }
 
@@ -269,7 +264,7 @@ fun MemoryGame() {
             // Si hay otra carta seleccionada, verificar si hacen match
             if (lastSelectedCardId != -1) {
                 val lastSelectedCard = cards.find { it.id == lastSelectedCardId }
-                if (lastSelectedCard != null && lastSelectedCard.number == clickedCard.number) {
+                if (lastSelectedCard != null && lastSelectedCard.id == clickedCard.id) {
                     // Si hacen match, marcar ambas como matched
                     lastSelectedCard.isMatched = true
                     clickedCard.isMatched = true
@@ -295,7 +290,7 @@ fun MemoryGame() {
         for (i in cards.indices step 2) {
             Row {
                 CardItem(card = cards[i], onClick = onCardClick)
-                CardItem(card = cards.getOrNull(i + 1) ?: Carta(-1, "-1",-1), onClick = onCardClick)
+                CardItem(card = cards.getOrNull(i + 1) ?: Carta(-1, "-1",), onClick = onCardClick)
             }
         }
     }

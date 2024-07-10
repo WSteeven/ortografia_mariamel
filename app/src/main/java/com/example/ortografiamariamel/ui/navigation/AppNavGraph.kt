@@ -1,13 +1,10 @@
 package com.example.ortografiamariamel.ui.navigation
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -15,20 +12,19 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.ortografiamariamel.AppScreen
-import com.example.ortografiamariamel.R
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
-import com.example.ortografiamariamel.ui.views.Actividad1
-import com.example.ortografiamariamel.ui.views.ActividadIDestination
+import com.example.ortografiamariamel.ui.views.unidad1.Actividad1
+import com.example.ortografiamariamel.ui.views.unidad1.ActividadIDestination
 import com.example.ortografiamariamel.ui.views.DatosJugadorDestination
 import com.example.ortografiamariamel.ui.views.DatosJugadorScreen
 import com.example.ortografiamariamel.ui.views.InicioDestination
 import com.example.ortografiamariamel.ui.views.InicioScreen
 import com.example.ortografiamariamel.ui.views.MenuDestination
 import com.example.ortografiamariamel.ui.views.MenuScreen
-import com.example.ortografiamariamel.ui.views.UnidadI
-import com.example.ortografiamariamel.ui.views.UnidadIDestination
+import com.example.ortografiamariamel.ui.views.unidad1.UnidadI
+import com.example.ortografiamariamel.ui.views.unidad1.UnidadIDestination
 
 @Composable
 fun AppNavHost(

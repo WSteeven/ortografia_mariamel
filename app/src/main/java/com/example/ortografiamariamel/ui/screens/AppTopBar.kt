@@ -11,15 +11,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Divider
-import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalDrawerSheet
-import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
-import androidx.compose.material3.NavigationDrawerItemColors
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -39,7 +36,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.ortografiamariamel.R
+import com.example.ortografiamariamel.ui.views.unidad1.UnidadIDestination
 import kotlinx.coroutines.launch
 
 @Composable
@@ -142,6 +142,7 @@ fun AppTopBar(
 
 @Composable
 fun MenuItems(){
+    val navController: NavHostController= rememberNavController()
     ModalDrawerSheet(drawerContainerColor = Color(255, 168, 0),
         drawerContentColor = Color.Yellow) { /* Drawer content */
         Text("Ortografía Mariamel", modifier = Modifier.padding(16.dp))
@@ -150,7 +151,7 @@ fun MenuItems(){
             colors = NavigationDrawerItemDefaults.colors(selectedContainerColor = Color.Yellow),
             label = { Text(text = "Portada") },
             selected = false,
-            onClick = { /*TODO*/ }
+            onClick = { navController.navigate(UnidadIDestination.route) }
         )
         NavigationDrawerItem(
             label = { Text(text = "Unidad 1") },
