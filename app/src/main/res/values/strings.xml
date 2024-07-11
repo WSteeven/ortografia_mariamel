@@ -1,18 +1,26 @@
 <resources>
     <string name="app_name">Ortografia Mariamel</string>
-    <string name="caratula"> </string>
-    <string name="datos_usuario">Datos</string>
-    <string name="menu">Menu</string>
-    <string name="unidad1">Unidad 1</string>
+
     <string name="parrafo1_unidad1">Es un acento gráfico que se utiliza en palabras monosílabas o en palabras que se escriben igual pero que tienen distinto significado, sirve para diferenciar palabras que se escriben de la misma forma, pero que tienen significados diferentes.</string>
     <string name="parrafo2_unidad1">Es decir, es la que permite distinguir palabras con idéntica forma, escritas con las mismas letras, pero que pertenecen a categorías gramaticales diferentes.</string>
+
+    <string name="siguiente">Siguiente</string>
+    <string name="atras">Atrás</string>
+
+<!--    Strings de titulos para el menu-->
+    <string name="inicio"> </string>
+    <string name="datos_jugador">Datos del Jugador</string>
+    <string name="menu">Menu</string>
+    <string name="unidad1">Unidad 1</string>
     <string name="unidad2">Unidad 2</string>
     <string name="unidad3">Unidad 3</string>
     <string name="unidad4">Unidad 4</string>
     <string name="contenido">Contenido</string>
-    <string name="actividad">Actividad</string>
+    <string name="actividad1">Actividad 1</string>
+    <string name="actividad2">Actividad 2</string>
+    <string name="actividad3">Actividad 3</string>
+    <string name="actividad4">Actividad 4</string>
     <string name="evaluacion">Evaluación</string>
-    <string name="siguiente">Siguiente</string>
-    <string name="atras">Atrás</string>
+
 
 </resources>

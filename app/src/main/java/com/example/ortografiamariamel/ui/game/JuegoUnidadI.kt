@@ -1,6 +1,5 @@
 package com.example.ortografiamariamel.ui.game
 
-import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -15,36 +14,30 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.ortografiamariamel.R
 import com.example.ortografiamariamel.data.Datasource
 import com.example.ortografiamariamel.model.Carta
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
-import kotlinx.coroutines.launch
 
 
 @Composable
@@ -61,7 +54,7 @@ fun MatchPairs() {
         Text("Paso 1. Escoge una carta")
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(4.dp) // Espacio uniforme entre las cartas
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             ListaRespuestas(cartas = respuestas, onCardClicked = { carta ->
                 respuestas = respuestas.map { it.copy(isSelected = it.id == carta.id) }
@@ -71,10 +64,13 @@ fun MatchPairs() {
                 selectedRespuesta = carta
             })
         }
-        Spacer(modifier = Modifier.padding(16.dp))
+        Spacer(modifier = Modifier.padding(48.dp))
 
         Text("Paso 2. Escoge la respuesta correcta")
-        Row {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(top = 48.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
             ListaDefinificiones(cartas = definiciones, onCardClicked = { carta ->
                 intento = 0
                 // Al hacer clic en una carta de definiciones
@@ -96,7 +92,10 @@ fun MatchPairs() {
 }
 
 @Composable
-fun ListaDefinificiones(cartas: List<Carta>, onCardClicked: (Carta) -> Unit = {}) {
+fun ListaDefinificiones(
+    cartas: List<Carta>,
+    onCardClicked: (Carta) -> Unit = {},
+) {
     cartas.forEach { carta ->
         CardSimple(
             carta = carta,
@@ -114,11 +113,12 @@ fun CardSimple(
     elevation: Dp = 0.dp,
     backgroundColor: Color = Color.LightGray
 ) {
+    val imagenCarta: Int = R.drawable.carta2
     Card(
         modifier = Modifier
             .height(120.dp)
             .width(90.dp)
-            .padding(8.dp),
+            .padding(4.dp),
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(elevation),
         colors = CardDefaults.cardColors(containerColor = backgroundColor),
@@ -126,15 +126,46 @@ fun CardSimple(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(4.dp)
                 .clickable(onClick = {
 //                    Log.d("CardClicked", "Carta definicion seleccionada: ${carta}")
                     onClick()
                 }),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = carta.texto, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold)
+            if (carta.isSelected || carta.isMatched) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Text(
+                        carta.texto, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold,
+                        style = TextStyle(fontSize = calculateFontSize(carta.texto)),
+                    )
+                }
+
+            } else {
+                Image(painter = painterResource(imagenCarta), contentDescription = null)
+
+            }
+//            Text(text = carta.texto,
+//                textAlign = TextAlign.Center, fontWeight = FontWeight.Bold,
+//                style = TextStyle(fontSize = calculateFontSize(carta.texto)),
+//            )
         }
+    }
+}
+
+@Composable
+fun calculateFontSize(text: String): TextUnit {
+    val maxWidth = 90.dp - 8.dp // Width of the card minus padding
+    val maxLength =
+        maxWidth.value / 4 // Approximate maximum number of characters that fit in one line
+
+    return when {
+        text.length > maxLength * 2 -> 10.sp // If the text is very long, set a smaller font size
+        text.length > maxLength -> 12.sp // If the text is long, set a medium font size
+        else -> 14.sp // Default font size
     }
 }
 
@@ -196,21 +227,21 @@ fun CardCarta(
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun CardSimplePreview() {
-    OrtografiaMariamelTheme {
-        CardSimple(Carta(id = 1, "Articulo", isSelected = false, isMatched = false))
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun CardSimplePreview() {
+//    OrtografiaMariamelTheme {
+//        CardSimple(Carta(id = 1, "Articulo", isSelected = false, isMatched = false))
+//    }
+//}
 
-@Preview(showBackground = true)
-@Composable
-fun CardCartaPreview() {
-    OrtografiaMariamelTheme {
-        CardCarta(Carta(id = 1, "tu", isSelected = false, isMatched = false))
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun CardCartaPreview() {
+//    OrtografiaMariamelTheme {
+//        CardCarta(Carta(id = 1, "tu", isSelected = false, isMatched = false))
+//    }
+//}
 
 @Preview(showBackground = true)
 @Composable

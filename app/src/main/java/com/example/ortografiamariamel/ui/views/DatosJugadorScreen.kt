@@ -1,7 +1,6 @@
 package com.example.ortografiamariamel.ui.views
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -29,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -38,23 +36,16 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.ortografiamariamel.AppScreen
 import com.example.ortografiamariamel.R
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
-import com.example.ortografiamariamel.ui.navigation.NavigationDestination
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 
-object DatosJugadorDestination: NavigationDestination {
-    override val route= "datos"
-    override val title = "Datos del Jugador"
-}
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatosJugadorScreen(
@@ -63,7 +54,7 @@ fun DatosJugadorScreen(
     modifier: Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val imageLogo = painterResource(R.drawable.lapiz8)
+//    val imageLogo = painterResource(R.drawable.lapiz8)
     var playerName by remember { mutableStateOf(uiState.nombreJugador) }
     var sliderValue by remember { mutableFloatStateOf(8f) }
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()

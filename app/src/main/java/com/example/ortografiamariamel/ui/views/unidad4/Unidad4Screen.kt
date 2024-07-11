@@ -28,22 +28,22 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ortografiamariamel.R
-import com.example.ortografiamariamel.ui.navigation.NavigationDestination
+import com.example.ortografiamariamel.ui.AppViewModel
+import com.example.ortografiamariamel.ui.AppViewModelProvider
 import com.example.ortografiamariamel.ui.screens.AppTopBar
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 import com.example.ortografiamariamel.ui.views.DrawerState
 
-object UnidadIVDestination : NavigationDestination {
-    override val route = "unidad4"
-    override val title = "Unidad IV"
-}
 
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun UnidadIV(onPrevButtonClicked: () -> Unit,
              onNextButtonClicked: () -> Unit,
+             viewModel: AppViewModel = viewModel(factory = AppViewModelProvider.Factory),
+             onItemMenuButtonClicked: ()->Unit,
              modifier: Modifier = Modifier
 ){
     DrawerState(content = {
@@ -86,7 +86,9 @@ fun UnidadIV(onPrevButtonClicked: () -> Unit,
                         .padding(top = 16.dp),
                     contentScale = ContentScale.FillBounds
                 )
-                Text("Aquí va el texto de la unidad IV", modifier = Modifier.fillMaxHeight(.5f).padding(16.dp))
+                Text("Aquí va el texto de la unidad IV", modifier = Modifier
+                    .fillMaxHeight(.5f)
+                    .padding(16.dp))
                 Row(
                     modifier = modifier
                         .fillMaxWidth()
@@ -110,7 +112,7 @@ fun UnidadIV(onPrevButtonClicked: () -> Unit,
                 }
             }
         }
-    }, modifier = modifier)
+    }, viewModel = viewModel, onItemMenuButtonClicked = onItemMenuButtonClicked, modifier = modifier)
 }
 
 
@@ -118,6 +120,6 @@ fun UnidadIV(onPrevButtonClicked: () -> Unit,
 @Composable
 fun UnidadIVScreenPreview() {
     OrtografiaMariamelTheme {
-        UnidadIV(onPrevButtonClicked = { /*TODO*/ }, onNextButtonClicked = { /*TODO*/ })
+        UnidadIV(onPrevButtonClicked = { /*TODO*/ }, onNextButtonClicked = { /*TODO*/ }, onItemMenuButtonClicked = {})
     }
 }

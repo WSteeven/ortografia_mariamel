@@ -28,23 +28,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ortografiamariamel.R
-import com.example.ortografiamariamel.ui.navigation.NavigationDestination
+import com.example.ortografiamariamel.ui.AppViewModel
+import com.example.ortografiamariamel.ui.AppViewModelProvider
 import com.example.ortografiamariamel.ui.screens.AppTopBar
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 import com.example.ortografiamariamel.ui.views.DrawerState
 
-object UnidadIIIDestination : NavigationDestination {
-    override val route = "unidad3"
-    override val title = "Unidad III"
-}
 
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun UnidadIII(onPrevButtonClicked: () -> Unit,
-             onNextButtonClicked: () -> Unit,
-             modifier: Modifier = Modifier
+              onNextButtonClicked: () -> Unit,
+              viewModel: AppViewModel = viewModel(factory = AppViewModelProvider.Factory),
+              onItemMenuButtonClicked: ()->Unit,
+              modifier: Modifier = Modifier
 ){
     DrawerState(content = {
         val tildeDiacrita = painterResource(R.drawable.imagen_tema_unidad1)
@@ -110,7 +110,7 @@ fun UnidadIII(onPrevButtonClicked: () -> Unit,
                 }
             }
         }
-    }, modifier = modifier)
+    }, viewModel = viewModel, onItemMenuButtonClicked = onItemMenuButtonClicked, modifier = modifier)
 }
 
 
@@ -118,6 +118,6 @@ fun UnidadIII(onPrevButtonClicked: () -> Unit,
 @Composable
 fun UnidadIIIScreenPreview() {
     OrtografiaMariamelTheme {
-        UnidadIII(onPrevButtonClicked = { /*TODO*/ }, onNextButtonClicked = { /*TODO*/ })
+        UnidadIII(onPrevButtonClicked = { /*TODO*/ }, onNextButtonClicked = { /*TODO*/ }, onItemMenuButtonClicked = {})
     }
 }

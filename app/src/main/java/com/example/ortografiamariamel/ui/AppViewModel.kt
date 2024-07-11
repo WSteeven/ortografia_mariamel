@@ -1,8 +1,8 @@
 package com.example.ortografiamariamel.ui
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.ortografiamariamel.AppScreen
-import com.example.ortografiamariamel.model.Carta
 import com.example.ortografiamariamel.ui.data.AppUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,7 +29,8 @@ class AppViewModel: ViewModel() {
             )
         }
     }
-    fun setUnidadActual(unidad: AppScreen){
+    fun setPantallaActual(unidad: AppScreen){
+        Log.d("AppViewModel","setPantallaActual: $unidad")
         _uiState.update { currentState->
             currentState.copy(
                 menu = unidad,
@@ -53,7 +54,4 @@ class AppViewModel: ViewModel() {
         }
     }
 
-    fun actualizarCarta(carta: Carta){
-
-    }
 }

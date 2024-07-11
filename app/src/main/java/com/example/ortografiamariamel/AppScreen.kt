@@ -1,6 +1,7 @@
 package com.example.ortografiamariamel
 
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -47,16 +48,18 @@ import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 //    Unidad3(title = R.string.unidad3),
 //    Unidad4(title = R.string.unidad4),
 //}
-enum class AppScreen {
-    Inicio,
-    DatosJugador,
-    Menu,
-    Unidad1,
-    Actividad1,
-    Evaluacion1,
-    Unidad2,
-    Unidad3,
-    Unidad4,
+enum class AppScreen(@StringRes val title: Int) {
+    Inicio(R.string.inicio),
+    DatosJugador(R.string.datos_jugador),
+    Menu(R.string.menu),
+    Unidad1(R.string.unidad1),
+    Actividad1(R.string.actividad1),
+    Unidad2(R.string.unidad2),
+    Actividad2(R.string.actividad2),
+    Unidad3(R.string.unidad3),
+    Actividad3(R.string.actividad3),
+    Unidad4(R.string.unidad4),
+    Actividad4(R.string.actividad4),
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

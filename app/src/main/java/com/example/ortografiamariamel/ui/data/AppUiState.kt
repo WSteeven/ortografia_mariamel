@@ -12,4 +12,4 @@ data class AppUiState(
     val puntaje: Int = 0,
 
 
-)
+    )

@@ -4,21 +4,16 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ModalDrawerSheet
-import androidx.compose.material3.NavigationDrawerItem
-import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -37,18 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.ortografiamariamel.R
-import com.example.ortografiamariamel.ui.navigation.AppNavHost
-import com.example.ortografiamariamel.ui.theme.onPrimaryLight
-import com.example.ortografiamariamel.ui.theme.primaryContainerLight
-import com.example.ortografiamariamel.ui.theme.scrimLight
-import com.example.ortografiamariamel.ui.views.InicioDestination
-import com.example.ortografiamariamel.ui.views.unidad1.UnidadIDestination
-import com.example.ortografiamariamel.ui.views.unidad2.UnidadIIDestination
-import com.example.ortografiamariamel.ui.views.unidad3.UnidadIIIDestination
-import com.example.ortografiamariamel.ui.views.unidad4.UnidadIVDestination
 import kotlinx.coroutines.launch
 
 @Composable
@@ -148,53 +132,3 @@ fun AppTopBar(
 }
 
 
-
-@Composable
-fun MenuItems(){
-    val colors =  NavigationDrawerItemDefaults.colors(
-        unselectedContainerColor = Color(253, 233, 59),
-        unselectedTextColor = scrimLight
-    )
-    val navController: NavHostController= rememberNavController()
-    ModalDrawerSheet(drawerContainerColor = Color(255, 168, 0),
-        drawerContentColor = Color.Yellow) { /* Drawer content */
-        Text("Ortografía Mariamel", modifier = Modifier.padding(16.dp), fontWeight = FontWeight.Bold, color = Color.White)
-        Divider()
-        Spacer(modifier = Modifier.padding(4.dp))
-        NavigationDrawerItem(
-            colors = colors,
-            label = { Text(text = "Portada", fontWeight = FontWeight.Bold) },
-            selected = false,
-            onClick = { navController.navigate(InicioDestination.route) }
-        )
-        Spacer(modifier = Modifier.padding(4.dp))
-        NavigationDrawerItem(
-            colors = colors,
-            label = { Text(text = "Unidad 1", fontWeight = FontWeight.Bold) },
-            selected = false,
-            onClick = { navController.navigate(UnidadIDestination.route)}
-        )
-        Spacer(modifier = Modifier.padding(4.dp))
-        NavigationDrawerItem(
-            colors = colors,
-            label = { Text(text = "Unidad 2", fontWeight = FontWeight.Bold) },
-            selected = false,
-            onClick = { navController.navigate(UnidadIIDestination.route) }
-        )
-        Spacer(modifier = Modifier.padding(4.dp))
-        NavigationDrawerItem(
-            colors = colors,
-            label = { Text(text = "Unidad 3",fontWeight = FontWeight.Bold) },
-            selected = false,
-            onClick = { navController.navigate(UnidadIIIDestination.route) }
-        )
-        Spacer(modifier = Modifier.padding(4.dp))
-        NavigationDrawerItem(
-            colors = colors,
-            label = { Text(text = "Unidad 4",fontWeight = FontWeight.Bold) },
-            selected = false,
-            onClick = { navController.navigate(UnidadIVDestination.route) }
-        )
-
-    }
-}

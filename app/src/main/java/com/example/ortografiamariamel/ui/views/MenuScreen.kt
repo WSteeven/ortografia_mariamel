@@ -1,5 +1,6 @@
 package com.example.ortografiamariamel.ui.views
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,12 +16,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -32,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -47,15 +53,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ortografiamariamel.AppScreen
 import com.example.ortografiamariamel.R
 import com.example.ortografiamariamel.ui.AppViewModel
-import com.example.ortografiamariamel.ui.navigation.NavigationDestination
-import com.example.ortografiamariamel.ui.screens.MenuItems
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
+import com.example.ortografiamariamel.ui.theme.scrimLight
 import kotlinx.coroutines.launch
 
-object MenuDestination : NavigationDestination {
-    override val route = "menu"
-    override val title = "Menu"
-}
 
 @Composable
 fun MenuScreen(
@@ -63,14 +64,24 @@ fun MenuScreen(
     viewModel: AppViewModel = viewModel(),
     onPrevButtonClicked: () -> Unit,
     onNextButtonClicked: () -> Unit,
+    onItemMenuButtonClicked: () -> Unit
 ) {
     DrawerState(
+        viewModel = viewModel,
+        onItemMenuButtonClicked = onItemMenuButtonClicked,
         content =
-        { MenuContent(modifier.padding(top =120.dp), viewModel,  onPrevButtonClicked, onNextButtonClicked) }
-        ,
+        {
+            MenuContent(
+                modifier.padding(top = 120.dp),
+                viewModel,
+                onPrevButtonClicked,
+                onNextButtonClicked
+            )
+        },
         modifier = modifier,
     )
 }
+
 @Composable
 fun MenuContent(
     modifier: Modifier = Modifier,
@@ -92,43 +103,51 @@ fun MenuContent(
         )
         Spacer(modifier = Modifier.height(4.dp))
         Row(modifier = Modifier) {
-            MenuItem(onClick = {
-                viewModel.setUnidadActual(AppScreen.Unidad1)
-                onNextButtonClicked()
-            }, R.drawable.unidad1, R.string.unidad1)
             MenuItem(
                 onClick = {
-                    viewModel.setUnidadActual(AppScreen.Unidad2)
+                    viewModel.setPantallaActual(AppScreen.Unidad1)
+                    onNextButtonClicked()
+                }, R.drawable.unidad1, R.string.unidad1,
+                viewModel = viewModel
+            )
+            MenuItem(
+                onClick = {
+                    viewModel.setPantallaActual(AppScreen.Unidad2)
                     onNextButtonClicked()
                 },
                 R.drawable.unidad2,
-                R.string.unidad2
+                R.string.unidad2,
+                viewModel = viewModel,
             )
         }
         Spacer(modifier = Modifier.height(4.dp))
         Row {
             MenuItem(
                 onClick = {
-                    viewModel.setUnidadActual(AppScreen.Unidad3)
+                    viewModel.setPantallaActual(AppScreen.Unidad3)
                     onNextButtonClicked()
                 },
-                R.drawable.unidad3,
-                R.string.unidad3
+                viewModel = viewModel,
+                imagen = R.drawable.unidad3,
+                contentDescription = R.string.unidad3
             )
             MenuItem(
                 onClick = {
-                    viewModel.setUnidadActual(AppScreen.Unidad4)
+                    viewModel.setPantallaActual(AppScreen.Unidad4)
                     onNextButtonClicked()
                 },
                 R.drawable.unidad4,
-                R.string.unidad4
+                R.string.unidad4,
+                viewModel = viewModel
             )
 
         }
 //        Spacer(modifier = Modifier.height(4.dp))
         Row(
             horizontalArrangement = Arrangement.Start,
-            modifier = Modifier.fillMaxWidth().padding(48.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(48.dp)
         ) {
 //            Boton Atrás
             BotonAtras(onClick = onPrevButtonClicked, imagen = R.drawable.back)
@@ -139,7 +158,9 @@ fun MenuContent(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DrawerState(
-    content: @Composable ()-> Unit,
+    viewModel: AppViewModel,
+    onItemMenuButtonClicked: () -> Unit,
+    content: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     // [START android_compose_layout_material_modal_drawer_programmatic]
@@ -150,7 +171,7 @@ fun DrawerState(
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            MenuItems()
+            MenuItems(viewModel = viewModel, onItemMenuButtonClicked = onItemMenuButtonClicked)
         },
     ) {
         Scaffold(
@@ -262,18 +283,26 @@ fun AppTopBar(
 
 
 @Composable
-fun MenuItem(onClick: () -> Unit, imagen: Int, contentDescription: Int) {
+fun MenuItem(onClick: () -> Unit, imagen: Int, contentDescription: Int, viewModel: AppViewModel) {
     Box(
         modifier = Modifier
             .size(150.dp)
             .padding(8.dp)
             .width(100.dp)
             .height(50.dp)
-            .clickable(onClick = onClick)
+            .clickable(onClick = {
+                Log.d(
+                    "RutaNavegacion",
+                    "Ruta en viewModel: ${viewModel.uiState.value.menu}"
+                )
+                onClick()
+            })
     ) {
         Image(
             painter = painterResource(id = imagen),
-            contentDescription = stringResource(contentDescription)
+            contentDescription = stringResource(contentDescription),
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
         )
     }
 }
@@ -296,6 +325,96 @@ fun BotonAtras(onClick: () -> Unit, imagen: Int) {
 }
 
 
+@Composable
+fun MenuItems(viewModel: AppViewModel, onItemMenuButtonClicked: () -> Unit) {
+    val colors = NavigationDrawerItemDefaults.colors(
+        unselectedContainerColor = Color(253, 233, 59),
+        unselectedTextColor = scrimLight
+    )
+    ModalDrawerSheet(
+        drawerContainerColor = Color(255, 168, 0),
+        modifier = Modifier.fillMaxWidth(.5f),
+        drawerContentColor = Color.Yellow
+    ) { /* Drawer content */
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Image(
+                painter = painterResource(R.drawable.lapiz8),
+                contentDescription = "Logo colegio",
+                modifier = Modifier
+                    .padding(8.dp)
+                    .size(32.dp)
+            )
+            Text(
+                "Ortografía Mariamel",
+                modifier = Modifier.padding(16.dp),
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            )
+        }
+        Divider()
+        Spacer(modifier = Modifier.padding(4.dp))
+//        NavigationDrawerItem(
+//            colors = colors,
+//            label = { Text(text = "Portada", fontWeight = FontWeight.Bold) },
+//            selected = false,
+//            onClick = {
+//                viewModel.setPantallaActual(AppScreen.Inicio)
+//                onItemMenuButtonClicked()
+//            }
+//        )
+        Spacer(modifier = Modifier.padding(4.dp))
+        NavigationDrawerItem(
+            colors = colors,
+            label = { Text(text = "Unidad 1", fontWeight = FontWeight.Bold) },
+            selected = false,
+            onClick = {
+                viewModel.setPantallaActual(AppScreen.Unidad1)
+
+                onItemMenuButtonClicked()
+            }
+        )
+        Spacer(modifier = Modifier.padding(4.dp))
+        NavigationDrawerItem(
+            colors = colors,
+            label = { Text(text = "Unidad 2", fontWeight = FontWeight.Bold) },
+            selected = false,
+            onClick = {
+                viewModel.setPantallaActual(AppScreen.Unidad2)
+                Log.d("RutaNavegacion","Ruta en viewModel: ${viewModel.uiState.value.menu}")
+                onItemMenuButtonClicked()
+                Log.d(
+                    "RutaNavegacion",
+                    "Despues Ruta en viewModel: ${viewModel.uiState.value.menu}"
+                )
+            }
+        )
+        Spacer(modifier = Modifier.padding(4.dp))
+        NavigationDrawerItem(
+            colors = colors,
+            label = { Text(text = "Unidad 3", fontWeight = FontWeight.Bold) },
+            selected = false,
+            onClick = {
+                viewModel.setPantallaActual(AppScreen.Unidad3)
+                onItemMenuButtonClicked()
+            }
+        )
+        Spacer(modifier = Modifier.padding(4.dp))
+        NavigationDrawerItem(
+            colors = colors,
+            label = { Text(text = "Unidad 4", fontWeight = FontWeight.Bold) },
+            selected = false,
+            onClick = {
+                viewModel.setPantallaActual(AppScreen.Unidad4)
+                onItemMenuButtonClicked()
+            }
+        )
+
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun MenuScreenPreview() {
@@ -304,6 +423,7 @@ fun MenuScreenPreview() {
             viewModel = viewModel(),
             onPrevButtonClicked = {},
             onNextButtonClicked = {},
+            onItemMenuButtonClicked = {},
             modifier = Modifier.fillMaxSize()
         )
     }

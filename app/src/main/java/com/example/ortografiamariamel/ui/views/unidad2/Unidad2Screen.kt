@@ -28,22 +28,22 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ortografiamariamel.R
-import com.example.ortografiamariamel.ui.navigation.NavigationDestination
+import com.example.ortografiamariamel.ui.AppViewModel
+import com.example.ortografiamariamel.ui.AppViewModelProvider
 import com.example.ortografiamariamel.ui.screens.AppTopBar
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 import com.example.ortografiamariamel.ui.views.DrawerState
 
-object UnidadIIDestination : NavigationDestination {
-    override val route = "unidad2"
-    override val title = "Unidad II"
-}
 
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun UnidadII(onPrevButtonClicked: () -> Unit,
              onNextButtonClicked: () -> Unit,
+             viewModel: AppViewModel = viewModel(factory = AppViewModelProvider.Factory),
+             onItemMenuButtonClicked: ()->Unit,
              modifier: Modifier = Modifier
 ){
     DrawerState(content = {
@@ -110,7 +110,7 @@ fun UnidadII(onPrevButtonClicked: () -> Unit,
                 }
             }
         }
-    }, modifier = modifier)
+    }, viewModel = viewModel, onItemMenuButtonClicked = onItemMenuButtonClicked, modifier = modifier)
 }
 
 
@@ -118,6 +118,6 @@ fun UnidadII(onPrevButtonClicked: () -> Unit,
 @Composable
 fun UnidadIIScreenPreview() {
     OrtografiaMariamelTheme {
-        UnidadII(onPrevButtonClicked = { /*TODO*/ }, onNextButtonClicked = { /*TODO*/ })
+        UnidadII(onPrevButtonClicked = { /*TODO*/ }, onNextButtonClicked = { /*TODO*/ }, onItemMenuButtonClicked = {})
     }
 }
