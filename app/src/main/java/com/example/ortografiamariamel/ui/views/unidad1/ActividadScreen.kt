@@ -9,9 +9,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -23,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ortografiamariamel.AppScreen
 import com.example.ortografiamariamel.R
+import com.example.ortografiamariamel.service.SoundManager
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
 import com.example.ortografiamariamel.ui.game.MatchPairs
@@ -37,6 +41,11 @@ fun Actividad1(
     onNextButtonClicked: () -> Unit,
     onItemMenuButtonClicked: ()->Unit
 ) {
+    //variables
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val soundManager = remember {SoundManager(context)}
+
 DrawerState(content = {
     Column(
         modifier = modifier

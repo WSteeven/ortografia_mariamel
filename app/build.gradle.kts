@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
 }
 
+
+
 android {
     namespace = "com.example.ortografiamariamel"
     compileSdk = 34
@@ -18,6 +20,11 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        // Compatibilidad con Java 8 para ExoPlayer
+//        compileOptions {
+//            targetCompatibility JavaVersion.VERSION_1_8
+//        }
     }
 
     buildTypes {
@@ -73,6 +80,10 @@ dependencies {
     // Dependencia de Lottie
     implementation("com.airbnb.android:lottie:6.4.1")
     implementation("com.airbnb.android:lottie-compose:5.2.0")
-
+    // ExoPlayer (para manejar audio en la app)
+    implementation("androidx.media3:media3-exoplayer:1.3.1")
+    implementation("androidx.media3:media3-exoplayer-dash:1.3.1")
+    implementation("androidx.media3:media3-ui:1.3.1")
+    implementation("androidx.media3:media3-common:1.3.1")
 
 }
