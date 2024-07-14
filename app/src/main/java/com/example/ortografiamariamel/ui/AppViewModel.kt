@@ -1,10 +1,9 @@
 package com.example.ortografiamariamel.ui
 
 import android.util.Log
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.material3.DrawerValue
 import androidx.lifecycle.ViewModel
 import com.example.ortografiamariamel.AppScreen
-import com.example.ortografiamariamel.service.AudioController
 import com.example.ortografiamariamel.ui.data.AppUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -32,14 +31,19 @@ class AppViewModel: ViewModel() {
         }
     }
     fun setPantallaActual(unidad: AppScreen){
-        Log.d("AppViewModel","setPantallaActual: $unidad")
         _uiState.update { currentState->
             currentState.copy(
                 menu = unidad,
             )
         }
+//        Log.d("AppViewModel","valor despues de setear: ${_uiState.value.menu}")
     }
 
+    fun closeMenuLateral(){
+        _uiState.update { currentState->
+            currentState.copy(drawer = DrawerValue.Closed)
+        }
+    }
 
     fun setEnergiasDisponibles(valor:Int){
         _uiState.update { currentState->

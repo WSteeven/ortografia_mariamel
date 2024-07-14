@@ -21,6 +21,7 @@
     <string name="actividad3">Actividad 3</string>
     <string name="actividad4">Actividad 4</string>
     <string name="evaluacion">Evaluación</string>
+    <string name="blank">""</string>
 
 
 </resources>

@@ -1,4 +1,4 @@
-package com.example.ortografiamariamel.ui.views
+package com.example.ortografiamariamel.ui.screens
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
@@ -49,8 +49,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.ortografiamariamel.AppScreen
 import com.example.ortografiamariamel.R
-import com.example.ortografiamariamel.ui.screens.AppTopBar
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 
 
@@ -60,13 +60,12 @@ fun InicioScreen(
     modifier: Modifier = Modifier,
     onNextButtonClicked: () -> Unit = {},
 ) {
-//    val imageColegio = painterResource(R.drawable.logo_colegio)
-//    val imageLogo = painterResource(R.drawable.lapiz8)
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             AppTopBar(
+                title =  AppScreen.Inicio.title,
                 puedeNavegarAtras = false,
                 modifier = modifier,
                 mostrarEncabezado = false,
@@ -81,33 +80,12 @@ fun InicioScreen(
                     .padding(16.dp)
                     .align(alignment = Alignment.CenterHorizontally)
             )
-//        Image1(
-//            painter = imageColegio,
-//            contentDescription = null,
-//            modifier = Modifier
-//                .padding(16.dp)
-//                .align(alignment = Alignment.CenterHorizontally)
-//        )
             Spacer(modifier = Modifier.height(16.dp))
             ContinuousSlideAnimation(
                 modifier = Modifier
                     .fillMaxSize(.6f)
                     .align(alignment = Alignment.CenterHorizontally)
             )
-//        SlideInFromRightAnimation(
-//            Modifier
-//                .fillMaxSize(.6f)
-//                .padding(16.dp)
-//                .align(alignment = Alignment.CenterHorizontally)
-//        )
-//        Image(
-//            painter = imageLogo,
-//            contentDescription = null,
-//            modifier = Modifier
-//                .fillMaxSize(.6f)
-//                .padding(16.dp)
-//                .align(alignment = Alignment.CenterHorizontally)
-//        )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = "Bienvenid@ a",
@@ -119,7 +97,6 @@ fun InicioScreen(
             Button(
                 onClick = onNextButtonClicked,
                 modifier = Modifier
-//                .height(64.dp)
                     .align(Alignment.CenterHorizontally),
                 border = BorderStroke(4.dp, Color(244, 225, 220)),
                 shape = MaterialTheme.shapes.extraLarge,
@@ -178,7 +155,7 @@ fun BasicMarqueeNombreApp() {
 fun ContinuousSlideAnimation(modifier: Modifier) {
     val infiniteTransition = rememberInfiniteTransition(label = "")
 
-    // Animación de desplazamiento horizontal de izquierda a derecha
+    // Horizontal scrolling animation from left to right
     val offsetX by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
@@ -196,18 +173,10 @@ fun ContinuousSlideAnimation(modifier: Modifier) {
 @Composable
 private fun SlideInFromRightAnimation(offsetX: Float, modifier: Modifier) {
     val painter = painterResource(id = R.drawable.lapiz8)
-//    var isVisible by remember { mutableStateOf(false) }
-
-    // Anima el desplazamiento horizontal de la imagen
-//    val offsetX by animateDpAsState(
-//        targetValue = if (isVisible) 0.dp else 200.dp,
-//        animationSpec = tween(durationMillis = 1000)
-//    )
-
     Column {
         Image(
             painter = painter,
-            contentDescription = null, // Puedes agregar una descripción accesible aquí
+            contentDescription = null,
             modifier = modifier.offset(x = (offsetX * 200).dp)
         )
     }
@@ -217,13 +186,13 @@ private fun SlideInFromRightAnimation(offsetX: Float, modifier: Modifier) {
 fun SlideInFromTopAnimation(imageResId: Int, modifier: Modifier) {
     var isVisible by remember { mutableStateOf(false) }
 
-    // Animación de desplazamiento vertical desde arriba
+    // Animation vertical center to Top of screen
     val offsetY by animateFloatAsState(
         targetValue = if (isVisible) 0f else 1f,
-        animationSpec = tween(durationMillis = 2000, easing = FastOutSlowInEasing)
+        animationSpec = tween(durationMillis = 2000, easing = FastOutSlowInEasing), label = ""
     )
 
-    // Cuando se hace visible, establece isVisible en true
+    // When is visible, set isVisible = true
     LaunchedEffect(key1 = true) {
         isVisible = true
     }
@@ -248,8 +217,8 @@ private fun AnimatedImage(offsetY: Float, imageResId: Int) {
             painter = painter,
             contentDescription = null,
             modifier = Modifier
-                .size(100.dp) // Tamaño de la imagen
-                .padding(8.dp) // Espacio de relleno opcional
+                .size(100.dp) // Size of image
+                .padding(8.dp)
         )
     }
 }

@@ -1,4 +1,4 @@
-package com.example.ortografiamariamel.ui.views
+package com.example.ortografiamariamel.ui.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -20,7 +20,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -41,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.ortografiamariamel.AppScreen
 import com.example.ortografiamariamel.R
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
@@ -49,22 +50,24 @@ import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatosJugadorScreen(
-    viewModel: AppViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    viewModel: AppViewModel,
+    onPrevButtonClicked: () -> Unit,
     onNextButtonClicked: () -> Unit,
     modifier: Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
-//    val imageLogo = painterResource(R.drawable.lapiz8)
     var playerName by remember { mutableStateOf(uiState.nombreJugador) }
-    var sliderValue by remember { mutableFloatStateOf(8f) }
+    var sliderValue by remember { mutableIntStateOf(uiState.edad) }
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            com.example.ortografiamariamel.ui.screens.AppTopBar(
-                puedeNavegarAtras = false,
+            AppTopBar(
+                title = AppScreen.DatosJugador.title,
+                puedeNavegarAtras = true,
+                navigateUp = onPrevButtonClicked,
                 modifier = modifier,
-                mostrarEncabezado = false,
+                mostrarEncabezado = true,
                 mostrarMenu = false
             )
         }
@@ -103,8 +106,8 @@ fun DatosJugadorScreen(
             )
             Spacer(modifier = Modifier.height(16.dp))
             Slider(
-                value = sliderValue,
-                onValueChange = { sliderValue = it },
+                value = sliderValue.toFloat(),
+                onValueChange = { sliderValue = it.toInt() },
                 valueRange = 4f..12f,
                 steps = 7,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -120,7 +123,7 @@ fun DatosJugadorScreen(
                             fontFamily = FontFamily.SansSerif
                         )
                     ) {
-                        append(sliderValue.toInt().toString())
+                        append(sliderValue.toString())
                     }
                 },
                 modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
@@ -130,7 +133,7 @@ fun DatosJugadorScreen(
                 enabled = playerName.isNotEmpty(),
                 onClick = {
                     viewModel.setNombreJugador(playerName)
-                    viewModel.setEdad(sliderValue.toInt())
+                    viewModel.setEdad(sliderValue)
                     onNextButtonClicked()
                 },
                 modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -150,7 +153,7 @@ fun DatosJugadorScreen(
 @Composable
 fun DatosJugadorPreview() {
     OrtografiaMariamelTheme {
-        DatosJugadorScreen(viewModel(),{},modifier = Modifier)
+        DatosJugadorScreen(viewModel = viewModel(factory = AppViewModelProvider.Factory), {}, {}, modifier = Modifier)
     }
 }
 

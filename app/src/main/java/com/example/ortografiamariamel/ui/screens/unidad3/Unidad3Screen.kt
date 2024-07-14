@@ -1,4 +1,4 @@
-package com.example.ortografiamariamel.ui.views.unidad3
+package com.example.ortografiamariamel.ui.screens.unidad3
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -29,24 +29,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.ortografiamariamel.AppScreen
 import com.example.ortografiamariamel.R
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
 import com.example.ortografiamariamel.ui.screens.AppTopBar
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
-import com.example.ortografiamariamel.ui.views.DrawerState
-
+import com.example.ortografiamariamel.ui.screens.MenuLateral
 
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun UnidadIII(onPrevButtonClicked: () -> Unit,
               onNextButtonClicked: () -> Unit,
-              viewModel: AppViewModel = viewModel(factory = AppViewModelProvider.Factory),
+              viewModel: AppViewModel,
               onItemMenuButtonClicked: ()->Unit,
               modifier: Modifier = Modifier
 ){
-    DrawerState(content = {
+    MenuLateral(
+        title = AppScreen.Unidad3.title,
+        content = {
         val tildeDiacrita = painterResource(R.drawable.imagen_tema_unidad1)
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
         Scaffold(
@@ -118,6 +120,6 @@ fun UnidadIII(onPrevButtonClicked: () -> Unit,
 @Composable
 fun UnidadIIIScreenPreview() {
     OrtografiaMariamelTheme {
-        UnidadIII(onPrevButtonClicked = { /*TODO*/ }, onNextButtonClicked = { /*TODO*/ }, onItemMenuButtonClicked = {})
+        UnidadIII(viewModel =  viewModel(factory = AppViewModelProvider.Factory), onPrevButtonClicked = { /*TODO*/ }, onNextButtonClicked = { /*TODO*/ }, onItemMenuButtonClicked = {})
     }
 }

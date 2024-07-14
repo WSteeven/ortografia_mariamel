@@ -1,22 +1,21 @@
-package com.example.ortografiamariamel.ui.views.unidad1
+package com.example.ortografiamariamel.ui.screens.unidad1
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -29,38 +28,31 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.ortografiamariamel.AppScreen
 import com.example.ortografiamariamel.R
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
-import com.example.ortografiamariamel.ui.screens.AppTopBar
+import com.example.ortografiamariamel.ui.screens.MenuLateral
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
-import com.example.ortografiamariamel.ui.views.DrawerState
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UnidadI(
+    viewModel: AppViewModel,
     modifier: Modifier = Modifier,
     onPrevButtonClicked: () -> Unit,
     onNextButtonClicked: () -> Unit,
-    viewModel: AppViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    onItemMenuButtonClicked: ()->Unit,
+    onItemMenuButtonClicked: () -> Unit,
 ) {
-    DrawerState(content = {
-        val tildeDiacrita = painterResource(R.drawable.imagen_tema_unidad1)
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-        Scaffold(
-            modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            topBar = {
-                AppTopBar(
-                    puedeNavegarAtras = false,
-                    modifier = modifier,
-                    mostrarEncabezado = false,
-                    mostrarMenu = false
-                )
-            }
-        ) { innerPadding ->
-            Column(modifier = modifier.padding(innerPadding)) {
+    MenuLateral(
+        title = AppScreen.Unidad1.title,
+        content = {
+            val tildeDiacrita = painterResource(R.drawable.imagen_tema_unidad1)
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(4.dp)
+            ) {
                 Text(
                     text = "TEMA:",
                     fontWeight = FontWeight.Bold,
@@ -104,38 +96,55 @@ fun UnidadI(
                     ),
                     modifier = Modifier.padding(16.dp)
                 )
-                Row(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .padding(dimensionResource(R.dimen.padding_medium)),
-                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
-                    verticalAlignment = Alignment.Bottom
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize().padding(4.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Bottom
                 ) {
-                    OutlinedButton(
-                        modifier = Modifier.weight(1f),
-                        onClick = onPrevButtonClicked
+
+                    Row(
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .padding(dimensionResource(R.dimen.padding_medium)),
+                        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
+                        verticalAlignment = Alignment.Bottom
                     ) {
-                        Text(stringResource(R.string.atras))
-                    }
-                    Button(
-                        modifier = Modifier.weight(1f),
-                        // the button is enabled when the user makes a selection
-                        onClick = onNextButtonClicked
-                    ) {
-                        Text(stringResource(R.string.siguiente))
+                        OutlinedButton(
+                            modifier = Modifier.weight(1f),
+                            onClick = onPrevButtonClicked
+                        ) {
+                            Text(stringResource(R.string.atras))
+                        }
+                        Button(
+                            modifier = Modifier.weight(1f),
+                            // the button is enabled when the user makes a selection
+                            onClick = onNextButtonClicked
+                        ) {
+                            Text(stringResource(R.string.siguiente))
+                        }
                     }
                 }
+
             }
-        }
-        /*TODO*/
-    }, viewModel = viewModel, onItemMenuButtonClicked = onItemMenuButtonClicked, modifier = modifier)
+            /*TODO*/
+        },
+        viewModel = viewModel,
+        onItemMenuButtonClicked = onItemMenuButtonClicked,
+        modifier = modifier
+    )
 }
 
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, widthDp = 352)
 @Composable
 fun UnidadIScreenPreview() {
     OrtografiaMariamelTheme {
-        UnidadI(onPrevButtonClicked = { /*TODO*/ }, onNextButtonClicked = { /*TODO*/ }, onItemMenuButtonClicked = {})
+        UnidadI(
+            viewModel = viewModel(factory = AppViewModelProvider.Factory),
+            onPrevButtonClicked = { /*TODO*/ },
+            onNextButtonClicked = { /*TODO*/ },
+            onItemMenuButtonClicked = {})
     }
 }
