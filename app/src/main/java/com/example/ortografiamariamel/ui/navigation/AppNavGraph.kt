@@ -1,11 +1,8 @@
 package com.example.ortografiamariamel.ui.navigation
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -21,6 +18,8 @@ import com.example.ortografiamariamel.ui.screens.DatosJugadorScreen
 import com.example.ortografiamariamel.ui.screens.InicioScreen
 import com.example.ortografiamariamel.ui.screens.MenuScreen
 import com.example.ortografiamariamel.ui.screens.unidad1.Actividad1
+import com.example.ortografiamariamel.ui.screens.unidad1.FinJuegoUnidad1
+import com.example.ortografiamariamel.ui.screens.unidad1.Niveles1
 import com.example.ortografiamariamel.ui.screens.unidad1.UnidadI
 import com.example.ortografiamariamel.ui.screens.unidad2.Actividad2
 import com.example.ortografiamariamel.ui.screens.unidad2.UnidadII
@@ -36,7 +35,6 @@ fun AppNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
-    val uiState by viewModel.uiState.collectAsState()
 
     NavHost(
         navController = navController,
@@ -72,7 +70,7 @@ fun AppNavHost(
             MenuScreen(
                 viewModel = viewModel,
                 onPrevButtonClicked = {
-                    navController.navigateUp()
+                    navController.navigate(AppScreen.DatosJugador.name)
                 },
                 onNextButtonClicked = {
                     navController.navigate(viewModel.uiState.value.menu.name)
@@ -115,7 +113,7 @@ fun AppNavHost(
                     navController.navigateUp()
                 },
                 onNextButtonClicked = {
-                    navController.navigate(AppScreen.Menu.name)
+                    navController.navigate(AppScreen.FinJuegoActividad1.name)
                 },
                 onItemMenuButtonClicked = {
 //                    Log.d("AppNavGraph", "composable ActividadI: ${uiState.menu.name}")
@@ -123,6 +121,22 @@ fun AppNavHost(
                 },
                 modifier = Modifier
             )
+        }
+        composable(route = AppScreen.FinJuegoActividad1.name) {
+            FinJuegoUnidad1(
+                viewModel = viewModel,
+                onItemMenuButtonClicked = {
+                    navController.navigate(viewModel.uiState.value.menu.name)
+                },
+                onClick = { navController.navigate(AppScreen.MenuJuego1.name) }
+            )
+        }
+        composable(route = AppScreen.MenuJuego1.name) {
+            Niveles1(
+                viewModel = viewModel,
+                onClick = {
+                    navController.navigate(viewModel.uiState.value.menu_juego.name)
+                })
         }
         // 6ta pantalla - UNIDAD II
         composable(route = AppScreen.Unidad2.name) {

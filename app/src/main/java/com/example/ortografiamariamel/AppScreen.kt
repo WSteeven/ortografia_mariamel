@@ -19,6 +19,8 @@ enum class AppScreen(@StringRes val title: Int) {
     Menu(R.string.menu),
     Unidad1(R.string.unidad1),
     Actividad1(R.string.actividad1),
+    FinJuegoActividad1(R.string.actividad1),
+    MenuJuego1(R.string.niveles_unidad1),
     Unidad2(R.string.unidad2),
     Actividad2(R.string.actividad2),
     Unidad3(R.string.unidad3),

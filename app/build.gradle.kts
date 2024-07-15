@@ -57,7 +57,6 @@ android {
 }
 
 dependencies {
-    implementation("com.airbnb.android:lottie:6.4.1")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -80,6 +79,11 @@ dependencies {
     // Dependencia de Lottie
     implementation("com.airbnb.android:lottie:6.4.1")
     implementation("com.airbnb.android:lottie-compose:5.2.0")
+    // Dependencias de ui
+    implementation("androidx.compose.ui:ui:1.3.0")
+    implementation("androidx.compose.material:material:1.3.0")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.3.0")
+
     // ExoPlayer (para manejar audio en la app)
     implementation("androidx.media3:media3-exoplayer:1.3.1")
     implementation("androidx.media3:media3-exoplayer-dash:1.3.1")

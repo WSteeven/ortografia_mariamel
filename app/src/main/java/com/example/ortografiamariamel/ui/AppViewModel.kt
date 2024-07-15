@@ -10,28 +10,30 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class AppViewModel: ViewModel() {
+class AppViewModel : ViewModel() {
 
     private val _uiState = MutableStateFlow(AppUiState())
     val uiState: StateFlow<AppUiState> = _uiState.asStateFlow()
 
-//    Configure all functions for setValues, calculates, etc.
-    fun setNombreJugador(nombre: String){
-        _uiState.update { currentState->
+    //    Configure all functions for setValues, calculates, etc.
+    fun setNombreJugador(nombre: String) {
+        _uiState.update { currentState ->
             currentState.copy(
                 nombreJugador = nombre,
             )
         }
     }
-    fun setEdad(edad: Int){
-        _uiState.update { currentState->
+
+    fun setEdad(edad: Int) {
+        _uiState.update { currentState ->
             currentState.copy(
                 edad = edad,
             )
         }
     }
-    fun setPantallaActual(unidad: AppScreen){
-        _uiState.update { currentState->
+
+    fun setPantallaActual(unidad: AppScreen) {
+        _uiState.update { currentState ->
             currentState.copy(
                 menu = unidad,
             )
@@ -39,21 +41,26 @@ class AppViewModel: ViewModel() {
 //        Log.d("AppViewModel","valor despues de setear: ${_uiState.value.menu}")
     }
 
-    fun closeMenuLateral(){
-        _uiState.update { currentState->
+    fun setPantallaJuego(pantalla: AppScreen) {
+        _uiState.update { currentState -> currentState.copy(menu_juego = pantalla) }
+    }
+
+    fun closeMenuLateral() {
+        _uiState.update { currentState ->
             currentState.copy(drawer = DrawerValue.Closed)
         }
     }
 
-    fun setEnergiasDisponibles(valor:Int){
-        _uiState.update { currentState->
+    fun setEnergiasDisponibles(valor: Int) {
+        _uiState.update { currentState ->
             currentState.copy(
                 energias = valor,
             )
         }
     }
-    fun setPuntaje(valor:Int){
-        _uiState.update { currentState->
+
+    fun setPuntaje(valor: Int) {
+        _uiState.update { currentState ->
             currentState.copy(
                 puntaje = valor,
             )

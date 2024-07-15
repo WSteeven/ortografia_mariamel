@@ -11,6 +11,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,13 +25,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieAnimatable
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.ortografiamariamel.AppScreen
 import com.example.ortografiamariamel.R
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
 import com.example.ortografiamariamel.ui.game.MatchPairs
-import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 import com.example.ortografiamariamel.ui.screens.MenuLateral
+import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 
 @Composable
 fun Actividad1(
@@ -45,16 +52,30 @@ fun Actividad1(
         content = {
             Column(
                 modifier = Modifier
-                    .fillMaxHeight()
                     .padding(4.dp)
             ) {
-                Text(
-                    text = "ACTIVIDAD",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 30.sp,
-                    modifier = modifier
-                        .align(Alignment.CenterHorizontally)
-                )
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.End,
+                        modifier = modifier
+                            .fillMaxWidth(.4f)
+                            .fillMaxHeight(.07f)
+                    ) {
+                        LottieAnimationScreen()
+                    }
+                }
+//                Text(
+//                    text = "ACTIVIDAD",
+//                    fontWeight = FontWeight.Bold,
+//                    fontSize = 30.sp,
+//                    modifier = modifier
+//                        .align(Alignment.CenterHorizontally)
+//                )
                 Text(
                     text = "Elija la carta correcta de acuerdo al monosílabo",
                     fontWeight = FontWeight.SemiBold,
@@ -66,10 +87,11 @@ fun Actividad1(
                     modifier = modifier
                         .align(Alignment.CenterHorizontally)
                 )
-                MatchPairs()
+                MatchPairs(onNextButtonClicked)
                 Column(
                     modifier = Modifier
-                        .fillMaxSize().padding(0.dp),
+                        .fillMaxSize()
+                        .padding(0.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Bottom
                 ) {
@@ -103,6 +125,27 @@ fun Actividad1(
         viewModel = viewModel,
         onItemMenuButtonClicked = onItemMenuButtonClicked,
         modifier = modifier
+    )
+}
+
+@Composable
+fun LottieAnimationScreen() {
+//    val context = LocalContext.current
+
+    // Cargar la animación desde assets
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.actividad_apareciendo))
+
+    // Controlar la animación
+    val animatable = rememberLottieAnimatable()
+
+    LaunchedEffect(composition) {
+        animatable.animate(composition)
+    }
+
+    LottieAnimation(
+        composition = composition,
+        iterations = LottieConstants.IterateForever,
+        modifier = Modifier.fillMaxSize()
     )
 }
 

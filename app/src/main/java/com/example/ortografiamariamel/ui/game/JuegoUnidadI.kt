@@ -49,7 +49,7 @@ import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 
 
 @Composable
-fun MatchPairs() {
+fun MatchPairs(onNextButtonClicked:()->Unit) {
     val datasource = Datasource()
     var definiciones by remember { mutableStateOf(datasource.loadDefiniciones()) }
     var respuestas by remember { mutableStateOf(datasource.loadRespuestas()) }
@@ -106,6 +106,9 @@ fun MatchPairs() {
                         } else {
                             soundManager.playSound(R.raw.incorrect_card_sound)
                         }
+                        if(allMatched(definiciones, respuestas)){
+                            onNextButtonClicked()
+                        }
                     }
                 })
         }
@@ -113,6 +116,9 @@ fun MatchPairs() {
 
 }
 
+private fun allMatched(definiciones: List<Carta>, respuestas:List<Carta>):Boolean{
+    return definiciones.all { it.isMatched } && respuestas.all { it.isMatched }
+}
 @Composable
 fun ListaDefinificiones(
     cartas: List<Carta>,
@@ -138,16 +144,16 @@ fun ListaDefinificiones(
 @Composable
 fun CardSimple(
     carta: Carta,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
     elevation: Dp = 0.dp,
     backgroundColor: Color = Color.LightGray,
-    modifier: Modifier = Modifier
 ) {
     val imagenCarta: Int = R.drawable.carta2
     Card(
         modifier = modifier
-            .fillMaxHeight() // Tamaño fijo para cada carta
-            .fillMaxWidth(),
+            .height(120.dp) // Tamaño fijo para cada carta
+            .width(90.dp),
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(elevation),
         colors = CardDefaults.cardColors(containerColor = backgroundColor),
@@ -225,17 +231,17 @@ fun ListaMonosilabas(
 fun CardCarta(
     carta: Carta,
     soundManager: SoundManager,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
     elevation: Dp = 0.dp,
     backgroundColor: Color = Color.LightGray,
-    modifier: Modifier = Modifier
 ) {
     val imagenCarta: Int = R.drawable.carta1
 
     Card(
         modifier = modifier
-            .fillMaxHeight() // Tamaño fijo para cada carta
-            .fillMaxWidth(),
+            .height(120.dp) // Tamaño fijo para cada carta
+            .width(90.dp),
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(elevation),
         colors = CardDefaults.cardColors(containerColor = backgroundColor),
@@ -245,7 +251,7 @@ fun CardCarta(
                 .clickable(
                     onClick = {
                         Log.d("CardClicked", "Carta negra seleccionada: $carta")
-                        soundManager.playSound(R.raw.correct_card_sound)
+                        soundManager.playSound(R.raw.neutral_sound)
                         onClick()
                     }
                 ),
@@ -278,7 +284,7 @@ fun CardCarta(
 fun CardSimplePreview() {
     OrtografiaMariamelTheme {
         CardSimple(
-            Carta(id = 1, "Articulo", isSelected = false, isMatched = false),
+            Carta(id = 1, "Articulo", isSelected = true, isMatched = false),
             modifier = Modifier.width(80.dp).height(120.dp)
         )
     }
@@ -289,7 +295,7 @@ fun CardSimplePreview() {
 fun CardCartaPreview() {
     OrtografiaMariamelTheme {
         CardCarta(
-            Carta(id = 1, "tu", isSelected = false, isMatched = false),
+            Carta(id = 1, "tu", isSelected = true, isMatched = false),
             soundManager = SoundManager(LocalContext.current),
             modifier = Modifier.height(120.dp)
         )
@@ -300,6 +306,6 @@ fun CardCartaPreview() {
 @Composable
 fun ActividadScreenPreview() {
     OrtografiaMariamelTheme {
-        MatchPairs()
+        MatchPairs({})
     }
 }
