@@ -11,10 +11,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalDrawerSheet
@@ -68,6 +68,8 @@ fun AppTopBar(
     navigateUp: () -> Unit = {}
 ) {
 
+//    val windowSize = calculateWindowSizeClass(this)
+
     TopAppBar(
         scrollBehavior = scrollBehavior,
         title = {
@@ -81,7 +83,8 @@ fun AppTopBar(
                 ) {
                     Text(
                         text = stringResource(title),
-                        modifier = Modifier.fillMaxWidth(.4f),
+                        fontSize = 18.sp,
+                        modifier = Modifier.fillMaxWidth(.3f),
                         textAlign = TextAlign.Center
                     )
                     Row(
@@ -141,7 +144,7 @@ fun AppTopBar(
             if (puedeNavegarAtras && !mostrarMenu) {
                 IconButton(onClick = navigateUp) {
                     Icon(
-                        imageVector = Icons.Filled.ArrowBack,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Atrás"
                     )
                 }
@@ -252,7 +255,7 @@ fun MenuItems(viewModel: AppViewModel, onItemMenuButtonClicked: () -> Unit) {
                 color = Color.White
             )
         }
-        Divider()
+        HorizontalDivider()
         Spacer(modifier = Modifier.padding(4.dp))
         NavigationDrawerItem(
             colors = colors,
@@ -316,7 +319,7 @@ fun MenuItems(viewModel: AppViewModel, onItemMenuButtonClicked: () -> Unit) {
 
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
+@Preview(showBackground = true, widthDp = 305)
 @Composable
 fun AppTopBarPreview() {
     OrtografiaMariamelTheme {
@@ -331,7 +334,7 @@ fun AppTopBarPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, widthDp = 305)
 @Composable
 fun MenuLateralPreview() {
     OrtografiaMariamelTheme {

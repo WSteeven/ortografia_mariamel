@@ -48,64 +48,65 @@ fun UnidadI(
         title = R.string.blank,
         content = {
             val tildeDiacrita = painterResource(R.drawable.imagen_tema_unidad1)
-            Column(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(4.dp)
-                    .verticalScroll(rememberScrollState()) // Habilitar desplazamiento vertical
-            ) {
-                Text(
-                    text = "TEMA:",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 30.sp,
-                    modifier = modifier
-                        .align(Alignment.CenterHorizontally)
-                )
-                Text(
-                    text = "Tílde Diacrítica en los Monosílabos",
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 25.sp,
-                    textAlign = TextAlign.Center,
-                    fontFamily = FontFamily.SansSerif,
-                    letterSpacing = 3.sp,
-                    color = Color(230, 170, 75),
-                    modifier = modifier
-                        .align(Alignment.CenterHorizontally)
-                )
-                Image(
-                    painter = tildeDiacrita, contentDescription = "Unidad I",
-                    modifier = modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(top = 16.dp),
-                    contentScale = ContentScale.FillBounds
-                )
-                Text(
-                    text = stringResource(id = R.string.parrafo1_unidad1),
-                    style = TextStyle(
-                        textAlign = TextAlign.Justify,
-                        fontFamily = FontFamily.SansSerif,
-                        letterSpacing = 2.sp
-                    ),
-                    modifier = Modifier.padding(16.dp)
-                )
-                Text(
-                    text = stringResource(id = R.string.parrafo2_unidad1),
-                    style = TextStyle(
-                        textAlign = TextAlign.Justify,
-                        fontFamily = FontFamily.SansSerif,
-                        letterSpacing = 2.sp
-                    ),
-                    modifier = Modifier.padding(16.dp)
-                )
-
+            Column(modifier = Modifier.fillMaxSize()) {
                 Column(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(4.dp),
+                        .fillMaxHeight(.85f)
+                        .padding(4.dp)
+                        .verticalScroll(rememberScrollState()) // Habilitar desplazamiento vertical
+                ) {
+                    Text(
+                        text = "TEMA:",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 30.sp,
+                        modifier = modifier
+                            .align(Alignment.CenterHorizontally)
+                    )
+                    Text(
+                        text = "Tílde Diacrítica en los Monosílabos",
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 25.sp,
+                        textAlign = TextAlign.Center,
+                        fontFamily = FontFamily.SansSerif,
+                        letterSpacing = 3.sp,
+                        color = Color(230, 170, 75),
+                        modifier = modifier
+                            .align(Alignment.CenterHorizontally)
+                    )
+                    Image(
+                        painter = tildeDiacrita, contentDescription = "Unidad I",
+                        modifier = modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(top = 16.dp),
+                        contentScale = ContentScale.FillBounds
+                    )
+                    Text(
+                        text = stringResource(id = R.string.parrafo1_unidad1),
+                        style = TextStyle(
+                            textAlign = TextAlign.Justify,
+                            fontFamily = FontFamily.SansSerif,
+                            letterSpacing = 2.sp
+                        ),
+                        modifier = Modifier.padding(16.dp)
+                    )
+                    Text(
+                        text = stringResource(id = R.string.parrafo2_unidad1),
+                        style = TextStyle(
+                            textAlign = TextAlign.Justify,
+                            fontFamily = FontFamily.SansSerif,
+                            letterSpacing = 2.sp
+                        ),
+                        modifier = Modifier.padding(16.dp)
+                    )
+
+
+                }
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Bottom
                 ) {
-
                     Row(
                         modifier = modifier
                             .fillMaxWidth()
@@ -128,7 +129,6 @@ fun UnidadI(
                         }
                     }
                 }
-
             }
             /*TODO*/
         },

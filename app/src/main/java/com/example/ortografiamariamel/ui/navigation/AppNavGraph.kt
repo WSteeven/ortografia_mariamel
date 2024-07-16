@@ -94,7 +94,7 @@ fun AppNavHost(
                     navController.navigateUp()
                 },
                 onNextButtonClicked = {
-                    navController.navigate(AppScreen.Actividad1.name)
+                    navController.navigate(AppScreen.MenuJuego1.name)
                 },
                 onItemMenuButtonClicked = {
 //                    Log.d("AppNavGraph", "composable UnidadI: ${uiState.menu.name}")

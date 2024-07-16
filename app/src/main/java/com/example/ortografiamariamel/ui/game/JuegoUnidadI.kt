@@ -152,6 +152,8 @@ fun CardSimple(
     val imagenCarta: Int = R.drawable.carta2
     Card(
         modifier = modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
             .height(120.dp) // Tamaño fijo para cada carta
             .width(90.dp),
         shape = RoundedCornerShape(8.dp),
@@ -181,7 +183,7 @@ fun CardSimple(
                 }
 
             } else {
-                Image(painter = painterResource(imagenCarta), contentDescription = null)
+                Image(painter = painterResource(imagenCarta), contentDescription = null, contentScale = ContentScale.FillBounds)
 
             }
 //            Text(text = carta.texto,
@@ -269,7 +271,7 @@ fun CardCarta(
             } else {
                 Image(
                     painter = painterResource(imagenCarta),
-                    contentScale = ContentScale.FillWidth,
+                    contentScale = ContentScale.FillBounds,
                     contentDescription = null
                 )
 
@@ -284,7 +286,7 @@ fun CardCarta(
 fun CardSimplePreview() {
     OrtografiaMariamelTheme {
         CardSimple(
-            Carta(id = 1, "Articulo", isSelected = true, isMatched = false),
+            Carta(id = 1, "Articulo", isSelected = false, isMatched = false),
             modifier = Modifier.width(80.dp).height(120.dp)
         )
     }
@@ -295,17 +297,17 @@ fun CardSimplePreview() {
 fun CardCartaPreview() {
     OrtografiaMariamelTheme {
         CardCarta(
-            Carta(id = 1, "tu", isSelected = true, isMatched = false),
+            Carta(id = 1, "tu", isSelected = false, isMatched = false),
             soundManager = SoundManager(LocalContext.current),
             modifier = Modifier.height(120.dp)
         )
     }
 }
 
-@Preview(showBackground = true, widthDp = 372)
+@Preview(showBackground = true, widthDp = 370, heightDp = 967)
 @Composable
 fun ActividadScreenPreview() {
     OrtografiaMariamelTheme {
-        MatchPairs({})
+        MatchPairs(onNextButtonClicked = {})
     }
 }

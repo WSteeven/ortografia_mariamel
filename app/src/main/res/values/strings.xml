@@ -9,7 +9,7 @@
 
 <!--    Strings de titulos para el menu-->
     <string name="inicio"> </string>
-    <string name="datos_jugador">Datos del Jugador</string>
+    <string name="datos_jugador">Datos Jugador</string>
     <string name="menu">Menu</string>
     <string name="unidad1">Unidad 1</string>
     <string name="unidad2">Unidad 2</string>

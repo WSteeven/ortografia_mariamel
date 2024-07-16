@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,7 +29,6 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieAnimatable
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.example.ortografiamariamel.AppScreen
 import com.example.ortografiamariamel.R
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
@@ -108,16 +106,16 @@ fun Actividad1(
                         ) {
                             Text(stringResource(R.string.atras))
                         }
-                        Button(
-                            modifier = Modifier.weight(1f),
-                            // the button is enabled when the user makes a selection
-                            onClick = {
-                                viewModel.setPantallaActual(AppScreen.Menu)
-                                onNextButtonClicked()
-                            }
-                        ) {
-                            Text(stringResource(R.string.siguiente))
-                        }
+//                        Button(
+//                            modifier = Modifier.weight(1f),
+//                            // the button is enabled when the user makes a selection
+//                            onClick = {
+//                                viewModel.setPantallaActual(AppScreen.Menu)
+//                                onNextButtonClicked()
+//                            }
+//                        ) {
+//                            Text(stringResource(R.string.siguiente))
+//                        }
                     }
                 }
             }
@@ -155,7 +153,7 @@ fun LottieAnimationScreen() {
 // Iphone 14 Pro widthDp = 393, heightDp = 852)
 // Iphone 3ra Gen widthDp = 375, heightDp = 667)
 
-@Preview(showBackground = true, widthDp = 375, heightDp = 667)
+@Preview(showBackground = true, widthDp = 325, heightDp = 967)
 @Composable
 fun ActividadScreenPreview() {
     OrtografiaMariamelTheme {
