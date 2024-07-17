@@ -101,7 +101,7 @@ fun AppTopBar(
                         )
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(
-                                text = "ORTOGRAFÍA",
+                                text = "APP",
                                 fontSize = 14.sp,
                                 style = TextStyle(
                                     fontSize = 20.sp,
@@ -249,7 +249,7 @@ fun MenuItems(viewModel: AppViewModel, onItemMenuButtonClicked: () -> Unit) {
                     .size(32.dp)
             )
             Text(
-                "Ortografía Mariamel",
+                "App Mariamel",
                 modifier = Modifier.padding(16.dp),
                 fontWeight = FontWeight.Bold,
                 color = Color.White

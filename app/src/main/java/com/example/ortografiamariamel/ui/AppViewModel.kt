@@ -1,6 +1,5 @@
 package com.example.ortografiamariamel.ui
 
-import android.util.Log
 import androidx.compose.material3.DrawerValue
 import androidx.lifecycle.ViewModel
 import com.example.ortografiamariamel.AppScreen
@@ -42,7 +41,23 @@ class AppViewModel : ViewModel() {
     }
 
     fun setPantallaJuego(pantalla: AppScreen) {
-        _uiState.update { currentState -> currentState.copy(menu_juego = pantalla) }
+        _uiState.update { currentState -> currentState.copy(menuJuego = pantalla) }
+    }
+
+    /**
+     * Set the Screen for end game, in case game is win before drain all energies, the Screen is
+     * FinJuegoActividad1, else FinJuegoLoseActividad1
+     */
+    fun setScreenEndGame(pantalla: AppScreen) {
+        _uiState.update { currentState -> currentState.copy(screenEndGame = pantalla) }
+    }
+
+    fun reestablecerEnergias() {
+        _uiState.update { it -> it.copy(energias = 5) }
+    }
+
+    fun reestablecerAciertos() {
+        _uiState.update { it -> it.copy(aciertos = 0) }
     }
 
     fun closeMenuLateral() {
@@ -51,18 +66,18 @@ class AppViewModel : ViewModel() {
         }
     }
 
-    fun setEnergiasDisponibles(valor: Int) {
+    fun restarEnergia() {
         _uiState.update { currentState ->
             currentState.copy(
-                energias = valor,
+                energias = currentState.energias - 1,
             )
         }
     }
 
-    fun setPuntaje(valor: Int) {
+    fun sumarAciertos() {
         _uiState.update { currentState ->
             currentState.copy(
-                puntaje = valor,
+                aciertos = currentState.aciertos + 1,
             )
         }
     }

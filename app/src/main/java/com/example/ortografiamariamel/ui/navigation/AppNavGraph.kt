@@ -18,6 +18,7 @@ import com.example.ortografiamariamel.ui.screens.DatosJugadorScreen
 import com.example.ortografiamariamel.ui.screens.InicioScreen
 import com.example.ortografiamariamel.ui.screens.MenuScreen
 import com.example.ortografiamariamel.ui.screens.unidad1.Actividad1
+import com.example.ortografiamariamel.ui.screens.unidad1.FinJuegoLoseUnidad1
 import com.example.ortografiamariamel.ui.screens.unidad1.FinJuegoUnidad1
 import com.example.ortografiamariamel.ui.screens.unidad1.Niveles1
 import com.example.ortografiamariamel.ui.screens.unidad1.UnidadI
@@ -113,7 +114,7 @@ fun AppNavHost(
                     navController.navigateUp()
                 },
                 onNextButtonClicked = {
-                    navController.navigate(AppScreen.FinJuegoActividad1.name)
+                    navController.navigate(viewModel.uiState.value.screenEndGame.name)
                 },
                 onItemMenuButtonClicked = {
 //                    Log.d("AppNavGraph", "composable ActividadI: ${uiState.menu.name}")
@@ -131,11 +132,25 @@ fun AppNavHost(
                 onClick = { navController.navigate(AppScreen.MenuJuego1.name) }
             )
         }
+        composable(route = AppScreen.FinJuegoLoseActividad1.name) {
+            FinJuegoLoseUnidad1(
+                viewModel = viewModel,
+                onItemMenuButtonClicked = {
+                    navController.navigate(viewModel.uiState.value.menu.name)
+                },
+                onPrevButtonClicked = {
+                    navController.navigateUp()
+                },
+                onNextButtonClicked = {
+                    navController.navigate(AppScreen.MenuJuego1.name)
+                },
+            )
+        }
         composable(route = AppScreen.MenuJuego1.name) {
             Niveles1(
                 viewModel = viewModel,
                 onClick = {
-                    navController.navigate(viewModel.uiState.value.menu_juego.name)
+                    navController.navigate(viewModel.uiState.value.menuJuego.name)
                 })
         }
         // 6ta pantalla - UNIDAD II

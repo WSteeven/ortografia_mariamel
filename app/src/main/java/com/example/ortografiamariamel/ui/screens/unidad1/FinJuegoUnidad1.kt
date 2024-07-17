@@ -101,6 +101,8 @@ fun FinJuegoUnidad1(
                             // the button is enabled when the user makes a selection
                             onClick = {
                                 viewModel.setPantallaActual(AppScreen.Menu)
+                                viewModel.reestablecerEnergias()
+                                viewModel.reestablecerAciertos()
                                 onClick()
                             }
                         ) {

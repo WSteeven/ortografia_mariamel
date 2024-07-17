@@ -1,5 +1,6 @@
 package com.example.ortografiamariamel.ui.screens.unidad1
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,24 +31,27 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieAnimatable
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.example.ortografiamariamel.AppScreen
 import com.example.ortografiamariamel.R
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
-import com.example.ortografiamariamel.ui.game.MatchPairs
 import com.example.ortografiamariamel.ui.screens.MenuLateral
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun Actividad1(
+fun FinJuegoLoseUnidad1(
     viewModel: AppViewModel,
     modifier: Modifier = Modifier,
     onPrevButtonClicked: () -> Unit,
     onNextButtonClicked: () -> Unit,
-    onItemMenuButtonClicked: () -> Unit
+    onItemMenuButtonClicked: () -> Unit = {},
 ) {
-
     MenuLateral(
         title = R.string.blank,
+        viewModel = viewModel,
+        onItemMenuButtonClicked = onItemMenuButtonClicked,
+        modifier = modifier,
         content = {
             Column(
                 modifier = Modifier
@@ -61,31 +66,28 @@ fun Actividad1(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.End,
                         modifier = modifier
-                            .fillMaxWidth(.4f)
-                            .fillMaxHeight(.07f)
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .fillMaxHeight(.6f)
                     ) {
-                        LottieAnimationScreen()
+                        LottieAnimationCaraTriste()
                     }
                 }
-//                Text(
-//                    text = "ACTIVIDAD",
-//                    fontWeight = FontWeight.Bold,
-//                    fontSize = 30.sp,
-//                    modifier = modifier
-//                        .align(Alignment.CenterHorizontally)
-//                )
                 Text(
-                    text = "Elija la carta correcta de acuerdo al monosílabo",
+                    text = "Es una pena \uD83D\uDE25, se te acabaron las energías",
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 18.sp,
-                    textAlign = TextAlign.Justify,
+                    textAlign = TextAlign.Center,
                     fontFamily = FontFamily.SansSerif,
                     letterSpacing = 1.sp,
                     color = Color(230, 170, 75),
                     modifier = modifier
+                        .fillMaxWidth()
                         .align(Alignment.CenterHorizontally)
                 )
-                MatchPairs(viewModel, onNextButtonClicked)
+                Text("Solo has acertado ${viewModel.uiState.value.aciertos}/4 respuestas correctas antes de agotar tus energías")
+//                Text("No has acertado todas las respuestas antes de agotarse tus intentos, por lo tanto has perdido")
+
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -102,36 +104,39 @@ fun Actividad1(
                     ) {
                         OutlinedButton(
                             modifier = Modifier.weight(1f),
-                            onClick = onPrevButtonClicked
+                            onClick = {
+                                viewModel.reestablecerEnergias()
+                                viewModel.reestablecerAciertos()
+                                onPrevButtonClicked()
+                            }
                         ) {
-                            Text(stringResource(R.string.atras))
+                            Text(stringResource(R.string.reintentar))
                         }
-//                        Button(
-//                            modifier = Modifier.weight(1f),
-//                            // the button is enabled when the user makes a selection
-//                            onClick = {
-//                                viewModel.setPantallaActual(AppScreen.Menu)
-//                                onNextButtonClicked()
-//                            }
-//                        ) {
-//                            Text(stringResource(R.string.siguiente))
-//                        }
+                        Button(
+                            modifier = Modifier.weight(1f),
+                            // the button is enabled when the user makes a selection
+                            onClick = {
+                                viewModel.setPantallaActual(AppScreen.MenuJuego1)
+                                viewModel.reestablecerEnergias()
+                                viewModel.reestablecerAciertos()
+                                onNextButtonClicked()
+                            }
+                        ) {
+                            Text(stringResource(R.string.back_to_menu_game))
+                        }
                     }
                 }
             }
-        },
-        viewModel = viewModel,
-        onItemMenuButtonClicked = onItemMenuButtonClicked,
-        modifier = modifier
+        }
     )
 }
 
 @Composable
-fun LottieAnimationScreen() {
+fun LottieAnimationCaraTriste() {
 //    val context = LocalContext.current
 
     // Cargar la animación desde assets
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.actividad_apareciendo))
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.cara_triste))
 
     // Controlar la animación
     val animatable = rememberLottieAnimatable()
@@ -147,20 +152,15 @@ fun LottieAnimationScreen() {
     )
 }
 
-// Galaxy S23 widthDp = 412, heightDp = 915)
-// Google Pixel widthDp = 411, heightDp = 891)
-// Huawei P50 Pro widthDp = 384, heightDp = 884)
-// Iphone 14 Pro widthDp = 393, heightDp = 852)
-// Iphone 3ra Gen widthDp = 375, heightDp = 667)
 
-@Preview(showBackground = true, widthDp = 325, heightDp = 967)
+@Preview(showBackground = true, widthDp = 352, heightDp = 600)
 @Composable
-fun ActividadScreenPreview() {
+fun FinJuegoLoseUnidadIScreenPreview() {
     OrtografiaMariamelTheme {
-        Actividad1(
+        FinJuegoLoseUnidad1(
             viewModel = viewModel(factory = AppViewModelProvider.Factory),
             onPrevButtonClicked = { /*TODO*/ },
-            onItemMenuButtonClicked = {},
-            onNextButtonClicked = { /*TODO*/ })
+            onNextButtonClicked = { /*TODO*/ }
+        )
     }
 }

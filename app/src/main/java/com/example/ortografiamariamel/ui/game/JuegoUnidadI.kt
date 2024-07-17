@@ -1,5 +1,6 @@
 package com.example.ortografiamariamel.ui.game
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -41,26 +42,32 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.ortografiamariamel.AppScreen
 import com.example.ortografiamariamel.R
 import com.example.ortografiamariamel.data.Datasource
 import com.example.ortografiamariamel.model.Carta
 import com.example.ortografiamariamel.service.SoundManager
+import com.example.ortografiamariamel.ui.AppViewModel
+import com.example.ortografiamariamel.ui.AppViewModelProvider
+import com.example.ortografiamariamel.ui.screens.unidad1.EnergyBar
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun MatchPairs(onNextButtonClicked:()->Unit) {
+fun MatchPairs(viewModel:AppViewModel,onNextButtonClicked: () -> Unit) {
     val datasource = Datasource()
     var definiciones by remember { mutableStateOf(datasource.loadDefiniciones()) }
     var respuestas by remember { mutableStateOf(datasource.loadRespuestas()) }
     var selectedMonosilaba: Carta? by remember { mutableStateOf(null) }
     var selectedDefinicion: Carta? by remember { mutableStateOf(null) }
-//    var puntos by remember { mutableStateOf(0) }
     var intento by remember { mutableIntStateOf(0) }
 
     val soundManager = SoundManager(LocalContext.current)
 
     Column(modifier = Modifier.padding(top = 16.dp)) {
+        EnergyBar(viewModel.uiState.value.energias)
         Text("Paso 1. Escoge una carta")
         Row(
             modifier = Modifier
@@ -103,10 +110,18 @@ fun MatchPairs(onNextButtonClicked:()->Unit) {
                                 respuestas.map { it.copy(isMatched = it.id == carta.id || it.isMatched) }
                             definiciones =
                                 definiciones.map { it.copy(isMatched = it.id == carta.id || it.isMatched) }
+                            viewModel.sumarAciertos() //Agrega en 1 los aciertos realizados
                         } else {
                             soundManager.playSound(R.raw.incorrect_card_sound)
+                            if (viewModel.uiState.value.energias > 1) {
+                                viewModel.restarEnergia()  // Reduce la energía en 1 al no estar correcto
+                            }else{
+                                viewModel.setScreenEndGame(AppScreen.FinJuegoLoseActividad1)
+                                onNextButtonClicked()
+                            }
                         }
-                        if(allMatched(definiciones, respuestas)){
+                        if (allMatched(definiciones, respuestas)) {
+                            viewModel.setScreenEndGame(AppScreen.FinJuegoActividad1)
                             onNextButtonClicked()
                         }
                     }
@@ -116,9 +131,10 @@ fun MatchPairs(onNextButtonClicked:()->Unit) {
 
 }
 
-private fun allMatched(definiciones: List<Carta>, respuestas:List<Carta>):Boolean{
+private fun allMatched(definiciones: List<Carta>, respuestas: List<Carta>): Boolean {
     return definiciones.all { it.isMatched } && respuestas.all { it.isMatched }
 }
+
 @Composable
 fun ListaDefinificiones(
     cartas: List<Carta>,
@@ -183,7 +199,11 @@ fun CardSimple(
                 }
 
             } else {
-                Image(painter = painterResource(imagenCarta), contentDescription = null, contentScale = ContentScale.FillBounds)
+                Image(
+                    painter = painterResource(imagenCarta),
+                    contentDescription = null,
+                    contentScale = ContentScale.FillBounds
+                )
 
             }
 //            Text(text = carta.texto,
@@ -281,33 +301,33 @@ fun CardCarta(
 }
 
 
-@Preview(showBackground = true, widthDp = 88)
-@Composable
-fun CardSimplePreview() {
-    OrtografiaMariamelTheme {
-        CardSimple(
-            Carta(id = 1, "Articulo", isSelected = false, isMatched = false),
-            modifier = Modifier.width(80.dp).height(120.dp)
-        )
-    }
-}
+//@Preview(showBackground = true, widthDp = 88)
+//@Composable
+//fun CardSimplePreview() {
+//    OrtografiaMariamelTheme {
+//        CardSimple(
+//            Carta(id = 1, "Articulo", isSelected = false, isMatched = false),
+//            modifier = Modifier.width(80.dp).height(120.dp)
+//        )
+//    }
+//}
 
-@Preview(showBackground = true, widthDp = 88)
-@Composable
-fun CardCartaPreview() {
-    OrtografiaMariamelTheme {
-        CardCarta(
-            Carta(id = 1, "tu", isSelected = false, isMatched = false),
-            soundManager = SoundManager(LocalContext.current),
-            modifier = Modifier.height(120.dp)
-        )
-    }
-}
+//@Preview(showBackground = true, widthDp = 88)
+//@Composable
+//fun CardCartaPreview() {
+//    OrtografiaMariamelTheme {
+//        CardCarta(
+//            Carta(id = 1, "tu", isSelected = false, isMatched = false),
+//            soundManager = SoundManager(LocalContext.current),
+//            modifier = Modifier.height(120.dp)
+//        )
+//    }
+//}
 
 @Preview(showBackground = true, widthDp = 370, heightDp = 967)
 @Composable
 fun ActividadScreenPreview() {
     OrtografiaMariamelTheme {
-        MatchPairs(onNextButtonClicked = {})
+        MatchPairs(onNextButtonClicked = {}, viewModel = viewModel(factory = AppViewModelProvider.Factory))
     }
 }
