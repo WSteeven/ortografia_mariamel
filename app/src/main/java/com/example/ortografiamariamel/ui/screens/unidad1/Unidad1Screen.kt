@@ -4,13 +4,17 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -30,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ortografiamariamel.R
+import com.example.ortografiamariamel.service.SoundManager
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
 import com.example.ortografiamariamel.ui.screens.MenuLateral
@@ -48,6 +54,7 @@ fun UnidadI(
         title = R.string.blank,
         content = {
             val tildeDiacrita = painterResource(R.drawable.imagen_tema_unidad1)
+            val soundManager = SoundManager(LocalContext.current)
             Column(modifier = Modifier.fillMaxSize()) {
                 Column(
                     modifier = Modifier
@@ -55,13 +62,44 @@ fun UnidadI(
                         .padding(4.dp)
                         .verticalScroll(rememberScrollState()) // Habilitar desplazamiento vertical
                 ) {
-                    Text(
-                        text = "TEMA:",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 30.sp,
-                        modifier = modifier
-                            .align(Alignment.CenterHorizontally)
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Spacer(modifier = Modifier.weight(1f)) // Espacio flexible para centrar el texto
+                        Text(
+                            text = "TEMA",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 30.sp,
+                            modifier = Modifier.padding(start = 64.dp) // Espacio al final del texto
+                        )
+                        Spacer(modifier = Modifier.weight(1f)) // Espacio flexible para centrar el texto
+                        Row(
+                            verticalAlignment = Alignment.Bottom // Alineación de los botones al fondo
+                        ) {
+                            IconButton(
+                                onClick = { soundManager.playSound(R.raw.audio_tema1) },
+                                modifier = Modifier.padding(end = 0.dp) // Espacio entre los botones
+                            ) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.speaker_filled),
+                                        contentDescription = "audio_speaker",
+                                        modifier = Modifier
+                                            .padding(end = 20.dp) // Espacio a la derecha de la imagen
+                                    )
+                                    Image(
+                                        painter = painterResource(id = R.drawable.lapiz6),
+                                        contentDescription = "Audio",
+                                        modifier = Modifier
+                                        .padding(start= 20.dp) // Espacio a la derecha de la imagen
+                                        .size(48.dp) // Tamaño deseado de la imagen
+                                    )
+
+                            }
+                        }
+                    }
+
                     Text(
                         text = "Tílde Diacrítica en los Monosílabos",
                         fontWeight = FontWeight.SemiBold,
@@ -128,6 +166,7 @@ fun UnidadI(
                             Text(stringResource(R.string.siguiente))
                         }
                     }
+
                 }
             }
             /*TODO*/

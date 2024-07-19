@@ -203,7 +203,7 @@ fun Niveles1(
 @Composable
 fun LottieAnimationInstrucciones() {
     // Cargar la animación desde assets
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.cara_triste))
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.instrucciones))
 
     // Controlar la animación
     val animatable = rememberLottieAnimatable()
