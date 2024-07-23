@@ -74,7 +74,7 @@ fun FinJuegoLoseUnidad1(
                     }
                 }
                 Text(
-                    text = "Es una pena \uD83D\uDE25, se te acabaron las energías",
+                    text = " Respuesta equivocada. Te has quedado sin energías.",// \uD83D\uDE25.",
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 18.sp,
                     textAlign = TextAlign.Center,
@@ -85,7 +85,14 @@ fun FinJuegoLoseUnidad1(
                         .fillMaxWidth()
                         .align(Alignment.CenterHorizontally)
                 )
-                Text("Solo has acertado ${viewModel.uiState.value.aciertos}/4 respuestas correctas antes de agotar tus energías")
+//                Text("Solo has acertado ${viewModel.uiState.value.aciertos}/4 respuestas correctas antes de agotar tus energías")
+                Text(
+                    "¡Buena suerte la próxima vez!",
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top=8.dp)
+                )
 //                Text("No has acertado todas las respuestas antes de agotarse tus intentos, por lo tanto has perdido")
 
                 Column(
