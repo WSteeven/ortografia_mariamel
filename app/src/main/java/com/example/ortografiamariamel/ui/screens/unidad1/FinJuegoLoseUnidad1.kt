@@ -143,7 +143,7 @@ fun LottieAnimationCaraTriste() {
 //    val context = LocalContext.current
 
     // Cargar la animación desde assets
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.cara_triste))
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.lapiz_llorando))
 
     // Controlar la animación
     val animatable = rememberLottieAnimatable()
