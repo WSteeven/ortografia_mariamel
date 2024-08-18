@@ -9,8 +9,9 @@ data class AppUiState(
     val edad: Int = 8,
     val menu: AppScreen = AppScreen.Unidad1,
     val screenEndGame: AppScreen = AppScreen.FinJuegoActividad1,
-    val menuJuego: AppScreen = AppScreen.Actividad1,
+    val menuJuego: AppScreen = AppScreen.Actividad1U1,
     val energias: Int = 5,
+    val energiasJuego2U1: Int=7,
     val aciertos: Int = 0,
 
     val drawer: DrawerValue = DrawerValue.Closed,

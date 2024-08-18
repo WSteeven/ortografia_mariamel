@@ -13,11 +13,11 @@ import androidx.navigation.compose.rememberNavController
 import com.example.ortografiamariamel.AppScreen
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
-import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 import com.example.ortografiamariamel.ui.screens.DatosJugadorScreen
 import com.example.ortografiamariamel.ui.screens.InicioScreen
 import com.example.ortografiamariamel.ui.screens.MenuScreen
 import com.example.ortografiamariamel.ui.screens.unidad1.Actividad1
+import com.example.ortografiamariamel.ui.screens.unidad1.Actividad2U1
 import com.example.ortografiamariamel.ui.screens.unidad1.FinJuegoLoseUnidad1
 import com.example.ortografiamariamel.ui.screens.unidad1.FinJuegoUnidad1
 import com.example.ortografiamariamel.ui.screens.unidad1.Niveles1
@@ -28,6 +28,7 @@ import com.example.ortografiamariamel.ui.screens.unidad3.Actividad3
 import com.example.ortografiamariamel.ui.screens.unidad3.UnidadIII
 import com.example.ortografiamariamel.ui.screens.unidad4.Actividad4
 import com.example.ortografiamariamel.ui.screens.unidad4.UnidadIV
+import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
@@ -107,8 +108,24 @@ fun AppNavHost(
             )
         }
         // 5ta pantalla - ACTIVIDAD UNIDAD I
-        composable(route = AppScreen.Actividad1.name) {
+        composable(route = AppScreen.Actividad1U1.name) {
             Actividad1(
+                viewModel = viewModel,
+                onPrevButtonClicked = {
+                    navController.navigateUp()
+                },
+                onNextButtonClicked = {
+                    navController.navigate(viewModel.uiState.value.screenEndGame.name)
+                },
+                onItemMenuButtonClicked = {
+//                    Log.d("AppNavGraph", "composable ActividadI: ${uiState.menu.name}")
+                    navController.navigate(viewModel.uiState.value.menu.name)
+                },
+                modifier = Modifier
+            )
+        }
+        composable(route = AppScreen.Actividad2U1.name) {
+            Actividad2U1(
                 viewModel = viewModel,
                 onPrevButtonClicked = {
                     navController.navigateUp()

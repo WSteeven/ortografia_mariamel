@@ -125,7 +125,7 @@ fun Niveles1(
                         .padding(end = 54.dp)
                         .clickable(onClick = {
                             //Aquí se setea la pantalla de navegacion
-                            viewModel.setPantallaJuego(AppScreen.Actividad1)
+                            viewModel.setPantallaJuego(AppScreen.Actividad1U1)
                             soundManager.playSound(R.raw.correct_card_sound)
                             onClick()
                         })
@@ -147,7 +147,7 @@ fun Niveles1(
                         .padding(bottom = 50.dp)
                         .clickable(onClick = {
                             //Aquí se setea la pantalla de navegacion
-                            viewModel.setPantallaJuego(AppScreen.Actividad1)
+                            viewModel.setPantallaJuego(AppScreen.Actividad2U1)
                             soundManager.playSound(R.raw.correct_card_sound)
                             onClick()
                         })
@@ -169,7 +169,7 @@ fun Niveles1(
                         .padding(end = 32.dp)
                         .clickable(onClick = {
                             //Aquí se setea la pantalla de navegacion
-                            viewModel.setPantallaJuego(AppScreen.Actividad1)
+                            viewModel.setPantallaJuego(AppScreen.Actividad1U1)
                             soundManager.playSound(R.raw.correct_card_sound)
                             onClick()
                         })
