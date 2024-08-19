@@ -1,6 +1,7 @@
 package com.example.ortografiamariamel.ui
 
 import androidx.compose.material3.DrawerValue
+import androidx.compose.runtime.currentComposer
 import androidx.lifecycle.ViewModel
 import com.example.ortografiamariamel.AppScreen
 import com.example.ortografiamariamel.ui.data.AppUiState
@@ -72,6 +73,9 @@ class AppViewModel : ViewModel() {
                 energias = currentState.energias - 1,
             )
         }
+    }
+    fun restarEnergiasJuego2U1(){
+        _uiState.update { currentState -> currentState.copy(energiasJuego2U1 =  currentState.energiasJuego2U1-1) }
     }
 
     fun sumarAciertos() {

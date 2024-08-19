@@ -1,26 +1,28 @@
 package com.example.ortografiamariamel.ui.screens.unidad1
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -42,12 +44,11 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -55,50 +56,11 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieAnimatable
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.ortografiamariamel.R
+import com.example.ortografiamariamel.data.Datasource
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
 import com.example.ortografiamariamel.ui.screens.MenuLateral
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
-
-data class Question(
-    val index:Int,
-    val question: String,
-    val options: List<String>,
-    val correctOption: Int, // Índice de la respuesta correcta
-    val respuestas:Int=1
-)
-
-val questions = listOf(
-    Question(1,"__ espero para tomar __ __", listOf("París", "Londres", "Berlín"), 0, 3),
-//    Question("Te/té espero para tomar el/él té/te", listOf("París", "Londres", "Berlín"), 0),
-//              __                      __    __
-
-    Question(2,"__ eres mi mejor amigo", listOf("5", "6", "7"), 2,1),
-//                    Tú/tu
-//                    __
-
-    Question(3, "Dice que __ libro es __ __.", listOf("5", "6", "7"), 2,3),
-//                             el/él  de/dé   el/él
-//                             __     __         __
-
-    Question(4,"__ me lo contó en la clase.", listOf("5", "6", "7"), 2,1),
-//                    El/Él
-//                       __
-
-    Question(5,"Ya __ que no __ gusta el __.", listOf("5", "6", "7"), 2,3),
-//                      se/sé      te/té    te/té
-//                         __      __          __
-
-    Question(6,"__ tienes siempre la razón.", listOf("5", "6", "7"), 2, 1),
-//                    Tú/tu
-//                    __
-
-    Question(7,"Espero que __ lo __ a él.", listOf("5", "6", "7"), 2,2),
-//                            se/sé    dé/de
-//                            __       __
-
-
-)
 
 
 @Composable
@@ -178,92 +140,75 @@ fun Actividad2U1(
 }
 
 @Composable
-fun MenuDropdown(options: List<String>) {
+fun MenuDropdown(
+    options: List<String>,
+    selectedOption: String,
+    onOptionSelected: (String) -> Unit
+) {
     var expanded by remember { mutableStateOf(false) }
-    var showDialog by remember { mutableStateOf(false) }
-    var selectedOption by remember { mutableStateOf("") }
-    var valor by remember { mutableStateOf("") }
+
     Box(
         modifier = Modifier
-            .fillMaxSize()
             .wrapContentSize(Alignment.TopStart)
     ) {
-        Row {
-            TextField(
-                value = valor,
-                onValueChange = { valor = it },
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth(.3f)
-                    .border(BorderStroke(width = 2.dp, color = Color(255, 168, 0))),
-                enabled=false,
-                suffix = {
-                    IconButton(onClick = { expanded = true }) {
-                        Icon(
-                            Icons.Default.ArrowDropDown,
-                            contentDescription = "Localized description"
-                        )
-                    }
+        TextField(
+            value = selectedOption,
+            onValueChange = { /* no-op */ },
+            singleLine = true,
+            modifier = Modifier
+                .fillMaxWidth(0.35f)
+                .border(BorderStroke(width = 2.dp, color = Color(255, 168, 0))),
+            enabled = false,
+            trailingIcon = {
+                IconButton(onClick = { expanded = true }) {
+                    Icon(
+                        Icons.Default.ArrowDropDown,
+                        contentDescription = "Localized description"
+                    )
                 }
-            )
+            }
+        )
 
-        }
-        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
             options.forEach { option ->
                 DropdownMenuItem(
-                    text = { Text(option) },
                     onClick = {
-                        valor = option
-                        selectedOption = option
-                        showDialog = true
+                        onOptionSelected(option)  // Notificar selección
+                        expanded = false
                     },
+                    text = { Text(option) },
                 )
             }
         }
-
-    }
-}
-
-@SuppressLint("StateFlowValueCalledInComposition")
-@Composable
-fun GameApp(viewModel: AppViewModel) {
-    var currentLevel by remember { mutableIntStateOf(0) }
-    var gameOver by remember { mutableStateOf(false) }
-
-
-    EnergyBar(viewModel.uiState.value.energiasJuego2U1)
-    if (gameOver) {
-        Text(text = "Juego terminado")
-    } else if (currentLevel < questions.size) {
-        GameScreen(currentLevel) { isCorrect ->
-            if (isCorrect) {
-                currentLevel++
-            } else {
-                gameOver = true
-            }
-        }
-    } else {
-        Text(text = "¡Felicidades! Has terminado el juego.")
     }
 }
 
 @Composable
-fun GameScreen(currentLevel: Int, onAnswerSelected: (Boolean) -> Unit) {
-    val question = questions[currentLevel]
-
-    Column(modifier = Modifier.padding(16.dp)) {
-        Text(text = "Nivel ${currentLevel + 1}", fontSize = 24.sp)
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(text = question.question, fontSize = 20.sp)
-        Spacer(modifier = Modifier.height(16.dp))
-
-        question.options.forEachIndexed { index, option ->
-            Button(onClick = {
-                onAnswerSelected(index == question.correctOption)
-            }) {
-                Text(text = option)
+fun MinimalDialog(viewModel: AppViewModel, index: Int, onDismissRequest: () -> Unit) {
+    Dialog(onDismissRequest = { onDismissRequest() }) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(4.dp),
+            shape = RoundedCornerShape(16.dp),
+        ) {
+            Column(
+                modifier = Modifier.padding(4.dp)
+            ) {
+                when (index) {
+                    1 -> ContenidoOracion1(viewModel = viewModel, onClose = onDismissRequest)
+                    2 -> ContenidoOracion2(viewModel = viewModel, onClose = onDismissRequest)
+                    3 -> ContenidoOracion3(viewModel = viewModel, onClose = onDismissRequest)
+                    4 -> ContenidoOracion4(viewModel = viewModel, onClose = onDismissRequest)
+                    5 -> ContenidoOracion5(viewModel = viewModel, onClose = onDismissRequest)
+                    6 -> ContenidoOracion6(viewModel = viewModel, onClose = onDismissRequest)
+                    7 -> ContenidoOracion7(viewModel = viewModel, onClose = onDismissRequest)
+                    else -> Log.d("ACTIVIDAD2-U1", "No hay pregunta para este boton $index")
+                }
             }
-            Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }
@@ -296,61 +241,258 @@ fun LadderScreen(viewModel: AppViewModel) {
 
         // Mostrar el modal si showDialog es true
         if (showDialog) {
-            AlertDialog(
-                onDismissRequest = {
-                    showDialog = false
-                },
-                title = {
-                    Text(text = "Botón Seleccionado")
-                },
-                text = {
-                    MenuDropdown(listOf("Te", "Té"))
-                },
-                confirmButton = {
-                    Button(
-                        onClick = {
-                            showDialog = false
-                        }
-                    ) {
-                        Text("Aceptar")
-                    }
-                }
-            )
+            MinimalDialog(viewModel=viewModel, index = selectedButton ){showDialog=false}
         }
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ContenidoOracion1(){
-    val oracion = questions.first { it->it.index==1 }
-    Text(text= oracion.toString())
+fun ContenidoOracion1(viewModel: AppViewModel, onClose: ()->Unit) {
+    // Estados para las selecciones
+    var selectedOption1 by remember { mutableStateOf("") }
+    var selectedOption2 by remember { mutableStateOf("") }
+    var selectedOption3 by remember { mutableStateOf("") }
+    val response = Datasource().responses.firstOrNull { it.index == 1 }
 
+    //verificamos la respuesta
+    fun checkResponse(){
+        val respuestas = listOf(selectedOption1, selectedOption2, selectedOption3)
+        if (respuestas == response?.responses){
+            println("Respuestas correctas")
+        }else{
+            viewModel.restarEnergiasJuego2U1()
+        }
+        onClose()
+    }
+
+
+    Text("Contesta correctamente la oración con las posibles respuestas")
+
+    FlowRow(modifier = Modifier.fillMaxWidth()) {
+        MenuDropdown(options = listOf("Té", "Te"),
+            selectedOption = selectedOption1,
+            onOptionSelected = { selectedOption1 = it })
+        Text(" espero para tomar ")
+        MenuDropdown(options = listOf("el", "él"),
+            selectedOption = selectedOption2,
+            onOptionSelected = { selectedOption2 = it })
+        Text(" ")
+        MenuDropdown(options = listOf("te", "té"),
+            selectedOption = selectedOption3,
+            onOptionSelected = { selectedOption3 = it })
+        Text(".")
+    }
+    Spacer(modifier = Modifier.padding(16.dp))
+    Button(onClick = {
+        checkResponse()}) {
+        Text("Verificar respuesta")
+    }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun Dialogo(abierto: Boolean = false, selectedOption: String = "") {
-    var showDialog by remember { mutableStateOf(abierto) }
-    if (showDialog) {
-        AlertDialog(
-            onDismissRequest = {
-                showDialog = false
-            },
-            title = {
-                Text(text = "Botón Seleccionado")
-            },
-            text = {
-                Text(text = "Has seleccionado el Botón $selectedOption")
-            },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        showDialog = false
-                    }
-                ) {
-                    Text("Aceptar")
-                }
-            }
-        )
+fun ContenidoOracion2(viewModel: AppViewModel, onClose: ()->Unit) {
+    var selectedOption by remember { mutableStateOf("") }
+    val response = Datasource().responses.firstOrNull { it.index == 2 }
+    //verificamos la respuesta
+    fun checkResponse(){
+        val respuestas = listOf(selectedOption)
+        if (respuestas == response?.responses){
+            println("Respuestas correctas")
+        }else{
+            viewModel.restarEnergiasJuego2U1()
+        }
+        onClose()
+    }
+    Text("Contesta correctamente la oración con las posibles respuestas")
+    FlowRow(modifier = Modifier.fillMaxWidth()) {
+        MenuDropdown(options = listOf("Tú", "Tu"),
+            selectedOption = selectedOption,
+            onOptionSelected = { selectedOption = it })
+        Text(" eres mi mejor amigo.")
+    }
+    Spacer(modifier = Modifier.padding(16.dp))
+    Button(onClick = { checkResponse()
+        }) {
+        Text("Verificar respuesta")
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun ContenidoOracion3(viewModel: AppViewModel, onClose: ()->Unit) {
+    var selectedOption1 by remember { mutableStateOf("") }
+    var selectedOption2 by remember { mutableStateOf("") }
+    var selectedOption3 by remember { mutableStateOf("") }
+    val response = Datasource().responses.firstOrNull { it.index == 3 }
+
+    //verificamos la respuesta
+    fun checkResponse(){
+        val respuestas = listOf(selectedOption1, selectedOption2, selectedOption3)
+        if (respuestas == response?.responses){
+            println("Respuestas correctas")
+        }else{
+            viewModel.restarEnergiasJuego2U1()
+        }
+        onClose()
+    }
+    Text("Contesta correctamente la oración con las posibles respuestas")
+
+    FlowRow(modifier = Modifier.fillMaxWidth()) {
+        Text("Dice que ")
+        MenuDropdown(options = listOf("el", "él"),
+            selectedOption = selectedOption1,
+            onOptionSelected = { selectedOption1 = it })
+        Text(" libro es ")
+        MenuDropdown(options = listOf("de", "dé"),
+            selectedOption = selectedOption2,
+            onOptionSelected = { selectedOption2 = it })
+        Text(" ")
+        MenuDropdown(options = listOf("el", "él"),
+            selectedOption = selectedOption3,
+            onOptionSelected = { selectedOption3 = it })
+        Text(".")
+    }
+    Spacer(modifier = Modifier.padding(16.dp))
+    Button(onClick = {checkResponse()}) {
+        Text("Verificar respuesta")
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun ContenidoOracion4(viewModel: AppViewModel, onClose: ()->Unit) {
+    var selectedOption by remember { mutableStateOf("") }
+    val response = Datasource().responses.firstOrNull { it.index == 4 }
+    //verificamos la respuesta
+    fun checkResponse(){
+        val respuestas = listOf(selectedOption)
+        if (respuestas == response?.responses){
+            println("Respuestas correctas")
+        }else{
+            viewModel.restarEnergiasJuego2U1()
+        }
+        onClose()
+    }
+
+    Text("Contesta correctamente la oración con las posibles respuestas")
+
+    FlowRow(modifier = Modifier.fillMaxWidth()) {
+        MenuDropdown(options = listOf("El", "Él"),
+            selectedOption = selectedOption,
+            onOptionSelected = { selectedOption = it })
+        Text(" me lo contó en la clase.")
+    }
+    Spacer(modifier = Modifier.padding(16.dp))
+    Button(onClick = {checkResponse()}) {
+        Text("Verificar respuesta")
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun ContenidoOracion5(viewModel: AppViewModel, onClose: ()->Unit) {
+    var selectedOption1 by remember { mutableStateOf("") }
+    var selectedOption2 by remember { mutableStateOf("") }
+    var selectedOption3 by remember { mutableStateOf("") }
+    val response = Datasource().responses.firstOrNull { it.index == 5 }
+
+    //verificamos la respuesta
+    fun checkResponse(){
+        val respuestas = listOf(selectedOption1, selectedOption2, selectedOption3)
+        if (respuestas == response?.responses){
+            println("Respuestas correctas")
+        }else{
+            viewModel.restarEnergiasJuego2U1()
+        }
+        onClose()
+    }
+    Text("Contesta correctamente la oración con las posibles respuestas")
+    FlowRow(modifier = Modifier.fillMaxWidth()) {
+        Text("Ya ")
+        MenuDropdown(options = listOf("se", "sé"),
+            selectedOption = selectedOption1,
+            onOptionSelected = { selectedOption1 = it })
+        Text(" que no ")
+        MenuDropdown(options = listOf("te", "té"),
+            selectedOption = selectedOption2,
+            onOptionSelected = { selectedOption2 = it })
+        Text(" gusta el ")
+        MenuDropdown(options = listOf("te", "té"),
+            selectedOption = selectedOption3,
+            onOptionSelected = { selectedOption3 = it })
+        Text(".")
+    }
+    Spacer(modifier = Modifier.padding(16.dp))
+    Button(onClick = {checkResponse()}) {
+        Text("Verificar respuesta")
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun ContenidoOracion6(viewModel: AppViewModel, onClose: ()->Unit) {
+    var selectedOption by remember { mutableStateOf("") }
+    val response = Datasource().responses.firstOrNull { it.index == 6 }
+    //verificamos la respuesta
+    fun checkResponse(){
+        val respuestas = listOf(selectedOption)
+        if (respuestas == response?.responses){
+            println("Respuestas correctas")
+        }else{
+            viewModel.restarEnergiasJuego2U1()
+        }
+        onClose()
+    }
+
+    Text("Contesta correctamente la oración con las posibles respuestas")
+
+    FlowRow(modifier = Modifier.fillMaxWidth()) {
+        MenuDropdown(options = listOf("Tu", "Tú"),
+            selectedOption = selectedOption,
+            onOptionSelected = { selectedOption = it })
+        Text(" tienes siempre la razón.")
+    }
+    Spacer(modifier = Modifier.padding(16.dp))
+    Button(onClick = {checkResponse()}) {
+        Text("Verificar respuesta")
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun ContenidoOracion7(viewModel: AppViewModel, onClose: ()->Unit) {
+    var selectedOption1 by remember { mutableStateOf("") }
+    var selectedOption2 by remember { mutableStateOf("") }
+    val response = Datasource().responses.firstOrNull { it.index == 7 }
+
+    //verificamos la respuesta
+    fun checkResponse(){
+        val respuestas = listOf(selectedOption1, selectedOption2)
+        if (respuestas == response?.responses){
+            println("Respuestas correctas")
+        }else{
+            viewModel.restarEnergiasJuego2U1()
+        }
+        onClose()
+    }
+    Text("Contesta correctamente la oración con las posibles respuestas")
+    FlowRow(modifier = Modifier.fillMaxWidth()) {
+        Text("Espero que ")
+        MenuDropdown(options = listOf("se", "sé"),
+            selectedOption = selectedOption1,
+            onOptionSelected = { selectedOption1 = it })
+        Text(" lo ")
+        MenuDropdown(options = listOf("de", "dé"),
+            selectedOption = selectedOption2,
+            onOptionSelected = { selectedOption2 = it })
+        Text(" a él.")
+
+    }
+    Spacer(modifier = Modifier.padding(16.dp))
+    Button(onClick = {checkResponse()}) {
+        Text("Verificar respuesta")
     }
 }
 
@@ -391,6 +533,6 @@ fun Actividad2ScreenPreview() {
 @Composable
 fun LadderScreenScreenPreview() {
     OrtografiaMariamelTheme {
-        LadderScreen(viewModel = viewModel(factory = AppViewModelProvider.Factory),)
+        LadderScreen(viewModel = viewModel(factory = AppViewModelProvider.Factory))
     }
 }
