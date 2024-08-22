@@ -1,7 +1,7 @@
 package com.example.ortografiamariamel.ui
 
 import androidx.compose.material3.DrawerValue
-import androidx.compose.runtime.currentComposer
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.ortografiamariamel.AppScreen
 import com.example.ortografiamariamel.ui.data.AppUiState
@@ -14,6 +14,8 @@ class AppViewModel : ViewModel() {
 
     private val _uiState = MutableStateFlow(AppUiState())
     val uiState: StateFlow<AppUiState> = _uiState.asStateFlow()
+
+
 
     //    Configure all functions for setValues, calculates, etc.
     fun setNombreJugador(nombre: String) {

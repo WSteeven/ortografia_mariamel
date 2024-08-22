@@ -3,6 +3,8 @@ package com.example.ortografiamariamel.ui.screens.unidad1
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,20 +16,27 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -39,8 +48,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -71,6 +83,8 @@ fun Actividad2U1(
     onNextButtonClicked: () -> Unit,
     onItemMenuButtonClicked: () -> Unit
 ) {
+    // Define snackbarHostState
+    val snackbarHostState = remember { SnackbarHostState() }
 
     MenuLateral(
         title = R.string.blank,
@@ -96,7 +110,7 @@ fun Actividad2U1(
                 }
 
                 Text(
-                    text = "Seleccione el  monosílabo en cada oración",
+                    text = "Seleccione el monosílabo en cada oración",
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 18.sp,
                     textAlign = TextAlign.Justify,
@@ -107,8 +121,8 @@ fun Actividad2U1(
                         .align(Alignment.CenterHorizontally)
                 )
 
-//                GameApp(viewModel)
-                LadderScreen(viewModel)
+                LadderScreen(viewModel, snackbarHostState)
+
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -137,7 +151,133 @@ fun Actividad2U1(
         onItemMenuButtonClicked = onItemMenuButtonClicked,
         modifier = modifier
     )
+
+    // Add SnackbarHost at the top level of your composable hierarchy
+    SnackbarHost(hostState = snackbarHostState)
 }
+
+@SuppressLint("StateFlowValueCalledInComposition")
+@Composable
+fun LadderScreen(viewModel: AppViewModel, snackbarHostState: SnackbarHostState) {
+    var selectedButton by remember { mutableIntStateOf(-1) } // -1 para indicar que ningún botón está seleccionado
+    var showDialog by remember { mutableStateOf(false) }
+    var snackbarMessage by remember { mutableStateOf<String?>(null) }
+
+    EnergyBar(viewModel.uiState.value.energiasJuego2U1, 7)
+
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.juego_2_2),
+            contentDescription = "Juego",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+
+        Column(
+            modifier = Modifier
+                .fillMaxHeight(.83f)
+                .fillMaxWidth(.7f)
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState())
+                .align(Alignment.BottomCenter)
+        ) {
+            Spacer(modifier = Modifier.padding(4.dp))
+            ComposableButton(
+                id = 7, onButtonClick = {
+                    selectedButton = it
+                    showDialog = true
+                }, modifier = Modifier
+                    .align(Alignment.End)
+                    .padding(end = 24.dp)
+            )
+            ComposableButton(id = 6, onButtonClick = {
+                selectedButton = it
+                showDialog = true
+            }, modifier = Modifier.align(Alignment.CenterHorizontally))
+            ComposableButton(
+                id = 5, onButtonClick = {
+                    selectedButton = it
+                    showDialog = true
+                },
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 32.dp)
+            )
+            ComposableButton(id = 4, onButtonClick = {
+                selectedButton = it
+                showDialog = true
+            }, modifier = Modifier.padding(top = 4.dp))
+            ComposableButton(
+                id = 3, onButtonClick = {
+                    selectedButton = it
+                    showDialog = true
+                }, modifier = Modifier
+                    .align(Alignment.End)
+                    .padding(end = 40.dp)
+            )
+            ComposableButton(id = 2, onButtonClick = {
+                selectedButton = it
+                showDialog = true
+            }, modifier = Modifier.padding(bottom = 8.dp, start = 8.dp))
+            Spacer(modifier = Modifier.padding(4.dp))
+            ComposableButton(
+                id = 1, onButtonClick = {
+                    selectedButton = it
+                    showDialog = true
+                },
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(start = 16.dp)
+            )
+            Spacer(modifier = Modifier.padding(4.dp))
+        }
+
+        // Mostrar el modal si showDialog es true
+        if (showDialog) {
+            MinimalDialog(
+                viewModel = viewModel,
+                index = selectedButton,
+                onDismissRequest = {
+                    showDialog = false
+                },
+                onVerification = { isCorrect ->
+                    snackbarMessage = if (isCorrect) "¡Respuesta correcta!" else "Respuesta incorrecta"
+                }
+            )
+        }
+    }
+
+
+
+    LaunchedEffect(snackbarMessage) {
+        snackbarMessage?.let {
+            snackbarHostState.showSnackbar(it)
+            snackbarMessage = null
+        }
+    }
+}
+
+
+
+@Composable
+fun ComposableButton(
+    id: Int, onButtonClick: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Button(
+        shape = CircleShape,
+        onClick = { onButtonClick(id) },
+        colors = ButtonDefaults.buttonColors(Color.Transparent),
+        modifier = modifier
+            .size(64.dp)
+            .border(0.dp, Color.Transparent) // Remove border
+    ) {
+        Text("")
+    }
+}
+
 
 @Composable
 fun MenuDropdown(
@@ -187,7 +327,7 @@ fun MenuDropdown(
 }
 
 @Composable
-fun MinimalDialog(viewModel: AppViewModel, index: Int, onDismissRequest: () -> Unit) {
+fun MinimalDialog(viewModel: AppViewModel, index: Int, onDismissRequest: () -> Unit, onVerification: (Boolean) -> Unit) {
     Dialog(onDismissRequest = { onDismissRequest() }) {
         Card(
             modifier = Modifier
@@ -199,13 +339,13 @@ fun MinimalDialog(viewModel: AppViewModel, index: Int, onDismissRequest: () -> U
                 modifier = Modifier.padding(4.dp)
             ) {
                 when (index) {
-                    1 -> ContenidoOracion1(viewModel = viewModel, onClose = onDismissRequest)
-                    2 -> ContenidoOracion2(viewModel = viewModel, onClose = onDismissRequest)
-                    3 -> ContenidoOracion3(viewModel = viewModel, onClose = onDismissRequest)
-                    4 -> ContenidoOracion4(viewModel = viewModel, onClose = onDismissRequest)
-                    5 -> ContenidoOracion5(viewModel = viewModel, onClose = onDismissRequest)
-                    6 -> ContenidoOracion6(viewModel = viewModel, onClose = onDismissRequest)
-                    7 -> ContenidoOracion7(viewModel = viewModel, onClose = onDismissRequest)
+                    1 -> ContenidoOracion1(viewModel = viewModel, onClose = onDismissRequest, onVerification)
+                    2 -> ContenidoOracion2(viewModel = viewModel, onClose = onDismissRequest, onVerification)
+                    3 -> ContenidoOracion3(viewModel = viewModel, onClose = onDismissRequest, onVerification)
+                    4 -> ContenidoOracion4(viewModel = viewModel, onClose = onDismissRequest , onVerification)
+                    5 -> ContenidoOracion5(viewModel = viewModel, onClose = onDismissRequest, onVerification )
+                    6 -> ContenidoOracion6(viewModel = viewModel, onClose = onDismissRequest , onVerification)
+                    7 -> ContenidoOracion7(viewModel = viewModel, onClose = onDismissRequest , onVerification)
                     else -> Log.d("ACTIVIDAD2-U1", "No hay pregunta para este boton $index")
                 }
             }
@@ -213,126 +353,22 @@ fun MinimalDialog(viewModel: AppViewModel, index: Int, onDismissRequest: () -> U
     }
 }
 
-@SuppressLint("StateFlowValueCalledInComposition")
-@Composable
-fun LadderScreen(viewModel: AppViewModel) {
-    var selectedButton by remember { mutableIntStateOf(-1) } // -1 para indicar que ningún botón está seleccionado
-    var showDialog by remember { mutableStateOf(false) }
-    EnergyBar(viewModel.uiState.value.energiasJuego2U1)
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState())
-    ) {
-        for (i in 7 downTo 1) {
-            Button(
-                onClick = {
-                    selectedButton = i
-                    showDialog = true
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-            ) {
-                Text(text = "Botón $i")
-            }
-        }
-
-        // Mostrar el modal si showDialog es true
-        if (showDialog) {
-            MinimalDialog(viewModel=viewModel, index = selectedButton ){showDialog=false}
-        }
-    }
-}
-
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ContenidoOracion1(viewModel: AppViewModel, onClose: ()->Unit) {
-    // Estados para las selecciones
-    var selectedOption1 by remember { mutableStateOf("") }
-    var selectedOption2 by remember { mutableStateOf("") }
-    var selectedOption3 by remember { mutableStateOf("") }
-    val response = Datasource().responses.firstOrNull { it.index == 1 }
-
-    //verificamos la respuesta
-    fun checkResponse(){
-        val respuestas = listOf(selectedOption1, selectedOption2, selectedOption3)
-        if (respuestas == response?.responses){
-            println("Respuestas correctas")
-        }else{
-            viewModel.restarEnergiasJuego2U1()
-        }
-        onClose()
-    }
-
-
-    Text("Contesta correctamente la oración con las posibles respuestas")
-
-    FlowRow(modifier = Modifier.fillMaxWidth()) {
-        MenuDropdown(options = listOf("Té", "Te"),
-            selectedOption = selectedOption1,
-            onOptionSelected = { selectedOption1 = it })
-        Text(" espero para tomar ")
-        MenuDropdown(options = listOf("el", "él"),
-            selectedOption = selectedOption2,
-            onOptionSelected = { selectedOption2 = it })
-        Text(" ")
-        MenuDropdown(options = listOf("te", "té"),
-            selectedOption = selectedOption3,
-            onOptionSelected = { selectedOption3 = it })
-        Text(".")
-    }
-    Spacer(modifier = Modifier.padding(16.dp))
-    Button(onClick = {
-        checkResponse()}) {
-        Text("Verificar respuesta")
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-fun ContenidoOracion2(viewModel: AppViewModel, onClose: ()->Unit) {
-    var selectedOption by remember { mutableStateOf("") }
-    val response = Datasource().responses.firstOrNull { it.index == 2 }
-    //verificamos la respuesta
-    fun checkResponse(){
-        val respuestas = listOf(selectedOption)
-        if (respuestas == response?.responses){
-            println("Respuestas correctas")
-        }else{
-            viewModel.restarEnergiasJuego2U1()
-        }
-        onClose()
-    }
-    Text("Contesta correctamente la oración con las posibles respuestas")
-    FlowRow(modifier = Modifier.fillMaxWidth()) {
-        MenuDropdown(options = listOf("Tú", "Tu"),
-            selectedOption = selectedOption,
-            onOptionSelected = { selectedOption = it })
-        Text(" eres mi mejor amigo.")
-    }
-    Spacer(modifier = Modifier.padding(16.dp))
-    Button(onClick = { checkResponse()
-        }) {
-        Text("Verificar respuesta")
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-fun ContenidoOracion3(viewModel: AppViewModel, onClose: ()->Unit) {
+fun ContenidoOracion1(viewModel: AppViewModel, onClose: () -> Unit,    onVerification: (Boolean) -> Unit // Agrega el callback
+) {
     var selectedOption1 by remember { mutableStateOf("") }
     var selectedOption2 by remember { mutableStateOf("") }
     var selectedOption3 by remember { mutableStateOf("") }
     val response = Datasource().responses.firstOrNull { it.index == 3 }
 
     //verificamos la respuesta
-    fun checkResponse(){
+    fun checkResponse() {
         val respuestas = listOf(selectedOption1, selectedOption2, selectedOption3)
-        if (respuestas == response?.responses){
-            println("Respuestas correctas")
-        }else{
+        if (respuestas == response?.responses) {
+            onVerification(true)
+        } else {
+            onVerification(false)
             viewModel.restarEnergiasJuego2U1()
         }
         onClose()
@@ -355,22 +391,99 @@ fun ContenidoOracion3(viewModel: AppViewModel, onClose: ()->Unit) {
         Text(".")
     }
     Spacer(modifier = Modifier.padding(16.dp))
-    Button(onClick = {checkResponse()}) {
+    Button(onClick = { checkResponse() }) {
+        Text("Verificar respuesta")
+    }
+}
+
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun ContenidoOracion2(viewModel: AppViewModel, onClose: () -> Unit,  onVerification: (Boolean) -> Unit ) {
+    var selectedOption by remember { mutableStateOf("") }
+    val response = Datasource().responses.firstOrNull { it.index == 2 }
+
+    //verificamos la respuesta
+    fun checkResponse() {
+        val respuestas = listOf(selectedOption)
+        if (respuestas == response?.responses) {
+            onVerification(true)
+        } else {
+            onVerification(false)
+            viewModel.restarEnergiasJuego2U1()
+        }
+        onClose()
+    }
+    Text("Contesta correctamente la oración con las posibles respuestas")
+    FlowRow(modifier = Modifier.fillMaxWidth()) {
+        MenuDropdown(options = listOf("Tú", "Tu"),
+            selectedOption = selectedOption,
+            onOptionSelected = { selectedOption = it })
+        Text(" eres mi mejor amigo.")
+    }
+    Spacer(modifier = Modifier.padding(16.dp))
+    Button(onClick = {
+        checkResponse()
+    }) {
         Text("Verificar respuesta")
     }
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ContenidoOracion4(viewModel: AppViewModel, onClose: ()->Unit) {
+fun ContenidoOracion3(viewModel: AppViewModel, onClose: () -> Unit,  onVerification: (Boolean) -> Unit ) {
+    var selectedOption1 by remember { mutableStateOf("") }
+    var selectedOption2 by remember { mutableStateOf("") }
+    var selectedOption3 by remember { mutableStateOf("") }
+    val response = Datasource().responses.firstOrNull { it.index == 3 }
+
+    //verificamos la respuesta
+    fun checkResponse() {
+        val respuestas = listOf(selectedOption1, selectedOption2, selectedOption3)
+        if (respuestas == response?.responses) {
+            onVerification(true)
+        } else {
+            onVerification(false)
+            viewModel.restarEnergiasJuego2U1()
+        }
+        onClose()
+    }
+    Text("Contesta correctamente la oración con las posibles respuestas")
+
+    FlowRow(modifier = Modifier.fillMaxWidth()) {
+        Text("Dice que ")
+        MenuDropdown(options = listOf("el", "él"),
+            selectedOption = selectedOption1,
+            onOptionSelected = { selectedOption1 = it })
+        Text(" libro es ")
+        MenuDropdown(options = listOf("de", "dé"),
+            selectedOption = selectedOption2,
+            onOptionSelected = { selectedOption2 = it })
+        Text(" ")
+        MenuDropdown(options = listOf("el", "él"),
+            selectedOption = selectedOption3,
+            onOptionSelected = { selectedOption3 = it })
+        Text(".")
+    }
+    Spacer(modifier = Modifier.padding(16.dp))
+    Button(onClick = { checkResponse() }) {
+        Text("Verificar respuesta")
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun ContenidoOracion4(viewModel: AppViewModel, onClose: () -> Unit, onVerification: (Boolean) -> Unit) {
     var selectedOption by remember { mutableStateOf("") }
     val response = Datasource().responses.firstOrNull { it.index == 4 }
+
     //verificamos la respuesta
-    fun checkResponse(){
+    fun checkResponse() {
         val respuestas = listOf(selectedOption)
-        if (respuestas == response?.responses){
-            println("Respuestas correctas")
-        }else{
+        if (respuestas == response?.responses) {
+            onVerification(true)
+        } else {
+            onVerification(false)
             viewModel.restarEnergiasJuego2U1()
         }
         onClose()
@@ -385,25 +498,26 @@ fun ContenidoOracion4(viewModel: AppViewModel, onClose: ()->Unit) {
         Text(" me lo contó en la clase.")
     }
     Spacer(modifier = Modifier.padding(16.dp))
-    Button(onClick = {checkResponse()}) {
+    Button(onClick = { checkResponse() }) {
         Text("Verificar respuesta")
     }
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ContenidoOracion5(viewModel: AppViewModel, onClose: ()->Unit) {
+fun ContenidoOracion5(viewModel: AppViewModel, onClose: () -> Unit, onVerification: (Boolean) -> Unit) {
     var selectedOption1 by remember { mutableStateOf("") }
     var selectedOption2 by remember { mutableStateOf("") }
     var selectedOption3 by remember { mutableStateOf("") }
     val response = Datasource().responses.firstOrNull { it.index == 5 }
 
     //verificamos la respuesta
-    fun checkResponse(){
+    fun checkResponse() {
         val respuestas = listOf(selectedOption1, selectedOption2, selectedOption3)
-        if (respuestas == response?.responses){
-            println("Respuestas correctas")
-        }else{
+        if (respuestas == response?.responses) {
+            onVerification(true)
+        } else {
+            onVerification(false)
             viewModel.restarEnergiasJuego2U1()
         }
         onClose()
@@ -425,22 +539,24 @@ fun ContenidoOracion5(viewModel: AppViewModel, onClose: ()->Unit) {
         Text(".")
     }
     Spacer(modifier = Modifier.padding(16.dp))
-    Button(onClick = {checkResponse()}) {
+    Button(onClick = { checkResponse() }) {
         Text("Verificar respuesta")
     }
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ContenidoOracion6(viewModel: AppViewModel, onClose: ()->Unit) {
+fun ContenidoOracion6(viewModel: AppViewModel, onClose: () -> Unit, onVerification: (Boolean) -> Unit) {
     var selectedOption by remember { mutableStateOf("") }
     val response = Datasource().responses.firstOrNull { it.index == 6 }
+
     //verificamos la respuesta
-    fun checkResponse(){
+    fun checkResponse() {
         val respuestas = listOf(selectedOption)
-        if (respuestas == response?.responses){
-            println("Respuestas correctas")
-        }else{
+        if (respuestas == response?.responses) {
+            onVerification(true)
+        } else {
+            onVerification(false)
             viewModel.restarEnergiasJuego2U1()
         }
         onClose()
@@ -455,24 +571,25 @@ fun ContenidoOracion6(viewModel: AppViewModel, onClose: ()->Unit) {
         Text(" tienes siempre la razón.")
     }
     Spacer(modifier = Modifier.padding(16.dp))
-    Button(onClick = {checkResponse()}) {
+    Button(onClick = { checkResponse() }) {
         Text("Verificar respuesta")
     }
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ContenidoOracion7(viewModel: AppViewModel, onClose: ()->Unit) {
+fun ContenidoOracion7(viewModel: AppViewModel, onClose: () -> Unit, onVerification: (Boolean) -> Unit) {
     var selectedOption1 by remember { mutableStateOf("") }
     var selectedOption2 by remember { mutableStateOf("") }
     val response = Datasource().responses.firstOrNull { it.index == 7 }
 
     //verificamos la respuesta
-    fun checkResponse(){
+    fun checkResponse() {
         val respuestas = listOf(selectedOption1, selectedOption2)
-        if (respuestas == response?.responses){
-            println("Respuestas correctas")
-        }else{
+        if (respuestas == response?.responses) {
+            onVerification(true)
+        } else {
+            onVerification(false)
             viewModel.restarEnergiasJuego2U1()
         }
         onClose()
@@ -491,10 +608,80 @@ fun ContenidoOracion7(viewModel: AppViewModel, onClose: ()->Unit) {
 
     }
     Spacer(modifier = Modifier.padding(16.dp))
-    Button(onClick = {checkResponse()}) {
+    Button(onClick = { checkResponse() }) {
         Text("Verificar respuesta")
     }
 }
+@Composable
+fun PlayerStatus(
+    avatarResId: Int,
+    level: Int,
+    progress: Int,
+    maxProgress: Int,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            painter = painterResource(id = avatarResId),
+            contentDescription = "Avatar",
+            modifier = Modifier
+                .size(64.dp)
+                .clip(CircleShape)
+                .border(2.dp, Color.Gray, CircleShape)
+                .background(Color.White),
+            contentScale = ContentScale.Crop
+        )
+
+        Spacer(modifier = Modifier.width(16.dp))
+
+        Column {
+            Text(
+                text = "Nivel: $level",
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp
+            )
+
+            ProgressBar(progress, maxProgress, modifier = Modifier.padding(top = 8.dp))
+        }
+    }
+}
+
+@Composable
+fun ProgressBar(progress: Int, maxProgress: Int, modifier: Modifier = Modifier) {
+    val progressPercentage = (progress.toFloat() / maxProgress.toFloat()) * 100
+
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(24.dp)
+            .border(1.dp, Color.Gray, RoundedCornerShape(4.dp))
+            .background(Color.LightGray, RoundedCornerShape(4.dp))
+            .padding(2.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth(progressPercentage / 100f)
+                .background(Color.Green, RoundedCornerShape(4.dp))
+        )
+    }
+
+    Spacer(modifier = Modifier.height(4.dp))
+
+    Text(
+        text = "${progressPercentage.toInt()}%",
+        fontSize = 14.sp,
+        color = Color.Black,
+        textAlign = TextAlign.End,
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+
 
 @Composable
 fun LottieAnimationA2U1Screen() {
@@ -526,13 +713,5 @@ fun Actividad2ScreenPreview() {
             onPrevButtonClicked = { /*TODO*/ },
             onItemMenuButtonClicked = {},
             onNextButtonClicked = { /*TODO*/ })
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LadderScreenScreenPreview() {
-    OrtografiaMariamelTheme {
-        LadderScreen(viewModel = viewModel(factory = AppViewModelProvider.Factory))
     }
 }

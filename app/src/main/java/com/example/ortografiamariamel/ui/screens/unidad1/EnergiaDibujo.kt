@@ -2,16 +2,10 @@ package com.example.ortografiamariamel.ui.screens.unidad1
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
@@ -24,10 +18,10 @@ import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 
 
 @Composable
-fun EnergyBar(energy: Int = 5, modifier: Modifier = Modifier) {
+fun EnergyBar(energy: Int = 5, maxEnergy: Int = 5) {
 //    var energy by remember { mutableIntStateOf(energias) } // Energía inicial
     Box {
-        EnergyJar(energy)
+        EnergyJar(energy, maxEnergy)
         Text(
             " Mis energías: $energy",
             color = Color.Black,
@@ -38,19 +32,18 @@ fun EnergyBar(energy: Int = 5, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun EnergyJar(energy: Int) {
+fun EnergyJar(energy: Int, maxEnergy: Int) {
     Canvas(
         modifier = Modifier
             .fillMaxWidth()
             .height(25.dp)
     ) {
-        drawEnergyJar(energy)
+        drawEnergyJar(energy, maxEnergy)
     }
 }
 
-fun DrawScope.drawEnergyJar(energy: Int) {
-    val totalEnergy = 5
-    val fillWidth = (size.width * (energy / totalEnergy.toFloat())).coerceIn(0f, size.width)
+fun DrawScope.drawEnergyJar(energy: Int, maxEnergy: Int) {
+    val fillWidth = (size.width * (energy / maxEnergy.toFloat())).coerceIn(0f, size.width)
 
     // Dibuja el frasco
     drawRoundRect(
