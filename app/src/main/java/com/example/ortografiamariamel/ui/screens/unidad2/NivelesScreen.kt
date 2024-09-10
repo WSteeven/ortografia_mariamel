@@ -1,4 +1,4 @@
-package com.example.ortografiamariamel.ui.screens.unidad1
+package com.example.ortografiamariamel.ui.screens.unidad2
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -36,9 +36,8 @@ import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 
-
 @Composable
-fun Niveles1(
+fun Niveles2(
     modifier: Modifier = Modifier,
     viewModel: AppViewModel,
     onClick: () -> Unit = {},
@@ -69,7 +68,7 @@ fun Niveles1(
                         .fillMaxWidth()
                         .fillMaxHeight(.5f)
                 ) {
-                    LottieAnimationInstrucciones()
+//                    LottieAnimationInstrucciones()
                 }
             }
             Column(
@@ -87,7 +86,7 @@ fun Niveles1(
                         .padding(end = 54.dp)
                         .clickable(onClick = {
                             //Aquí se setea la pantalla de navegacion
-                            viewModel.setPantallaJuego(AppScreen.Actividad3U1)
+                            viewModel.setPantallaJuegoU2(AppScreen.Actividad3U2)
                             soundManager.playSound(R.raw.correct_card_sound)
                             onClick()
                         })
@@ -109,7 +108,7 @@ fun Niveles1(
                         .padding(bottom = 50.dp)
                         .clickable(onClick = {
                             //Aquí se setea la pantalla de navegacion
-                            viewModel.setPantallaJuego(AppScreen.Actividad2U1)
+                            viewModel.setPantallaJuegoU2(AppScreen.Actividad2U2)
                             soundManager.playSound(R.raw.correct_card_sound)
                             onClick()
                         })
@@ -131,7 +130,7 @@ fun Niveles1(
                         .padding(end = 32.dp)
                         .clickable(onClick = {
                             //Aquí se setea la pantalla de navegacion
-                            viewModel.setPantallaJuego(AppScreen.Actividad1U1)
+                            viewModel.setPantallaJuegoU2(AppScreen.Actividad1U2)
                             soundManager.playSound(R.raw.correct_card_sound)
                             onClick()
                         })
@@ -162,29 +161,29 @@ fun Niveles1(
 }
 
 
-@Composable
-fun LottieAnimationInstrucciones() {
-    // Cargar la animación desde assets
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.instrucciones))
-
-    // Controlar la animación
-    val animatable = rememberLottieAnimatable()
-
-    LaunchedEffect(composition) {
-        animatable.animate(composition)
-    }
-
-    LottieAnimation(
-        composition = composition,
-        iterations = LottieConstants.IterateForever,
-        modifier = Modifier.fillMaxSize()
-    )
-}
+//@Composable
+//fun LottieAnimationInstrucciones() {
+//    // Cargar la animación desde assets
+//    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.instrucciones))
+//
+//    // Controlar la animación
+//    val animatable = rememberLottieAnimatable()
+//
+//    LaunchedEffect(composition) {
+//        animatable.animate(composition)
+//    }
+//
+//    LottieAnimation(
+//        composition = composition,
+//        iterations = LottieConstants.IterateForever,
+//        modifier = Modifier.fillMaxSize()
+//    )
+//}
 
 @Preview(showBackground = true)
 @Composable
 fun NivelesScreenPreview() {
     OrtografiaMariamelTheme {
-        Niveles1(viewModel = viewModel(factory = AppViewModelProvider.Factory))
+        Niveles2(viewModel = viewModel(factory = AppViewModelProvider.Factory))
     }
 }

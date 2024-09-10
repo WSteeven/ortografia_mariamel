@@ -51,6 +51,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -73,6 +74,7 @@ import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
 import com.example.ortografiamariamel.ui.screens.MenuLateral
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
+import kotlinx.coroutines.delay
 
 
 @Composable
@@ -243,7 +245,8 @@ fun LadderScreen(viewModel: AppViewModel, snackbarHostState: SnackbarHostState) 
                     showDialog = false
                 },
                 onVerification = { isCorrect ->
-                    snackbarMessage = if (isCorrect) "¡Respuesta correcta!" else "Respuesta incorrecta"
+                    snackbarMessage =
+                        if (isCorrect) "¡Respuesta correcta!" else "Respuesta incorrecta"
                 }
             )
         }
@@ -258,7 +261,6 @@ fun LadderScreen(viewModel: AppViewModel, snackbarHostState: SnackbarHostState) 
         }
     }
 }
-
 
 
 @Composable
@@ -327,7 +329,12 @@ fun MenuDropdown(
 }
 
 @Composable
-fun MinimalDialog(viewModel: AppViewModel, index: Int, onDismissRequest: () -> Unit, onVerification: (Boolean) -> Unit) {
+fun MinimalDialog(
+    viewModel: AppViewModel,
+    index: Int,
+    onDismissRequest: () -> Unit,
+    onVerification: (Boolean) -> Unit
+) {
     Dialog(onDismissRequest = { onDismissRequest() }) {
         Card(
             modifier = Modifier
@@ -338,14 +345,57 @@ fun MinimalDialog(viewModel: AppViewModel, index: Int, onDismissRequest: () -> U
             Column(
                 modifier = Modifier.padding(4.dp)
             ) {
+                // Add the countdown timer
+                CountdownTimer(
+                    totalSeconds = 30, // Set the countdown time (e.g., 30 seconds)
+                    onTimeUp = {
+                        // Close the dialog when time is up
+                        onDismissRequest()
+                    }
+                )
                 when (index) {
-                    1 -> ContenidoOracion1(viewModel = viewModel, onClose = onDismissRequest, onVerification)
-                    2 -> ContenidoOracion2(viewModel = viewModel, onClose = onDismissRequest, onVerification)
-                    3 -> ContenidoOracion3(viewModel = viewModel, onClose = onDismissRequest, onVerification)
-                    4 -> ContenidoOracion4(viewModel = viewModel, onClose = onDismissRequest , onVerification)
-                    5 -> ContenidoOracion5(viewModel = viewModel, onClose = onDismissRequest, onVerification )
-                    6 -> ContenidoOracion6(viewModel = viewModel, onClose = onDismissRequest , onVerification)
-                    7 -> ContenidoOracion7(viewModel = viewModel, onClose = onDismissRequest , onVerification)
+                    1 -> ContenidoOracion1(
+                        viewModel = viewModel,
+                        onClose = onDismissRequest,
+                        onVerification
+                    )
+
+                    2 -> ContenidoOracion2(
+                        viewModel = viewModel,
+                        onClose = onDismissRequest,
+                        onVerification
+                    )
+
+                    3 -> ContenidoOracion3(
+                        viewModel = viewModel,
+                        onClose = onDismissRequest,
+                        onVerification
+                    )
+
+                    4 -> ContenidoOracion4(
+                        viewModel = viewModel,
+                        onClose = onDismissRequest,
+                        onVerification
+                    )
+
+                    5 -> ContenidoOracion5(
+                        viewModel = viewModel,
+                        onClose = onDismissRequest,
+                        onVerification
+                    )
+
+                    6 -> ContenidoOracion6(
+                        viewModel = viewModel,
+                        onClose = onDismissRequest,
+                        onVerification
+                    )
+
+                    7 -> ContenidoOracion7(
+                        viewModel = viewModel,
+                        onClose = onDismissRequest,
+                        onVerification
+                    )
+
                     else -> Log.d("ACTIVIDAD2-U1", "No hay pregunta para este boton $index")
                 }
             }
@@ -353,9 +403,132 @@ fun MinimalDialog(viewModel: AppViewModel, index: Int, onDismissRequest: () -> U
     }
 }
 
+@Composable
+fun CountdownTimer(
+    totalSeconds: Int,
+    onTimeUp: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var timeLeft by remember { mutableIntStateOf(totalSeconds) }
+    val context = LocalContext.current
+
+    // Timer effect
+    LaunchedEffect(timeLeft) {
+        if (timeLeft > 0) {
+            delay(1000L)
+            timeLeft -= 1
+        } else {
+            onTimeUp()
+        }
+    }
+
+    Text(
+        text = formatTime(timeLeft),
+        fontSize = 24.sp,
+        color = Color.Red,
+        modifier = modifier
+            .padding(16.dp)
+    )
+}
+
+@SuppressLint("DefaultLocale")
+fun formatTime(seconds: Int): String {
+    val minutes = seconds / 60
+    val remainingSeconds = seconds % 60
+    return String.format("%02d:%02d", minutes, remainingSeconds)
+}
+
+
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ContenidoOracion1(viewModel: AppViewModel, onClose: () -> Unit,    onVerification: (Boolean) -> Unit // Agrega el callback
+fun ContenidoOracion1(
+    viewModel: AppViewModel,
+    onClose: () -> Unit,
+    onVerification: (Boolean) -> Unit // Agrega el callback
+) {
+    var selectedOption1 by remember { mutableStateOf("") }
+    var selectedOption2 by remember { mutableStateOf("") }
+    var selectedOption3 by remember { mutableStateOf("") }
+    val response = Datasource().responses.firstOrNull { it.index == 3 }
+
+    //verificamos la respuesta
+    fun checkResponse() {
+        val respuestas = listOf(selectedOption1, selectedOption2, selectedOption3)
+        if (respuestas == response?.responses) {
+            onVerification(true)
+        } else {
+            onVerification(false)
+            viewModel.restarEnergiasJuego2U1()
+        }
+        onClose()
+    }
+    Spacer(modifier = Modifier.padding(4.dp))
+    Text("Contesta correctamente la oración con las posibles respuestas")
+
+    FlowRow(modifier = Modifier.fillMaxWidth()) {
+        Text("Dice que ")
+        MenuDropdown(options = listOf("el", "él"),
+            selectedOption = selectedOption1,
+            onOptionSelected = { selectedOption1 = it })
+        Text(" libro es ")
+        MenuDropdown(options = listOf("de", "dé"),
+            selectedOption = selectedOption2,
+            onOptionSelected = { selectedOption2 = it })
+        Text(" ")
+        MenuDropdown(options = listOf("el", "él"),
+            selectedOption = selectedOption3,
+            onOptionSelected = { selectedOption3 = it })
+        Text(".")
+    }
+    Spacer(modifier = Modifier.padding(16.dp))
+    Button(onClick = { checkResponse() }) {
+        Text("Verificar respuesta")
+    }
+}
+
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun ContenidoOracion2(
+    viewModel: AppViewModel,
+    onClose: () -> Unit,
+    onVerification: (Boolean) -> Unit
+) {
+    var selectedOption by remember { mutableStateOf("") }
+    val response = Datasource().responses.firstOrNull { it.index == 2 }
+
+    //verificamos la respuesta
+    fun checkResponse() {
+        val respuestas = listOf(selectedOption)
+        if (respuestas == response?.responses) {
+            onVerification(true)
+        } else {
+            onVerification(false)
+            viewModel.restarEnergiasJuego2U1()
+        }
+        onClose()
+    }
+    Text("Contesta correctamente la oración con las posibles respuestas")
+    FlowRow(modifier = Modifier.fillMaxWidth()) {
+        MenuDropdown(options = listOf("Tú", "Tu"),
+            selectedOption = selectedOption,
+            onOptionSelected = { selectedOption = it })
+        Text(" eres mi mejor amigo.")
+    }
+    Spacer(modifier = Modifier.padding(16.dp))
+    Button(onClick = {
+        checkResponse()
+    }) {
+        Text("Verificar respuesta")
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun ContenidoOracion3(
+    viewModel: AppViewModel,
+    onClose: () -> Unit,
+    onVerification: (Boolean) -> Unit
 ) {
     var selectedOption1 by remember { mutableStateOf("") }
     var selectedOption2 by remember { mutableStateOf("") }
@@ -396,84 +569,13 @@ fun ContenidoOracion1(viewModel: AppViewModel, onClose: () -> Unit,    onVerific
     }
 }
 
-
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ContenidoOracion2(viewModel: AppViewModel, onClose: () -> Unit,  onVerification: (Boolean) -> Unit ) {
-    var selectedOption by remember { mutableStateOf("") }
-    val response = Datasource().responses.firstOrNull { it.index == 2 }
-
-    //verificamos la respuesta
-    fun checkResponse() {
-        val respuestas = listOf(selectedOption)
-        if (respuestas == response?.responses) {
-            onVerification(true)
-        } else {
-            onVerification(false)
-            viewModel.restarEnergiasJuego2U1()
-        }
-        onClose()
-    }
-    Text("Contesta correctamente la oración con las posibles respuestas")
-    FlowRow(modifier = Modifier.fillMaxWidth()) {
-        MenuDropdown(options = listOf("Tú", "Tu"),
-            selectedOption = selectedOption,
-            onOptionSelected = { selectedOption = it })
-        Text(" eres mi mejor amigo.")
-    }
-    Spacer(modifier = Modifier.padding(16.dp))
-    Button(onClick = {
-        checkResponse()
-    }) {
-        Text("Verificar respuesta")
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-fun ContenidoOracion3(viewModel: AppViewModel, onClose: () -> Unit,  onVerification: (Boolean) -> Unit ) {
-    var selectedOption1 by remember { mutableStateOf("") }
-    var selectedOption2 by remember { mutableStateOf("") }
-    var selectedOption3 by remember { mutableStateOf("") }
-    val response = Datasource().responses.firstOrNull { it.index == 3 }
-
-    //verificamos la respuesta
-    fun checkResponse() {
-        val respuestas = listOf(selectedOption1, selectedOption2, selectedOption3)
-        if (respuestas == response?.responses) {
-            onVerification(true)
-        } else {
-            onVerification(false)
-            viewModel.restarEnergiasJuego2U1()
-        }
-        onClose()
-    }
-    Text("Contesta correctamente la oración con las posibles respuestas")
-
-    FlowRow(modifier = Modifier.fillMaxWidth()) {
-        Text("Dice que ")
-        MenuDropdown(options = listOf("el", "él"),
-            selectedOption = selectedOption1,
-            onOptionSelected = { selectedOption1 = it })
-        Text(" libro es ")
-        MenuDropdown(options = listOf("de", "dé"),
-            selectedOption = selectedOption2,
-            onOptionSelected = { selectedOption2 = it })
-        Text(" ")
-        MenuDropdown(options = listOf("el", "él"),
-            selectedOption = selectedOption3,
-            onOptionSelected = { selectedOption3 = it })
-        Text(".")
-    }
-    Spacer(modifier = Modifier.padding(16.dp))
-    Button(onClick = { checkResponse() }) {
-        Text("Verificar respuesta")
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-fun ContenidoOracion4(viewModel: AppViewModel, onClose: () -> Unit, onVerification: (Boolean) -> Unit) {
+fun ContenidoOracion4(
+    viewModel: AppViewModel,
+    onClose: () -> Unit,
+    onVerification: (Boolean) -> Unit
+) {
     var selectedOption by remember { mutableStateOf("") }
     val response = Datasource().responses.firstOrNull { it.index == 4 }
 
@@ -505,7 +607,11 @@ fun ContenidoOracion4(viewModel: AppViewModel, onClose: () -> Unit, onVerificati
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ContenidoOracion5(viewModel: AppViewModel, onClose: () -> Unit, onVerification: (Boolean) -> Unit) {
+fun ContenidoOracion5(
+    viewModel: AppViewModel,
+    onClose: () -> Unit,
+    onVerification: (Boolean) -> Unit
+) {
     var selectedOption1 by remember { mutableStateOf("") }
     var selectedOption2 by remember { mutableStateOf("") }
     var selectedOption3 by remember { mutableStateOf("") }
@@ -546,7 +652,11 @@ fun ContenidoOracion5(viewModel: AppViewModel, onClose: () -> Unit, onVerificati
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ContenidoOracion6(viewModel: AppViewModel, onClose: () -> Unit, onVerification: (Boolean) -> Unit) {
+fun ContenidoOracion6(
+    viewModel: AppViewModel,
+    onClose: () -> Unit,
+    onVerification: (Boolean) -> Unit
+) {
     var selectedOption by remember { mutableStateOf("") }
     val response = Datasource().responses.firstOrNull { it.index == 6 }
 
@@ -578,7 +688,11 @@ fun ContenidoOracion6(viewModel: AppViewModel, onClose: () -> Unit, onVerificati
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ContenidoOracion7(viewModel: AppViewModel, onClose: () -> Unit, onVerification: (Boolean) -> Unit) {
+fun ContenidoOracion7(
+    viewModel: AppViewModel,
+    onClose: () -> Unit,
+    onVerification: (Boolean) -> Unit
+) {
     var selectedOption1 by remember { mutableStateOf("") }
     var selectedOption2 by remember { mutableStateOf("") }
     val response = Datasource().responses.firstOrNull { it.index == 7 }
@@ -612,6 +726,7 @@ fun ContenidoOracion7(viewModel: AppViewModel, onClose: () -> Unit, onVerificati
         Text("Verificar respuesta")
     }
 }
+
 @Composable
 fun PlayerStatus(
     avatarResId: Int,

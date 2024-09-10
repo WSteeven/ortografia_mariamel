@@ -96,4 +96,9 @@ dependencies {
 
     val material3Version = "1.2.1"
     implementation("androidx.compose.material3:material3-window-size-class:$material3Version")
+
+    // para iconos e imagenes SVG
+    implementation("androidx.compose.material:material-icons-extended:1.5.0") // Usa la versión más reciente
+
+
 }

@@ -3,7 +3,9 @@
 
     <string name="parrafo1_unidad1">Es un acento gráfico que se utiliza en palabras monosílabas o en palabras que se escriben igual pero que tienen distinto significado, sirve para diferenciar palabras que se escriben de la misma forma, pero que tienen significados diferentes.</string>
     <string name="parrafo2_unidad1">Es decir, es la que permite distinguir palabras con idéntica forma, escritas con las mismas letras, pero que pertenecen a categorías gramaticales diferentes.</string>
-
+    <string name="parrafo1_unidad2">En castellano, el sonido /s/ puede representarse con tres letras distintas: s, c y z.</string>
+    <string name="parrafo2_unidad2">Por esta razón, podemos tener dudas a la hora de escribir ciertas palabras, las palabras merecimiento y acontecimiento son sustantivos que se derivan de los verbos merecer y acontecer, respectivamente. Para realizar esta transformación de verbo en sustantivo, se reemplaza la terminación verbal –er o –ir por el sufijo –miento.</string>
+    <string name="parrafo3_unidad2">Ya que los verbos originales se escriben con c, la conservan en las palabras que se derivan de ellos. En el caso de los verbos terminados en –er, la vocal e de su terminación se reemplaza por i.</string>
     <string name="back_to_menu_game">Menú del Juego</string>
     <string name="siguiente">Siguiente</string>
     <string name="atras">Atrás</string>
@@ -21,6 +23,7 @@
     <string name="actividad1">Actividad 1</string>
     <string name="fin_juego">Resumen</string>
     <string name="niveles_unidad1" />
+    <string name="niveles_unidad2" />
     <string name="actividad2">Actividad 2</string>
     <string name="actividad3">Actividad 3</string>
     <string name="actividad4">Actividad 4</string>
