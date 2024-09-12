@@ -197,7 +197,7 @@ fun AppNavHost(
                 modifier = Modifier
             )
         }
-        composable(route = AppScreen.MenuJuego1.name) {
+        composable(route = AppScreen.MenuJuego2.name) {
             Niveles2(
                 viewModel = viewModel,
                 onClick = {

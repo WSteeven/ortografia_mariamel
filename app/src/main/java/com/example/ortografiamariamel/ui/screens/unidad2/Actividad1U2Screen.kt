@@ -25,6 +25,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ortografiamariamel.R
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
+import com.example.ortografiamariamel.ui.game.CrosswordApp
 import com.example.ortografiamariamel.ui.game.MatchPairs
 import com.example.ortografiamariamel.ui.screens.MenuLateral
 import com.example.ortografiamariamel.ui.screens.unidad1.LottieAnimationScreen
@@ -62,7 +63,7 @@ fun Actividad1U2(
                     }
                 }
                 Text(
-                    text = "Elija la carta correcta de acuerdo al monosílabo",
+                    text = "Llena el siguiente crucigrama",
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 18.sp,
                     textAlign = TextAlign.Justify,
@@ -72,7 +73,7 @@ fun Actividad1U2(
                     modifier = modifier
                         .align(Alignment.CenterHorizontally)
                 )
-                MatchPairs(viewModel, onNextButtonClicked)
+                CrosswordApp()
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
