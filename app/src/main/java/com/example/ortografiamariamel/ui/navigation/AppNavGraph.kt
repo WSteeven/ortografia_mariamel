@@ -24,6 +24,8 @@ import com.example.ortografiamariamel.ui.screens.unidad1.FinJuegoUnidad1
 import com.example.ortografiamariamel.ui.screens.unidad1.Niveles1
 import com.example.ortografiamariamel.ui.screens.unidad1.UnidadI
 import com.example.ortografiamariamel.ui.screens.unidad2.Actividad1U2
+import com.example.ortografiamariamel.ui.screens.unidad2.Actividad2U2
+import com.example.ortografiamariamel.ui.screens.unidad2.Actividad3U2
 import com.example.ortografiamariamel.ui.screens.unidad2.Niveles2
 import com.example.ortografiamariamel.ui.screens.unidad2.UnidadII
 import com.example.ortografiamariamel.ui.screens.unidad3.Actividad3
@@ -207,6 +209,38 @@ fun AppNavHost(
         // 7ma pantalla - ACTIVIDAD II
         composable(route = AppScreen.Actividad1U2.name) {
             Actividad1U2(
+                viewModel = viewModel,
+                onPrevButtonClicked = {
+                    navController.navigateUp()
+                },
+                onNextButtonClicked = {
+                    navController.navigate(viewModel.uiState.value.screenEndGame.name)
+                },
+                onItemMenuButtonClicked = {
+//                    Log.d("AppNavGraph", "composable ActividadI: ${uiState.menu.name}")
+                    navController.navigate(viewModel.uiState.value.menu.name)
+                },
+                modifier = Modifier
+            )
+        }
+        composable(route = AppScreen.Actividad2U2.name) {
+            Actividad2U2(
+                viewModel = viewModel,
+                onPrevButtonClicked = {
+                    navController.navigateUp()
+                },
+                onNextButtonClicked = {
+                    navController.navigate(viewModel.uiState.value.screenEndGame.name)
+                },
+                onItemMenuButtonClicked = {
+//                    Log.d("AppNavGraph", "composable ActividadI: ${uiState.menu.name}")
+                    navController.navigate(viewModel.uiState.value.menu.name)
+                },
+                modifier = Modifier
+            )
+        }
+        composable(route = AppScreen.Actividad3U2.name) {
+            Actividad3U2(
                 viewModel = viewModel,
                 onPrevButtonClicked = {
                     navController.navigateUp()
