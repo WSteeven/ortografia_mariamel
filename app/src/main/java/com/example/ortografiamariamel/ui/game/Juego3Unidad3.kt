@@ -1,5 +1,6 @@
 package com.example.ortografiamariamel.ui.game
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -7,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -18,13 +18,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.ortografiamariamel.ui.AppViewModelProvider
-import com.example.ortografiamariamel.ui.screens.unidad2.Actividad3U2
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 
 data class Word3(
@@ -38,18 +37,18 @@ data class WordState3(
 )
 
 val words3 = listOf(
-    Word3("Tradu__ión", "c"),
-    Word3("Precau__ión", "c"),
-    Word3("Instru__ión", "c"),
-    Word3("Satisfacción", "c"),
-    Word3("Relac__ón", "c"),
-    Word3("Reda__ión", "c"),
-    Word3("Adi__ión", "c"),
-    Word3("Solu__ión", "c"),
-    Word3("A__ión", "c"),
-    Word3("Producción", "c"),
-    Word3("Conducción", "c"),
-    Word3("Dirección", "c"),
+    Word3("Tradu___ión", "cc"),
+    Word3("Precau___ión", "c"),
+    Word3("Instru___ión", "cc"),
+    Word3("Satisfa___ión", "cc"),
+    Word3("Rela__ión", "c"),
+    Word3("Reda___ión", "cc"),
+    Word3("Adi___ión", "cc"),
+    Word3("Solu___ión", "c"),
+    Word3("A___ión", "cc"),
+    Word3("Produ___ión", "cc"),
+    Word3("Condu___ión", "cc"),
+    Word3("Dire___ión", "cc"),
 )
 
 @Composable
@@ -64,19 +63,22 @@ fun SpellingGameScreen() {
     ) {
         Row(modifier = Modifier.fillMaxWidth()) {
             // Lista de palabras
-            Column(modifier = Modifier.weight(1f)) {
-                Text("Palabras", style = MaterialTheme.typography.titleLarge)
-                Spacer(modifier = Modifier.height(8.dp))
-                wordsState.value.forEach { wordState ->
-                    Text(text = wordState.word.text)
-                }
-            }
-
-            Spacer(modifier = Modifier.width(16.dp))
+//            Column(modifier = Modifier.weight(1f)) {
+//                Text("Palabras", style = MaterialTheme.typography.titleLarge)
+//                Spacer(modifier = Modifier.height(8.dp))
+//                wordsState.value.forEach { wordState ->
+//                    Text(text = wordState.word.text)
+//                }
+//            }
+//
+//            Spacer(modifier = Modifier.width(16.dp))
 
             // Opciones de respuesta
             Column(modifier = Modifier.weight(1f)) {
-                Text("Opciones", style = MaterialTheme.typography.titleLarge)
+                Row(modifier = Modifier.fillMaxWidth()){
+                Text("Palabras", style = MaterialTheme.typography.titleLarge, modifier = Modifier.fillMaxWidth(.5f))
+                Text("Opciones", style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(horizontal = 30.dp))
+                }
                 Spacer(modifier = Modifier.height(8.dp))
                 wordsState.value.forEach { wordState ->
                     WordItem(wordState, onAnswerSelected = { answer ->
@@ -124,24 +126,27 @@ fun SpellingGameScreen() {
 fun WordItem(wordState: WordState3, onAnswerSelected: (String) -> Unit) {
     val options = listOf("c", "cc")
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-    ) {
-        Row {
-            OptionButton(
-                text = options[0],
-                isSelected = options[0] == wordState.selectedAnswer,
-                onClick = { onAnswerSelected(options[0]) }
-            )
-            OptionButton(
-                text = options[1],
-                isSelected = options[1] == wordState.selectedAnswer,
-                onClick = { onAnswerSelected(options[1]) }
-            )
-        }
+
+    Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+        Text(
+            wordState.word.text,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier
+                .fillMaxWidth(.5f)
+                .align(Alignment.CenterVertically),
+        )
+        OptionButton(
+            text = options[0],
+            isSelected = options[0] == wordState.selectedAnswer,
+            onClick = { onAnswerSelected(options[0]) }
+        )
+        OptionButton(
+            text = options[1],
+            isSelected = options[1] == wordState.selectedAnswer,
+            onClick = { onAnswerSelected(options[1]) }
+        )
     }
+
 }
 
 @Composable

@@ -64,7 +64,7 @@ fun Actividad3U2(
                     }
                 }
                 Text(
-                    text = "Llena el siguiente crucigrama",
+                    text = "Indica si se escriben con “c” o “cc” las siguientes palabras",
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 18.sp,
                     textAlign = TextAlign.Justify,
