@@ -1,4 +1,4 @@
-package com.example.ortografiamariamel.ui.screens.unidad2
+package com.example.ortografiamariamel.ui.screens.unidad3
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -28,16 +30,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ortografiamariamel.R
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
-import com.example.ortografiamariamel.ui.game.CrosswordApp
-import com.example.ortografiamariamel.ui.game.MatchPairs
-import com.example.ortografiamariamel.ui.game.SpellingGameScreen
+import com.example.ortografiamariamel.ui.game.GiraYJuega
 import com.example.ortografiamariamel.ui.screens.MenuLateral
 import com.example.ortografiamariamel.ui.screens.unidad1.LottieAnimationScreen
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 
 
 @Composable
-fun Actividad3U2(
+fun Actividad3U3(
     viewModel: AppViewModel,
     modifier: Modifier = Modifier,
     onPrevButtonClicked: () -> Unit,
@@ -53,6 +53,7 @@ fun Actividad3U2(
             Column(
                 modifier = Modifier
                     .padding(4.dp)
+                    .verticalScroll(rememberScrollState())
             ) {
                 Row(
                     horizontalArrangement = Arrangement.Center,
@@ -70,7 +71,7 @@ fun Actividad3U2(
                     }
                 }
                 Text(
-                    text = "Indica si se escriben con “c” o “cc” las siguientes palabras",
+                    text = "Debes girar la ruleta y escribir la palabra correcta aplicando el uso de la z",
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 18.sp,
                     textAlign = TextAlign.Justify,
@@ -80,7 +81,7 @@ fun Actividad3U2(
                     modifier = modifier
                         .align(Alignment.CenterHorizontally)
                 )
-                SpellingGameScreen(snackbarHostState)
+                GiraYJuega()
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -127,7 +128,7 @@ fun Actividad3U2(
 @Composable
 fun Actividad3U2ScreenPreview() {
     OrtografiaMariamelTheme {
-        Actividad3U2(
+        Actividad3U3(
             viewModel = viewModel(factory = AppViewModelProvider.Factory),
             onPrevButtonClicked = { /*TODO*/ },
             onItemMenuButtonClicked = {},

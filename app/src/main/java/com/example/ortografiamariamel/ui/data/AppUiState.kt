@@ -11,6 +11,7 @@ data class AppUiState(
     val screenEndGame: AppScreen = AppScreen.FinJuegoActividad1,
     val menuJuego: AppScreen = AppScreen.Actividad1U1,
     val menuJuegoU2: AppScreen = AppScreen.Actividad1U2,
+    val menuJuegoU3: AppScreen = AppScreen.Actividad1U3,
     val energias: Int = 5,
     val energiasJuego2U1: Int = 7,
     val aciertos: Int = 0,

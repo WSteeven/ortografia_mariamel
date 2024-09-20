@@ -1,4 +1,4 @@
-package com.example.ortografiamariamel.ui.screens.unidad2
+package com.example.ortografiamariamel.ui.screens.unidad3
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -7,12 +7,11 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,31 +27,27 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ortografiamariamel.R
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
-import com.example.ortografiamariamel.ui.game.CrosswordApp
-import com.example.ortografiamariamel.ui.game.MatchPairs
-import com.example.ortografiamariamel.ui.game.SpellingGameScreen
+import com.example.ortografiamariamel.ui.game.SopaDeLetras
 import com.example.ortografiamariamel.ui.screens.MenuLateral
 import com.example.ortografiamariamel.ui.screens.unidad1.LottieAnimationScreen
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 
 
 @Composable
-fun Actividad3U2(
+fun Actividad1U3(
     viewModel: AppViewModel,
     modifier: Modifier = Modifier,
     onPrevButtonClicked: () -> Unit,
     onNextButtonClicked: () -> Unit,
     onItemMenuButtonClicked: () -> Unit
 ) {
-    // Define snackbarHostState
-    val snackbarHostState = remember { SnackbarHostState() }
-
     MenuLateral(
         title = R.string.blank,
         content = {
             Column(
                 modifier = Modifier
                     .padding(4.dp)
+                    .verticalScroll(rememberScrollState())
             ) {
                 Row(
                     horizontalArrangement = Arrangement.Center,
@@ -70,7 +65,7 @@ fun Actividad3U2(
                     }
                 }
                 Text(
-                    text = "Indica si se escriben con “c” o “cc” las siguientes palabras",
+                    text = "Encuentra las siguientes palabras en la sopa de letras",
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 18.sp,
                     textAlign = TextAlign.Justify,
@@ -80,7 +75,8 @@ fun Actividad3U2(
                     modifier = modifier
                         .align(Alignment.CenterHorizontally)
                 )
-                SpellingGameScreen(snackbarHostState)
+//                WordSearchScreenViewModel()
+                SopaDeLetras()
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -119,15 +115,13 @@ fun Actividad3U2(
         onItemMenuButtonClicked = onItemMenuButtonClicked,
         modifier = modifier
     )
-    // Add SnackbarHost at the top level of your composable hierarchy
-    SnackbarHost(hostState = snackbarHostState)
 }
 
 @Preview(showBackground = true, widthDp = 325, heightDp = 967)
 @Composable
-fun Actividad3U2ScreenPreview() {
+fun ActividadScreenPreview() {
     OrtografiaMariamelTheme {
-        Actividad3U2(
+        Actividad1U3(
             viewModel = viewModel(factory = AppViewModelProvider.Factory),
             onPrevButtonClicked = { /*TODO*/ },
             onItemMenuButtonClicked = {},

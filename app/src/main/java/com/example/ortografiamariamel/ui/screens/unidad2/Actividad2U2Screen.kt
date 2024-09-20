@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +27,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ortografiamariamel.R
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
+import com.example.ortografiamariamel.ui.game.Juego2Prueba
 import com.example.ortografiamariamel.ui.game.WordGameScreen
 import com.example.ortografiamariamel.ui.screens.MenuLateral
 import com.example.ortografiamariamel.ui.screens.unidad1.LottieAnimationScreen
@@ -45,6 +48,7 @@ fun Actividad2U2(
             Column(
                 modifier = Modifier
                     .padding(4.dp)
+                    .verticalScroll(rememberScrollState())
             ) {
                 Row(
                     horizontalArrangement = Arrangement.Center,
@@ -73,6 +77,7 @@ fun Actividad2U2(
                         .align(Alignment.CenterHorizontally)
                 )
                 WordGameScreen()
+//                Juego2Prueba()
                 Column(
                     modifier = Modifier
                         .fillMaxSize()

@@ -50,6 +50,9 @@ class AppViewModel : ViewModel() {
     fun setPantallaJuegoU2(pantalla: AppScreen){
         _uiState.update { currentState ->currentState.copy(menuJuegoU2 = pantalla) }
     }
+    fun setPantallaJuegoU3(pantalla: AppScreen){
+        _uiState.update { currentState ->currentState.copy(menuJuegoU3 = pantalla) }
+    }
 
     /**
      * Set the Screen for end game, in case game is win before drain all energies, the Screen is

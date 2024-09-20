@@ -1,5 +1,6 @@
 package com.example.ortografiamariamel.ui.game
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,8 +13,11 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,7 +37,7 @@ data class Word3(
 
 data class WordState3(
     val word: Word3,
-    var selectedAnswer: String? = null
+    var selectedAnswer: MutableState<String?> = mutableStateOf(null)
 )
 
 val words3 = listOf(
@@ -52,37 +56,39 @@ val words3 = listOf(
 )
 
 @Composable
-fun SpellingGameScreen() {
+fun SpellingGameScreen(snackbarHostState: SnackbarHostState) {
     val wordsState = remember { mutableStateOf(words3.map { WordState3(it) }) }
     var showResult by remember { mutableStateOf<Pair<Boolean, List<WordState3>>?>(null) }
+    var snackbarMessage by remember { mutableStateOf<String?>(null) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
+//        EnergyBar()
+//        Spacer(modifier = Modifier.padding(vertical = 4.dp))
         Row(modifier = Modifier.fillMaxWidth()) {
-            // Lista de palabras
-//            Column(modifier = Modifier.weight(1f)) {
-//                Text("Palabras", style = MaterialTheme.typography.titleLarge)
-//                Spacer(modifier = Modifier.height(8.dp))
-//                wordsState.value.forEach { wordState ->
-//                    Text(text = wordState.word.text)
-//                }
-//            }
-//
-//            Spacer(modifier = Modifier.width(16.dp))
-
             // Opciones de respuesta
             Column(modifier = Modifier.weight(1f)) {
-                Row(modifier = Modifier.fillMaxWidth()){
-                Text("Palabras", style = MaterialTheme.typography.titleLarge, modifier = Modifier.fillMaxWidth(.5f))
-                Text("Opciones", style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(horizontal = 30.dp))
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        "Palabras",
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.fillMaxWidth(.5f)
+                    )
+                    Text(
+                        "Opciones",
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.padding(horizontal = 30.dp)
+                    )
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 wordsState.value.forEach { wordState ->
-                    WordItem(wordState, onAnswerSelected = { answer ->
-                        wordState.selectedAnswer = answer
+                    Log.d("wordsState", "Dentro del 74: $wordState")
+                    WordItem(wordState,snackbarHostState=snackbarHostState, onAnswerSelected = { answer ->
+                        wordState.selectedAnswer.value = answer
+                        Log.d("wordItem", "Dentro del wordItem: $answer´y $wordState")
                     })
                 }
             }
@@ -92,7 +98,8 @@ fun SpellingGameScreen() {
 
         // Botón para verificar respuestas
         Button(onClick = {
-            val isCorrect = wordsState.value.all { it.selectedAnswer == it.word.correctAnswer }
+            val isCorrect =
+                wordsState.value.all { it.selectedAnswer.value == it.word.correctAnswer }
             showResult = Pair(isCorrect, wordsState.value)
         }) {
             Text("Verificar")
@@ -120,13 +127,19 @@ fun SpellingGameScreen() {
             )
         }
     }
+    LaunchedEffect(snackbarMessage) {
+        snackbarMessage?.let {
+            snackbarHostState.showSnackbar(it)
+            snackbarMessage = null
+        }
+    }
 }
 
 @Composable
-fun WordItem(wordState: WordState3, onAnswerSelected: (String) -> Unit) {
+fun WordItem(wordState: WordState3, snackbarHostState: SnackbarHostState, onAnswerSelected: (String) -> Unit) {
     val options = listOf("c", "cc")
-
-
+    var showSnackbar by remember { mutableStateOf(false) }
+    var snackbarMessage by remember { mutableStateOf<String?>(null) }
     Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
         Text(
             wordState.word.text,
@@ -135,63 +148,64 @@ fun WordItem(wordState: WordState3, onAnswerSelected: (String) -> Unit) {
                 .fillMaxWidth(.5f)
                 .align(Alignment.CenterVertically),
         )
-        OptionButton(
-            text = options[0],
-            isSelected = options[0] == wordState.selectedAnswer,
-            onClick = { onAnswerSelected(options[0]) }
-        )
-        OptionButton(
-            text = options[1],
-            isSelected = options[1] == wordState.selectedAnswer,
-            onClick = { onAnswerSelected(options[1]) }
-        )
+        options.forEach { option ->
+            OptionButton(
+                text = option,
+                isSelected = option == wordState.selectedAnswer.value,
+                isCorrect = option == wordState.word.correctAnswer,
+                onClick = {
+                    snackbarMessage =
+                        if (option == wordState.word.correctAnswer) "Correcto" else "Incorrecto"
+                    wordState.selectedAnswer.value = option
+                    onAnswerSelected(option)
+                    showSnackbar = true
+                    Log.d(
+                        "wordItem",
+                        "Opción seleccionada: $option, Estado: ${wordState.selectedAnswer}"
+                    )
+                })
+        }
+        if (showSnackbar) {
+            LaunchedEffect(snackbarMessage) {
+                snackbarMessage?.let {
+                    snackbarHostState.showSnackbar(it)
+                    snackbarMessage = null
+                }
+            }
+        }
+
     }
 
 }
 
 @Composable
-fun OptionButton(text: String, isSelected: Boolean, onClick: () -> Unit) {
+fun OptionButton(text: String, isSelected: Boolean, isCorrect: Boolean, onClick: () -> Unit) {
     Button(
-        onClick = onClick,
+        onClick = {
+            onClick()
+            Log.d("Button", " Diste clic en $text, está seleccionado? $isSelected")
+        },
         modifier = Modifier
             .padding(vertical = 4.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (isSelected) Color.Blue else Color.Gray,
+            containerColor = when {
+                isSelected && isCorrect -> Color.Green
+                isSelected -> Color(240, 150, 55)
+                else -> Color.Gray
+            },
             contentColor = Color.White,
-            disabledContentColor = Color.Black,
-            disabledContainerColor = Color.Red
         )
+
     ) {
         Text(text)
     }
 }
 
-@Composable
-fun AnswerOptions() {
-    val options = listOf("c", "cc")
-
-    Column {
-        options.forEach { option ->
-            Button(
-                onClick = { /* Handle option selection here if needed */ },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Gray,
-                    contentColor = Color.White
-                )
-            ) {
-                Text(option)
-            }
-        }
-    }
-}
 
 @Preview(showBackground = true)
 @Composable
 fun SpellingGamePreview() {
     OrtografiaMariamelTheme {
-        SpellingGameScreen()
+        SpellingGameScreen(remember { SnackbarHostState() })
     }
 }
