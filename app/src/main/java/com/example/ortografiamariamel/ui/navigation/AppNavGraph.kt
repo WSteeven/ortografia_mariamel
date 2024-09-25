@@ -33,7 +33,10 @@ import com.example.ortografiamariamel.ui.screens.unidad3.Actividad2U3
 import com.example.ortografiamariamel.ui.screens.unidad3.Actividad3U3
 import com.example.ortografiamariamel.ui.screens.unidad3.Niveles3
 import com.example.ortografiamariamel.ui.screens.unidad3.UnidadIII
-import com.example.ortografiamariamel.ui.screens.unidad4.Actividad4
+import com.example.ortografiamariamel.ui.screens.unidad4.Actividad1U4
+import com.example.ortografiamariamel.ui.screens.unidad4.Actividad2U4
+import com.example.ortografiamariamel.ui.screens.unidad4.Actividad3U4
+import com.example.ortografiamariamel.ui.screens.unidad4.Niveles4
 import com.example.ortografiamariamel.ui.screens.unidad4.UnidadIV
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 
@@ -346,10 +349,54 @@ fun AppNavHost(
                 modifier = Modifier
             )
         }
-        // 11ava pantalla - ACTIVIDAD IV
-        composable(route = AppScreen.Actividad4.name) {
-            Actividad4(
+        composable(route = AppScreen.MenuJuego4.name) {
+            Niveles4(
                 viewModel = viewModel,
+                onClick = {
+                    navController.navigate(viewModel.uiState.value.menuJuegoU4.name)
+                })
+        }
+        composable(route = AppScreen.Actividad1U4.name) {
+            Actividad1U4(
+                viewModel = viewModel,
+                onPrevButtonClicked = {
+                    navController.navigateUp()
+                },
+                onNextButtonClicked = {
+                    navController.navigate(viewModel.uiState.value.screenEndGame.name)
+                },
+                onItemMenuButtonClicked = {
+//                    Log.d("AppNavGraph", "composable ActividadI: ${uiState.menu.name}")
+                    navController.navigate(viewModel.uiState.value.menu.name)
+                },
+                modifier = Modifier
+            )
+        }
+        composable(route = AppScreen.Actividad2U3.name) {
+            Actividad2U4(
+                viewModel = viewModel,
+                onPrevButtonClicked = {
+                    navController.navigateUp()
+                },
+                onNextButtonClicked = {
+                    navController.navigate(viewModel.uiState.value.screenEndGame.name)
+                },
+                onItemMenuButtonClicked = {
+//                    Log.d("AppNavGraph", "composable ActividadI: ${uiState.menu.name}")
+                    navController.navigate(viewModel.uiState.value.menu.name)
+                },
+                modifier = Modifier
+            )
+        }
+        composable(route = AppScreen.Actividad3U4.name) {
+            Actividad3U4(
+                viewModel = viewModel,
+                onPrevButtonClicked = {
+                    navController.navigateUp()
+                },
+                onNextButtonClicked = {
+                    navController.navigate(viewModel.uiState.value.screenEndGame.name)
+                },
                 onItemMenuButtonClicked = {
 //                    Log.d("AppNavGraph", "composable ActividadI: ${uiState.menu.name}")
                     navController.navigate(viewModel.uiState.value.menu.name)
