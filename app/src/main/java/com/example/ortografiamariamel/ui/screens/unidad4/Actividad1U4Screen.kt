@@ -27,7 +27,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ortografiamariamel.R
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
-import com.example.ortografiamariamel.ui.game.SopaDeLetras
+import com.example.ortografiamariamel.ui.game.AhorcadoGame
 import com.example.ortografiamariamel.ui.screens.MenuLateral
 import com.example.ortografiamariamel.ui.screens.unidad1.LottieAnimationScreen
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
@@ -76,7 +76,7 @@ fun Actividad1U4(
                         .align(Alignment.CenterHorizontally)
                 )
 //                WordSearchScreenViewModel()
-                SopaDeLetras()
+                AhorcadoGame()
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -119,7 +119,7 @@ fun Actividad1U4(
 
 @Preview(showBackground = true, widthDp = 325, heightDp = 967)
 @Composable
-fun ActividadScreenPreview() {
+fun Actividad1ScreenPreview() {
     OrtografiaMariamelTheme {
         Actividad1U4(
             viewModel = viewModel(factory = AppViewModelProvider.Factory),

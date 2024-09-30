@@ -99,6 +99,6 @@ dependencies {
 
     // para iconos e imagenes SVG
     implementation("androidx.compose.material:material-icons-extended:1.5.0") // Usa la versión más reciente
-
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 
 }

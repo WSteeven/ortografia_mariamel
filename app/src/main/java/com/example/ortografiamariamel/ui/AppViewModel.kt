@@ -1,7 +1,6 @@
 package com.example.ortografiamariamel.ui
 
 import androidx.compose.material3.DrawerValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.ortografiamariamel.AppScreen
 import com.example.ortografiamariamel.ui.data.AppUiState
@@ -47,14 +46,16 @@ class AppViewModel : ViewModel() {
         _uiState.update { currentState -> currentState.copy(menuJuego = pantalla) }
     }
 
-    fun setPantallaJuegoU2(pantalla: AppScreen){
-        _uiState.update { currentState ->currentState.copy(menuJuegoU2 = pantalla) }
+    fun setPantallaJuegoU2(pantalla: AppScreen) {
+        _uiState.update { currentState -> currentState.copy(menuJuegoU2 = pantalla) }
     }
-    fun setPantallaJuegoU3(pantalla: AppScreen){
-        _uiState.update { currentState ->currentState.copy(menuJuegoU3 = pantalla) }
+
+    fun setPantallaJuegoU3(pantalla: AppScreen) {
+        _uiState.update { currentState -> currentState.copy(menuJuegoU3 = pantalla) }
     }
-    fun setPantallaJuegoU4(pantalla: AppScreen){
-        _uiState.update { currentState ->currentState.copy(menuJuegoU4 = pantalla) }
+
+    fun setPantallaJuegoU4(pantalla: AppScreen) {
+        _uiState.update { currentState -> currentState.copy(menuJuegoU4 = pantalla) }
     }
 
     /**
@@ -66,11 +67,11 @@ class AppViewModel : ViewModel() {
     }
 
     fun reestablecerEnergias() {
-        _uiState.update { it -> it.copy(energias = 5) }
+        _uiState.update { it.copy(energias = 5) }
     }
 
     fun reestablecerAciertos() {
-        _uiState.update { it -> it.copy(aciertos = 0) }
+        _uiState.update { it.copy(aciertos = 0) }
     }
 
     fun closeMenuLateral() {
@@ -86,8 +87,9 @@ class AppViewModel : ViewModel() {
             )
         }
     }
-    fun restarEnergiasJuego2U1(){
-        _uiState.update { currentState -> currentState.copy(energiasJuego2U1 =  currentState.energiasJuego2U1-1) }
+
+    fun restarEnergiasJuego2U1() {
+        _uiState.update { currentState -> currentState.copy(energiasJuego2U1 = currentState.energiasJuego2U1 - 1) }
     }
 
     fun sumarAciertos() {

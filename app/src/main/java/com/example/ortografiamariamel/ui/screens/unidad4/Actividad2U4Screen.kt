@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,6 +29,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ortografiamariamel.R
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
+import com.example.ortografiamariamel.ui.game.EscogeVerdaderoFalso
 import com.example.ortografiamariamel.ui.game.OrdenarPalabras
 import com.example.ortografiamariamel.ui.screens.MenuLateral
 import com.example.ortografiamariamel.ui.screens.unidad1.LottieAnimationScreen
@@ -41,6 +44,7 @@ fun Actividad2U4(
     onNextButtonClicked: () -> Unit,
     onItemMenuButtonClicked: () -> Unit
 ) {
+    val snackbarHostState = remember {SnackbarHostState()}
     MenuLateral(
         title = R.string.blank,
         content = {
@@ -75,7 +79,7 @@ fun Actividad2U4(
                     modifier = modifier
                         .align(Alignment.CenterHorizontally)
                 )
-                OrdenarPalabras()
+                EscogeVerdaderoFalso(snackbarHostState)
                 Column(
                     modifier = Modifier
                         .fillMaxSize()

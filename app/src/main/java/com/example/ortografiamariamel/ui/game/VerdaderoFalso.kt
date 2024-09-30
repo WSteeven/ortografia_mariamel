@@ -73,8 +73,7 @@ fun EscogeVerdaderoFalso(snackbarHostState: SnackbarHostState) {
 
         // Botón para verificar respuestas
         Button(onClick = {
-            val isCorrect =
-                wordsState.value.all { it.selectedAnswer.value == it.word.correctAnswer }
+            val isCorrect = wordsState.value.all { it.selectedAnswer.value == it.word.correctAnswer }
             showResult = Pair(isCorrect, wordsState.value)
         }) {
             Text("Verificar")
@@ -87,10 +86,7 @@ fun EscogeVerdaderoFalso(snackbarHostState: SnackbarHostState) {
                 text = {
                     Text(
                         buildString {
-                            append("Tus respuestas:\n")
-                            results.forEach {
-                                append("${it.word.text}: ${it.selectedAnswer ?: "No respondida"}\n")
-                            }
+                            append("Todas tus respuestas han sido "+ if(isCorrect) "correctas" else "incorrectas")
                         }
                     )
                 },

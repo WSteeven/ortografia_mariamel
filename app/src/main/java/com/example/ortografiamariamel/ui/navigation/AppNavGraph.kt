@@ -340,10 +340,9 @@ fun AppNavHost(
                     navController.navigateUp()
                 },
                 onNextButtonClicked = {
-                    navController.navigate(AppScreen.Actividad4.name)
+                    navController.navigate(AppScreen.MenuJuego4.name)
                 },
                 onItemMenuButtonClicked = {
-//                    Log.d("AppNavGraph", "composable UnidadIV: ${uiState.menu.name}")
                     navController.navigate(viewModel.uiState.value.menu.name)
                 },
                 modifier = Modifier
@@ -372,7 +371,7 @@ fun AppNavHost(
                 modifier = Modifier
             )
         }
-        composable(route = AppScreen.Actividad2U3.name) {
+        composable(route = AppScreen.Actividad2U4.name) {
             Actividad2U4(
                 viewModel = viewModel,
                 onPrevButtonClicked = {
@@ -382,7 +381,6 @@ fun AppNavHost(
                     navController.navigate(viewModel.uiState.value.screenEndGame.name)
                 },
                 onItemMenuButtonClicked = {
-//                    Log.d("AppNavGraph", "composable ActividadI: ${uiState.menu.name}")
                     navController.navigate(viewModel.uiState.value.menu.name)
                 },
                 modifier = Modifier

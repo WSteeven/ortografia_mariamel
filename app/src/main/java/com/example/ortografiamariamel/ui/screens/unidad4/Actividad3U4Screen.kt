@@ -30,6 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ortografiamariamel.R
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
+import com.example.ortografiamariamel.ui.game.Dictado
 import com.example.ortografiamariamel.ui.game.GiraYJuega
 import com.example.ortografiamariamel.ui.screens.MenuLateral
 import com.example.ortografiamariamel.ui.screens.unidad1.LottieAnimationScreen
@@ -71,7 +72,7 @@ fun Actividad3U4(
                     }
                 }
                 Text(
-                    text = "Debes girar la ruleta y escribir la palabra correcta aplicando el uso de la z",
+                    text = "Escucha los audios y escribe la oración en los espacios en blanco.",
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 18.sp,
                     textAlign = TextAlign.Justify,
@@ -81,39 +82,29 @@ fun Actividad3U4(
                     modifier = modifier
                         .align(Alignment.CenterHorizontally)
                 )
-                GiraYJuega()
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(0.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Bottom
-                ) {
-                    Row(
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .padding(dimensionResource(R.dimen.padding_small)),
-                        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
-                        verticalAlignment = Alignment.Bottom
-                    ) {
-                        OutlinedButton(
-                            modifier = Modifier.weight(1f),
-                            onClick = onPrevButtonClicked
-                        ) {
-                            Text(stringResource(R.string.atras))
-                        }
-//                        Button(
+                Dictado()
+//                Column(
+//                    modifier = Modifier
+//                        .fillMaxSize()
+//                        .padding(0.dp),
+//                    horizontalAlignment = Alignment.CenterHorizontally,
+//                    verticalArrangement = Arrangement.Bottom
+//                ) {
+//                    Row(
+//                        modifier = modifier
+//                            .fillMaxWidth()
+//                            .padding(dimensionResource(R.dimen.padding_small)),
+//                        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
+//                        verticalAlignment = Alignment.Bottom
+//                    ) {
+//                        OutlinedButton(
 //                            modifier = Modifier.weight(1f),
-//                            // the button is enabled when the user makes a selection
-//                            onClick = {
-//                                viewModel.setPantallaActual(AppScreen.Menu)
-//                                onNextButtonClicked()
-//                            }
+//                            onClick = onPrevButtonClicked
 //                        ) {
-//                            Text(stringResource(R.string.siguiente))
+//                            Text(stringResource(R.string.atras))
 //                        }
-                    }
-                }
+//                    }
+//                }
             }
         },
         viewModel = viewModel,
@@ -126,7 +117,7 @@ fun Actividad3U4(
 
 @Preview(showBackground = true, widthDp = 325, heightDp = 967)
 @Composable
-fun Actividad3U2ScreenPreview() {
+fun Actividad3U4ScreenPreview() {
     OrtografiaMariamelTheme {
         Actividad3U4(
             viewModel = viewModel(factory = AppViewModelProvider.Factory),
