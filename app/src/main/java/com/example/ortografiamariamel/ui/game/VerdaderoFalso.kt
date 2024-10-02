@@ -86,7 +86,7 @@ fun EscogeVerdaderoFalso(snackbarHostState: SnackbarHostState) {
                 text = {
                     Text(
                         buildString {
-                            append("Todas tus respuestas han sido "+ if(isCorrect) "correctas" else "incorrectas")
+                            append( if(isCorrect) "Todas tus respuestas han sido correctas" else "Algunas respuestas han sido incorrectas")
                         }
                     )
                 },

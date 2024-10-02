@@ -20,7 +20,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -40,14 +42,16 @@ import androidx.compose.ui.unit.sp
 import com.example.ortografiamariamel.R
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 
+
 @Composable
 fun OrdenarPalabras() {
     val palabras = listOf("FLOREZCA", "LUZCO", "PERMANEZCO", "CONDUZCO")
-    var respuestas by remember { mutableStateOf(List(palabras.size) { "" }) }
+    val respuestas = palabras.map { remember { mutableStateOf("") } } // Mantener el estado de entrada
+
     var showDialog by remember { mutableStateOf(false) }
     var message by remember { mutableStateOf("") }
 
-// Generar las palabras mezcladas solo una vez
+    // Generar las palabras mezcladas solo una vez
     val palabrasMezcladas = palabras.map { it.toList().shuffled().joinToString("") }
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -64,9 +68,9 @@ fun OrdenarPalabras() {
                 imagen = imageId,
                 palabra = palabra,
                 palabraMezclada = palabrasMezcladas[index],
-                respuestas = respuestas[index],
-                onRespuestaChange = { nuevaRespuesta ->
-                    respuestas = respuestas.toMutableList().apply { this[index] = nuevaRespuesta }
+                respuestas = respuestas,
+                onRespuestaComplete = { nuevaRespuesta ->
+                    respuestas[index].value = nuevaRespuesta // Actualiza solo el índice correspondiente
                 }
             )
 
@@ -75,7 +79,7 @@ fun OrdenarPalabras() {
 
         Button(onClick = {
             val allCorrect = respuestas.zip(palabras).all { (respuesta, palabra) ->
-                respuesta.equals(palabra, ignoreCase = true)
+                respuesta.value.equals(palabra, ignoreCase = true)
             }
             message = if (allCorrect) "¡Felicitaciones! Todas las palabras están correctas." else "Algunas palabras están incorrectas."
             showDialog = true
@@ -107,21 +111,22 @@ fun OrdenarPalabras() {
 }
 
 @Composable
-fun ImageWordComponent(imagen: Int, palabra: String, palabraMezclada:String, respuestas: String, onRespuestaChange: (String) -> Unit) {
-    Image(
-        painter = painterResource(imagen),
-        contentDescription = palabra,
-        modifier = Modifier
-            .fillMaxWidth()
-            .size(150.dp)
-            .padding(4.dp),
-        alignment = Alignment.Center,
-        contentScale = ContentScale.Fit
-    )
+fun ImageWordComponent(
+    imagen: Int,
+    palabra: String,
+    palabraMezclada: String,
+    respuestas: List<MutableState<String>>, // Lista de estados
+    onRespuestaComplete: (String) -> Unit // Cambiar el tipo de función para incluir el índice
+) {
+    val respuestaIngresada = remember {        MutableList(palabra.length){ mutableStateOf("") }    }
+
+    Image(painter = painterResource(imagen), contentDescription = palabra, modifier = Modifier
+        .fillMaxWidth()
+        .size(150.dp)
+        .padding(4.dp), alignment = Alignment.Center, contentScale = ContentScale.Fit)
 
     // Muestra la palabra mezclada
     Text(
-//        text = palabra.toList().shuffled().joinToString(""),
         text = palabraMezclada,
         letterSpacing = 2.sp,
         color = Color(255, 168, 0),
@@ -135,16 +140,19 @@ fun ImageWordComponent(imagen: Int, palabra: String, palabraMezclada:String, res
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
+        fun enviarRespuesta(){
+            if (respuestaIngresada.all { it.value.isNotEmpty() }){
+                onRespuestaComplete(respuestaIngresada.joinToString("") { it.value })
+            }
+        }
         for (i in palabra.indices) {
-            var inputText by remember { mutableStateOf("") }
-
             BasicTextField(
-                value = inputText,
+                value = respuestaIngresada[i].value,
                 onValueChange = { newValue ->
-                    if (newValue.length <= 1) {
-                        inputText = newValue
-                        onRespuestaChange(respuestas.padEnd(palabra.length).replaceRange(i, i + 1, newValue))
+                    if(newValue.length<=1) {
+                        respuestaIngresada[i].value = newValue
                     }
+                    enviarRespuesta()
                 },
                 modifier = Modifier
                     .size(40.dp)
@@ -157,8 +165,10 @@ fun ImageWordComponent(imagen: Int, palabra: String, palabraMezclada:String, res
                 )
             )
         }
+
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
