@@ -1,7 +1,6 @@
 package com.example.ortografiamariamel.data
 
 import com.example.ortografiamariamel.model.Carta
-import com.example.ortografiamariamel.model.Nivel
 import com.example.ortografiamariamel.model.Question
 import com.example.ortografiamariamel.model.Response
 
