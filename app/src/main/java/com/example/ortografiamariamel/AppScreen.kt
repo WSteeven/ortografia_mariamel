@@ -9,7 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
-import com.example.ortografiamariamel.ui.navigation.AppNavHost
+import com.example.ortografiamariamel.ui.navigation.OrtografiaMariamelAppNavHost
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 
 // Screens
@@ -43,10 +43,11 @@ enum class AppScreen(@StringRes val title: Int) {
 
 
 @Composable
-fun App(
+fun OrtografiaMariamelApp(
     viewModel: AppViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    navController: NavHostController = rememberNavController()){
-    AppNavHost(viewModel=viewModel, navController = navController)
+    navController: NavHostController = rememberNavController()
+) {
+    OrtografiaMariamelAppNavHost(viewModel = viewModel, navController = navController)
 }
 
 
@@ -54,6 +55,6 @@ fun App(
 @Composable
 fun MenuScreenPreview() {
     OrtografiaMariamelTheme {
-        App()
+        OrtografiaMariamelApp()
     }
 }

@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.google.devtools.ksp") version "1.9.20-1.0.14"
 }
 
 
@@ -93,7 +94,7 @@ dependencies {
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.room:room-ktx:2.6.1")
-
+    ksp("androidx.room:room-compiler:2.6.1")
     val material3Version = "1.2.1"
     implementation("androidx.compose.material3:material3-window-size-class:$material3Version")
 

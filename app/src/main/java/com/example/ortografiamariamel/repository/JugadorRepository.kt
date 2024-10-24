@@ -1,4 +1,12 @@
 package com.example.ortografiamariamel.repository
 
-class JugadorRepository {
+import com.example.ortografiamariamel.model.Jugador
+import kotlinx.coroutines.flow.Flow
+
+interface JugadorRepository {
+
+      fun getJugador(): Flow<Jugador?>
+
+      suspend fun setJugador(jugador: Jugador)
+
 }

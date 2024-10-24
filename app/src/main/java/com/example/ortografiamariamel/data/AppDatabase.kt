@@ -4,10 +4,13 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.ortografiamariamel.data.dao.JugadorDao
+import com.example.ortografiamariamel.model.Jugador
 
-@Database(entities = [Nivel::class], version = 1, exportSchema = false)
+@Database(entities = [Nivel::class, Jugador::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun nivelDao(): NivelDao
+    abstract fun jugadorDao(): JugadorDao
 
     companion object {
         @Volatile

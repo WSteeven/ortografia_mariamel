@@ -8,10 +8,15 @@ import com.example.ortografiamariamel.OrtografiaMariamelApplication
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
+
         initializer {
             AppViewModel()
+//            AppViewModel(ortografiaMariamelApplication().container.jugadorRepository)
         }
         // mas initializers segun sea necesario
+        initializer {
+            JugadorViewModel(ortografiaMariamelApplication().container.jugadorRepository)
+        }
     }
 }
 

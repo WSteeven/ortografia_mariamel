@@ -42,7 +42,7 @@ import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun AppNavHost(
+fun OrtografiaMariamelAppNavHost(
     viewModel: AppViewModel,
     navController: NavHostController,
     modifier: Modifier = Modifier
@@ -67,7 +67,6 @@ fun AppNavHost(
         // 2da pantalla
         composable(route = AppScreen.DatosJugador.name) {
             DatosJugadorScreen(
-                viewModel = viewModel,
                 onPrevButtonClicked = {
                     navController.navigateUp()
                 },
@@ -88,12 +87,7 @@ fun AppNavHost(
                     navController.navigate(viewModel.uiState.value.menu.name)
                 },
                 onItemMenuButtonClicked = {
-//                    Log.d(
-//                        "AppNavGraph",
-//                        "oibc composable Menu: ${uiState.menu.name} - ${viewModel.uiState.value.menu.name}"
-//                    )
                     navController.navigate(viewModel.uiState.value.menu.name)
-//                    Log.d("AppNavGraph","oibc composable Menu after: ${uiState.menu.name} - ${viewModel.uiState.value.menu.name}")
                 },
                 modifier = Modifier
             )
@@ -125,7 +119,6 @@ fun AppNavHost(
                     navController.navigate(viewModel.uiState.value.screenEndGame.name)
                 },
                 onItemMenuButtonClicked = {
-//                    Log.d("AppNavGraph", "composable ActividadI: ${uiState.menu.name}")
                     navController.navigate(viewModel.uiState.value.menu.name)
                 },
                 modifier = Modifier
@@ -409,7 +402,7 @@ fun AppNavHost(
 @Composable
 fun MenuScreenPreview() {
     OrtografiaMariamelTheme {
-        AppNavHost(
+        OrtografiaMariamelAppNavHost(
             viewModel = viewModel(factory = AppViewModelProvider.Factory),
             navController = rememberNavController()
         )

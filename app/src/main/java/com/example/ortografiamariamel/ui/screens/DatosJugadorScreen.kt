@@ -18,11 +18,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,22 +43,25 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ortografiamariamel.AppScreen
 import com.example.ortografiamariamel.R
-import com.example.ortografiamariamel.ui.AppViewModel
+import com.example.ortografiamariamel.model.Jugador
 import com.example.ortografiamariamel.ui.AppViewModelProvider
+import com.example.ortografiamariamel.ui.JugadorViewModel
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatosJugadorScreen(
-    viewModel: AppViewModel,
+    viewModel: JugadorViewModel =viewModel(factory = AppViewModelProvider.Factory),
     onPrevButtonClicked: () -> Unit,
     onNextButtonClicked: () -> Unit,
     modifier: Modifier
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-    var playerName by remember { mutableStateOf(uiState.nombreJugador) }
-    var sliderValue by remember { mutableIntStateOf(uiState.edad) }
+    val jugadorUiState = viewModel.jugadorUiState
+    var playerName by remember { mutableStateOf(jugadorUiState.jugador.nombre) }
+    var sliderValue by remember { mutableIntStateOf(jugadorUiState.jugador.edad) }
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val coroutineScope = rememberCoroutineScope()
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -132,8 +135,11 @@ fun DatosJugadorScreen(
             Button(
                 enabled = playerName.isNotEmpty(),
                 onClick = {
-                    viewModel.setNombreJugador(playerName)
-                    viewModel.setEdad(sliderValue)
+                    viewModel.updateUiState(Jugador(nombre = playerName, edad = sliderValue))
+                    coroutineScope.launch { viewModel.setJugador() }
+
+//                    viewModel.setNombreJugador(playerName)
+//                    viewModel.setEdad(sliderValue)
                     onNextButtonClicked()
                 },
                 modifier = Modifier.align(Alignment.CenterHorizontally),
