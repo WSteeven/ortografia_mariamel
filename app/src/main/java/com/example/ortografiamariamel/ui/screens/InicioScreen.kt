@@ -42,6 +42,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
@@ -76,7 +77,6 @@ fun InicioScreen(
             )
         }
     ) { innerPadding ->
-
         Column(modifier = modifier.padding(innerPadding)) {
             SlideInFromTopAnimation(
                 R.drawable.logo_colegio, modifier = Modifier
@@ -86,7 +86,7 @@ fun InicioScreen(
             Spacer(modifier = Modifier.height(16.dp))
             ContinuousSlideAnimation(
                 modifier = Modifier
-                    .fillMaxSize(.6f)
+                    .fillMaxSize(.5f)
                     .align(alignment = Alignment.CenterHorizontally)
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -96,12 +96,14 @@ fun InicioScreen(
             )
             BasicMarqueeNombreApp()
             Text(
-                "La forma más fácil para aprender de la Ortografía ",
-                fontSize = 10.sp,
+                text = stringResource(id = R.string.slogan_bienvenida),
+                fontSize = 20.sp,
                 fontStyle = FontStyle.Italic,
-//                fontWeight = FontWeight.SemiBold,
+                fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
             Button(

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "359475017074",
+    "project_id": "ortografia-ce7bf",
+    "storage_bucket": "ortografia-ce7bf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:359475017074:android:33dfed1938dc48598019eb",
+        "android_client_info": {
+          "package_name": "com.example.ortografiamariamel"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBc-iQcTQVZ1BENnc2GMA7tU0CBbmdPKU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -69,7 +69,7 @@ fun UnidadI(
                     ) {
                         Spacer(modifier = Modifier.weight(1f)) // Espacio flexible para centrar el texto
                         Text(
-                            text = "TEMA",
+                            text = stringResource(id = R.string.recordemos),
                             fontWeight = FontWeight.Bold,
                             fontSize = 30.sp,
                             modifier = Modifier.padding(start = 64.dp) // Espacio al final del texto
@@ -101,7 +101,7 @@ fun UnidadI(
                     }
 
                     Text(
-                        text = "Tílde Diacrítica en los Monosílabos",
+                        text = stringResource(id = R.string.tema_unidad_1),
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 25.sp,
                         textAlign = TextAlign.Center,

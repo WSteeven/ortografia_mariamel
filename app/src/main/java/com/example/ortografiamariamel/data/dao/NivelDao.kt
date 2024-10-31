@@ -1,4 +1,4 @@
-package com.example.ortografiamariamel.data
+package com.example.ortografiamariamel.data.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.example.ortografiamariamel.model.Nivel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 
@@ -21,8 +22,10 @@ interface NivelDao {
     // Specify the conflict strategy as IGNORE, when the user tries to add an
     // existing Item into the database Room ignores the conflict.
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(nivel: Nivel)
+    suspend fun insertNivel(nivel: Nivel)
 
+    @Query("SELECT * FROM niveles WHERE unidadId = :unidadId")
+    suspend fun getNivelesPorUnidad(unidadId: Long): List<Nivel>
     @Update
     suspend fun update(nivel:Nivel)
 

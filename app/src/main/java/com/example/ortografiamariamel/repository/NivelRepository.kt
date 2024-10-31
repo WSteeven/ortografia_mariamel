@@ -1,5 +1,6 @@
 package com.example.ortografiamariamel.data
 
+import com.example.ortografiamariamel.model.Nivel
 import kotlinx.coroutines.flow.Flow
 
 interface NivelRepository {

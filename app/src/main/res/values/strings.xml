@@ -1,6 +1,15 @@
 <resources>
     <string name="app_name">Ortografia Mariamel</string>
 
+    <string name="slogan_bienvenida">La forma más fácil de aprender ortografía</string>
+    <string name="recordemos">RECORDEMOS</string>
+    <string name="instrucciones_1">Lee atentamente el enunciado en cada nivel</string>
+    <string name="instrucciones_2">Obtendrás puntos por cada nivel que completes</string>
+    <string name="instrucciones_3">No olvides que debes tener conexión a Internet para guardar tu progreso</string>
+    <string name="tema_unidad_1">Tílde Diacrítica en los Monosílabos</string>
+    <string name="tema_unidad_2">Uso de la C en palabras terminadas en-cimiento</string>
+    <string name="tema_unidad_3">El uso de la z en verbos terminados en-ecer, ucir</string>
+    <string name="tema_unidad_4">Uso de la coma en enumeraciones</string>
     <string name="parrafo1_unidad1">Es un acento gráfico que se utiliza en palabras monosílabas o en palabras que se escriben igual pero que tienen distinto significado, sirve para diferenciar palabras que se escriben de la misma forma, pero que tienen significados diferentes.</string>
     <string name="parrafo2_unidad1">Es decir, es la que permite distinguir palabras con idéntica forma, escritas con las mismas letras, pero que pertenecen a categorías gramaticales diferentes.</string>
     <string name="parrafo1_unidad2">En castellano, el sonido /s/ puede representarse con tres letras distintas: s, c y z.</string>
@@ -35,6 +44,8 @@
     <string name="actividad3">Actividad 3</string>
     <string name="actividad4">Actividad 4</string>
     <string name="evaluacion">Evaluación</string>
+    <string name="administracion">Administración</string>
+    <string name="administracion_app">Administración de la aplicación</string>
     <string name="blank">""</string>
 
 

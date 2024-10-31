@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     id("com.google.devtools.ksp") version "1.9.20-1.0.14"
+    id("com.google.gms.google-services")
 }
 
 
@@ -102,4 +103,7 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:1.5.0") // Usa la versión más reciente
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
+    // firebase
+    implementation("com.google.firebase:firebase-database-ktx:20.3.0") // Revisa la última versión
+    implementation("com.google.firebase:firebase-auth-ktx:21.0.1") // Para autenticación
 }

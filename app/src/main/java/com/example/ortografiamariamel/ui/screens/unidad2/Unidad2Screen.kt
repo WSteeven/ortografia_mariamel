@@ -68,7 +68,7 @@ fun UnidadII(
                     ) {
                         Spacer(modifier = Modifier.weight(1f)) // Espacio flexible para centrar el texto
                         Text(
-                            text = "TEMA",
+                            text = stringResource(id = R.string.recordemos),
                             fontWeight = FontWeight.Bold,
                             fontSize = 30.sp,
                             modifier = Modifier.padding(start = 64.dp) // Espacio al final del texto
@@ -100,7 +100,7 @@ fun UnidadII(
                     }
 
                     Text(
-                        text = "Uso de la C en palabras terminadas en-cimiento",
+                        text = stringResource(id = R.string.tema_unidad_2),
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 25.sp,
                         textAlign = TextAlign.Center,

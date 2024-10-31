@@ -3,6 +3,7 @@ package com.example.ortografiamariamel.ui.navigation
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.internal.composableLambda
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -16,6 +17,8 @@ import com.example.ortografiamariamel.ui.AppViewModelProvider
 import com.example.ortografiamariamel.ui.screens.DatosJugadorScreen
 import com.example.ortografiamariamel.ui.screens.InicioScreen
 import com.example.ortografiamariamel.ui.screens.MenuScreen
+import com.example.ortografiamariamel.ui.screens.admin.AdminLoginScreen
+import com.example.ortografiamariamel.ui.screens.admin.AdminScreen
 import com.example.ortografiamariamel.ui.screens.unidad1.Actividad1
 import com.example.ortografiamariamel.ui.screens.unidad1.Actividad2U1
 import com.example.ortografiamariamel.ui.screens.unidad1.Actividad3U1
@@ -394,6 +397,15 @@ fun OrtografiaMariamelAppNavHost(
                 },
                 modifier = Modifier
             )
+        }
+        //pantallas para el login
+        composable(route = AppScreen.Administracion.name){
+            AdminLoginScreen(onLoginSuccess = {
+                navController.navigate(AppScreen.PantallaAdministracion.name)
+            })
+        }
+        composable(route = AppScreen.PantallaAdministracion.name){
+            AdminScreen()
         }
     }
 }

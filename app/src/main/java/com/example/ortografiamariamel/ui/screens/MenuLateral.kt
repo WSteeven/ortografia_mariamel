@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -315,6 +316,17 @@ fun MenuItems(viewModel: AppViewModel, onItemMenuButtonClicked: () -> Unit) {
             selected = false,
             onClick = {
                 viewModel.setPantallaActual(AppScreen.Unidad4)
+                viewModel.closeMenuLateral()
+                onItemMenuButtonClicked()
+            }
+        )
+        Spacer(modifier = Modifier.padding(4.dp))
+        NavigationDrawerItem(
+            colors = colors,
+            label = { Text(text = stringResource(id = R.string.administracion), fontSize = 14.sp, fontWeight = FontWeight.Bold) },
+            selected = false,
+            onClick = {
+                viewModel.setPantallaActual(AppScreen.Administracion)
                 viewModel.closeMenuLateral()
                 onItemMenuButtonClicked()
             }

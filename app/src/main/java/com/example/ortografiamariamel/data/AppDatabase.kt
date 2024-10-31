@@ -5,10 +5,19 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.ortografiamariamel.data.dao.JugadorDao
+import com.example.ortografiamariamel.data.dao.NivelDao
+import com.example.ortografiamariamel.data.dao.UnidadDao
 import com.example.ortografiamariamel.model.Jugador
+import com.example.ortografiamariamel.model.Nivel
+import com.example.ortografiamariamel.model.Unidad
 
-@Database(entities = [Nivel::class, Jugador::class], version = 1, exportSchema = false)
+@Database(
+    entities = [Unidad::class, Nivel::class, Jugador::class],
+    version = 1,
+    exportSchema = false
+)
 abstract class AppDatabase : RoomDatabase() {
+    abstract fun unidadDao(): UnidadDao
     abstract fun nivelDao(): NivelDao
     abstract fun jugadorDao(): JugadorDao
 
