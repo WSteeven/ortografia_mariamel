@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -47,9 +49,13 @@ fun SopaDeLetras() {
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(modifier = Modifier.fillMaxWidth().padding(8.dp), horizontalAlignment = Alignment.Start) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp), horizontalAlignment = Alignment.Start
+        ) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
-                Row(modifier = Modifier.fillMaxWidth(.6f)) {
+                Row(modifier = Modifier.fillMaxWidth(.5f)) {
                     Text("- ", fontWeight = FontWeight.Bold)
                     Text(text = "OFREZCO")
                 }
@@ -59,7 +65,7 @@ fun SopaDeLetras() {
                 }
             }
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
-                Row(modifier = Modifier.fillMaxWidth(.6f)) {
+                Row(modifier = Modifier.fillMaxWidth(.5f)) {
                     Text("- ", fontWeight = FontWeight.Bold)
                     Text(text = "REDUZCO")
                 }
@@ -69,8 +75,8 @@ fun SopaDeLetras() {
                 }
             }
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
-                Row(modifier = Modifier.fillMaxWidth(.6f)) {
-                Text("- ", fontWeight = FontWeight.Bold)
+                Row(modifier = Modifier.fillMaxWidth(.5f)) {
+                    Text("- ", fontWeight = FontWeight.Bold)
                     Text(text = "FORTALEZCO")
                 }
                 Row {
@@ -80,46 +86,55 @@ fun SopaDeLetras() {
             }
 
         }
-        for (i in 0 until gridSize) {
-            Row {
-                for (j in 0 until gridSize) {
-                    val letra = grid[i][j]
-                    val isSelected = Pair(i, j) in selectedCells
-                    Box(
-                        modifier = Modifier
-                            .size(30.dp)
-                            .border(1.dp, Color.Black)
-                            .background(if (isSelected) Color(240, 150, 55) else Color.Transparent) //aqui se define el color de la celda
-                            .clickable {
-                                if (letra.isNotEmpty()) {
-                                    selectedCells = if(isSelected)
-                                        selectedCells - Pair(i, j)
-                                    else selectedCells + Pair(i, j)
-                                }
-                            },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = letra,
-                            fontSize = 18.sp,
-                            color = if (isSelected) Color.White else Color.Black // aqui se define el color de la letra
-                        )
+        Column(modifier = Modifier.horizontalScroll(rememberScrollState())) {
+            for (i in 0 until gridSize) {
+                Row {
+                    for (j in 0 until gridSize) {
+                        val letra = grid[i][j]
+                        val isSelected = Pair(i, j) in selectedCells
+                        Box(
+                            modifier = Modifier
+                                .size(30.dp)
+                                .border(1.dp, Color.Black)
+                                .background(
+                                    if (isSelected) Color(
+                                        240,
+                                        150,
+                                        55
+                                    ) else Color.Transparent
+                                ) //aqui se define el color de la celda
+                                .clickable {
+                                    if (letra.isNotEmpty()) {
+                                        selectedCells = if (isSelected)
+                                            selectedCells - Pair(i, j)
+                                        else selectedCells + Pair(i, j)
+                                    }
+                                },
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = letra,
+                                fontSize = 18.sp,
+                                color = if (isSelected) Color.White else Color.Black // aqui se define el color de la letra
+                            )
+                        }
                     }
                 }
             }
         }
         Spacer(modifier = Modifier.padding(8.dp))
-        Button(onClick = {
+        Button(
+            onClick = {
 //            val foundWords = verificarPalabrasEncontradas(selectedCells, palabras, grid)
-            val foundWords = verificarPalabrasEncontradasEasy(selectedCells, palabras, grid)
+                val foundWords = verificarPalabrasEncontradasEasy(selectedCells, palabras, grid)
 //            message = "Palabras encontradas: $foundWords de ${palabras.size}"
-            message = if (foundWords) {
-                "¡Felicitaciones! Has encontrado todas las palabras."
-            } else {
-                "Aún faltan palabras por completar."
-            }
-            showDialog = true
-        },
+                message = if (foundWords) {
+                    "¡Felicitaciones! Has encontrado todas las palabras."
+                } else {
+                    "Aún faltan palabras por completar."
+                }
+                showDialog = true
+            },
             border = BorderStroke(4.dp, Color(244, 225, 220)),
             shape = MaterialTheme.shapes.extraLarge,
             colors = ButtonDefaults.buttonColors(
@@ -145,16 +160,29 @@ fun SopaDeLetras() {
     }
 }
 
-fun verificarPalabrasEncontradasEasy(selectedCells: Set<Pair<Int, Int>>, palabras: List<String>, grid: List<List<String>>): Boolean {
+fun verificarPalabrasEncontradasEasy(
+    selectedCells: Set<Pair<Int, Int>>,
+    palabras: List<String>,
+    grid: List<List<String>>
+): Boolean {
     // Verificar si todas las palabras han sido encontradas
     return palabras.all { palabra ->
         palabra.all { letra ->
-            selectedCells.any { grid[it.first][it.second].equals(letra.toString(), ignoreCase = true) }
+            selectedCells.any {
+                grid[it.first][it.second].equals(
+                    letra.toString(),
+                    ignoreCase = true
+                )
+            }
         }
     }
 }
 
-fun verificarPalabrasEncontradas(selectedCells: Set<Pair<Int, Int>>, palabras: List<String>, grid: List<List<String>>): Int {
+fun verificarPalabrasEncontradas(
+    selectedCells: Set<Pair<Int, Int>>,
+    palabras: List<String>,
+    grid: List<List<String>>
+): Int {
     var foundCount = 0
 
     palabras.forEach { palabra ->
@@ -163,7 +191,12 @@ fun verificarPalabrasEncontradas(selectedCells: Set<Pair<Int, Int>>, palabras: L
 
         // Obtener las posiciones de cada letra en las celdas seleccionadas
         letras.forEach { letra ->
-            val foundPosition = selectedCells.firstOrNull { grid[it.first][it.second].equals(letra.toString(), ignoreCase = true) }
+            val foundPosition = selectedCells.firstOrNull {
+                grid[it.first][it.second].equals(
+                    letra.toString(),
+                    ignoreCase = true
+                )
+            }
             if (foundPosition != null) {
                 posiciones.add(foundPosition)
             }
@@ -176,10 +209,14 @@ fun verificarPalabrasEncontradas(selectedCells: Set<Pair<Int, Int>>, palabras: L
 
             // Comprobar si son consecutivas en alguna dirección
             val (rowStart, colStart) = posiciones[0]
-            val isHorizontal = posiciones.zipWithNext().all { (p1, p2) -> p1.first == p2.first && p1.second + 1 == p2.second }
-            val isVertical = posiciones.zipWithNext().all { (p1, p2) -> p1.second == p2.second && p1.first + 1 == p2.first }
-            val isDiagonalDescendente = posiciones.zipWithNext().all { (p1, p2) -> p1.first + 1 == p2.first && p1.second + 1 == p2.second }
-            val isDiagonalAscendente = posiciones.zipWithNext().all { (p1, p2) -> p1.first + 1 == p2.first && p1.second - 1 == p2.second }
+            val isHorizontal = posiciones.zipWithNext()
+                .all { (p1, p2) -> p1.first == p2.first && p1.second + 1 == p2.second }
+            val isVertical = posiciones.zipWithNext()
+                .all { (p1, p2) -> p1.second == p2.second && p1.first + 1 == p2.first }
+            val isDiagonalDescendente = posiciones.zipWithNext()
+                .all { (p1, p2) -> p1.first + 1 == p2.first && p1.second + 1 == p2.second }
+            val isDiagonalAscendente = posiciones.zipWithNext()
+                .all { (p1, p2) -> p1.first + 1 == p2.first && p1.second - 1 == p2.second }
 
             if (isHorizontal || isVertical || isDiagonalDescendente || isDiagonalAscendente) {
                 foundCount++
@@ -189,7 +226,6 @@ fun verificarPalabrasEncontradas(selectedCells: Set<Pair<Int, Int>>, palabras: L
 
     return foundCount
 }
-
 
 
 fun generateGrid(palabras: List<String>, gridSize: Int): List<List<String>> {
@@ -248,7 +284,7 @@ fun rellenarConLetrasAleatorias(grid: MutableList<MutableList<String>>) {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, widthDp = 300)
 @Composable
 fun JuegoSopaLetrasPreview() {
     OrtografiaMariamelTheme {
