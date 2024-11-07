@@ -28,6 +28,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ortografiamariamel.R
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
+import com.example.ortografiamariamel.ui.game.SentencePuzzleGame
 import com.example.ortografiamariamel.ui.screens.MenuLateral
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 
@@ -79,7 +80,7 @@ fun Actividad2U1(
                 )
 
                 // aqui va el juego
-
+                SentencePuzzleGame()
 
                 Column(
                     modifier = Modifier
