@@ -28,6 +28,7 @@ import com.example.ortografiamariamel.R
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
 import com.example.ortografiamariamel.ui.game.CrosswordApp
+import com.example.ortografiamariamel.ui.game.EmparejarFrases
 import com.example.ortografiamariamel.ui.screens.MenuLateral
 import com.example.ortografiamariamel.ui.screens.unidad1.LottieAnimationScreen
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
@@ -65,7 +66,7 @@ fun Actividad1U2(
                     }
                 }
                 Text(
-                    text = "Llena el siguiente crucigrama",
+                    text = "Empareja la frase con la palabra correcta",
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 18.sp,
                     textAlign = TextAlign.Justify,
@@ -75,7 +76,8 @@ fun Actividad1U2(
                     modifier = modifier
                         .align(Alignment.CenterHorizontally)
                 )
-                CrosswordApp()
+//                CrosswordApp()
+                EmparejarFrases()
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
