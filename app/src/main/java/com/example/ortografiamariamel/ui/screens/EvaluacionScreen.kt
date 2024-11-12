@@ -1,8 +1,9 @@
-package com.example.ortografiamariamel.ui.screens.unidad2
+package com.example.ortografiamariamel.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -27,66 +29,64 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ortografiamariamel.R
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
-import com.example.ortografiamariamel.ui.game.JuegoOrdenarOraciones
-import com.example.ortografiamariamel.ui.screens.MenuLateral
-import com.example.ortografiamariamel.ui.screens.unidad1.LottieAnimationScreen
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 
-
 @Composable
-fun Actividad2U2(
+fun EvaluacionScreen(
     viewModel: AppViewModel,
     modifier: Modifier = Modifier,
     onPrevButtonClicked: () -> Unit,
-    onNextButtonClicked: () -> Unit,
-    onItemMenuButtonClicked: () -> Unit
+    onItemMenuButtonClicked: () -> Unit,
 ) {
     MenuLateral(
-        title = R.string.blank,
+        title = R.string.blank, // AppScreen.Unidad2.title,
         content = {
-            Column(
-                modifier = Modifier
-                    .padding(4.dp)
-                    .verticalScroll(rememberScrollState())
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.End,
-                        modifier = modifier
-                            .fillMaxWidth(.4f)
-                            .fillMaxHeight(.07f)
-                    ) {
-                        LottieAnimationScreen()
-                    }
-                }
-                Text(
-                    text = "Llena los espacios en blanco con la palabra correcta que termina en “cimiento”",
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 18.sp,
-                    textAlign = TextAlign.Justify,
-                    fontFamily = FontFamily.SansSerif,
-                    letterSpacing = 1.sp,
-                    color = Color(230, 170, 75),
-                    modifier = modifier
-                        .align(Alignment.CenterHorizontally)
-                )
-                JuegoOrdenarOraciones(onPrevButtonClicked = onPrevButtonClicked)
+            val tildeDiacrita = painterResource(R.drawable.imagen_unidad_2)
+            Column(modifier = Modifier.fillMaxSize()) {
                 Column(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(0.dp),
+                        .fillMaxHeight(.85f)
+                        .padding(4.dp)
+                        .verticalScroll(rememberScrollState()) // Habilitar desplazamiento vertical
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Spacer(modifier = Modifier.weight(1f)) // Espacio flexible para centrar el texto
+                        Text(
+                            text = "EVALUACION",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 30.sp,
+                            modifier = Modifier.padding(start = 64.dp) // Espacio al final del texto
+                        )
+                        Spacer(modifier = Modifier.weight(1f)) // Espacio flexible para centrar el texto
+                    }
+
+                    Text(
+                        text = "Aquí va la evaluación",
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 25.sp,
+                        textAlign = TextAlign.Center,
+                        fontFamily = FontFamily.SansSerif,
+                        letterSpacing = 3.sp,
+                        color = Color(230, 170, 75),
+                        modifier = modifier
+                            .align(Alignment.CenterHorizontally)
+                    )
+
+                }
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Bottom
                 ) {
                     Row(
                         modifier = modifier
                             .fillMaxWidth()
-                            .padding(dimensionResource(R.dimen.padding_small)),
+                            .padding(dimensionResource(R.dimen.padding_medium)),
                         horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
                         verticalAlignment = Alignment.Bottom
                     ) {
@@ -96,7 +96,9 @@ fun Actividad2U2(
                         ) {
                             Text(stringResource(R.string.atras))
                         }
+
                     }
+
                 }
             }
         },
@@ -106,14 +108,13 @@ fun Actividad2U2(
     )
 }
 
-@Preview(showBackground = true, widthDp = 325, heightDp = 967)
+
+@Preview(showBackground = true)
 @Composable
-fun Actividad2U2ScreenPreview() {
+fun EvaluacionScreenPreview() {
     OrtografiaMariamelTheme {
-        Actividad2U2(
+        EvaluacionScreen(
             viewModel = viewModel(factory = AppViewModelProvider.Factory),
-            onPrevButtonClicked = { /*TODO*/ },
-            onItemMenuButtonClicked = {},
-            onNextButtonClicked = { /*TODO*/ })
+            onPrevButtonClicked = { /*TODO*/ }, onItemMenuButtonClicked = {})
     }
 }

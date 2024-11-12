@@ -28,9 +28,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ortografiamariamel.R
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
-import com.example.ortografiamariamel.ui.game.CrosswordApp
-import com.example.ortografiamariamel.ui.game.MatchPairs
-import com.example.ortografiamariamel.ui.game.SpellingGameScreen
+import com.example.ortografiamariamel.ui.game.CompletarParrafo
 import com.example.ortografiamariamel.ui.screens.MenuLateral
 import com.example.ortografiamariamel.ui.screens.unidad1.LottieAnimationScreen
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
@@ -70,7 +68,8 @@ fun Actividad3U2(
                     }
                 }
                 Text(
-                    text = "Indica si se escriben con “c” o “cc” las siguientes palabras",
+                    text = "Completa el párrafo con las palabras correctas",
+//                    text = "Indica si se escriben con “c” o “cc” las siguientes palabras",
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 18.sp,
                     textAlign = TextAlign.Justify,
@@ -80,7 +79,8 @@ fun Actividad3U2(
                     modifier = modifier
                         .align(Alignment.CenterHorizontally)
                 )
-                SpellingGameScreen(snackbarHostState)
+                CompletarParrafo(onPrevButtonClicked= onPrevButtonClicked)
+//                SpellingGameScreen(snackbarHostState)
                 Column(
                     modifier = Modifier
                         .fillMaxSize()

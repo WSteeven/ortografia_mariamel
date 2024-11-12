@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -208,9 +207,9 @@ fun MenuLateral(
                     }
                 )
             },
-            snackbarHost = { SnackbarHost(snackbarHostState ) }
+            snackbarHost = { SnackbarHost(snackbarHostState) }
 
-            ) { contentPadding ->
+        ) { contentPadding ->
             // Screen content
             // [START_EXCLUDE silent]
             Box(modifier = Modifier.padding(contentPadding)) { /* ... */
@@ -266,7 +265,7 @@ fun MenuItems(viewModel: AppViewModel, onItemMenuButtonClicked: () -> Unit) {
         Spacer(modifier = Modifier.padding(4.dp))
         NavigationDrawerItem(
             colors = colors,
-            label = { Text(text = "Portada", fontWeight = FontWeight.Bold) },
+            label = { Text(text = "Portada", fontSize=10.sp, fontWeight = FontWeight.Bold) },
             selected = false,
             onClick = {
                 viewModel.setPantallaActual(AppScreen.Inicio)
@@ -277,7 +276,7 @@ fun MenuItems(viewModel: AppViewModel, onItemMenuButtonClicked: () -> Unit) {
         Spacer(modifier = Modifier.padding(4.dp))
         NavigationDrawerItem(
             colors = colors,
-            label = { Text(text = "Unidad 1", fontWeight = FontWeight.Bold) },
+            label = {Text(text = stringResource(id = R.string.tema_unidad_1), fontSize = 8.sp, fontWeight = FontWeight.Bold) },
             selected = false,
             onClick = {
                 viewModel.setPantallaActual(AppScreen.Unidad1)
@@ -288,7 +287,7 @@ fun MenuItems(viewModel: AppViewModel, onItemMenuButtonClicked: () -> Unit) {
         Spacer(modifier = Modifier.padding(4.dp))
         NavigationDrawerItem(
             colors = colors,
-            label = { Text(text = "Unidad 2", fontWeight = FontWeight.Bold) },
+            label = {Text(text = stringResource(id = R.string.tema_unidad_2), fontSize = 8.sp, fontWeight = FontWeight.Bold) },
             selected = false,
             onClick = {
                 viewModel.setPantallaActual(AppScreen.Unidad2)
@@ -301,7 +300,7 @@ fun MenuItems(viewModel: AppViewModel, onItemMenuButtonClicked: () -> Unit) {
         Spacer(modifier = Modifier.padding(4.dp))
         NavigationDrawerItem(
             colors = colors,
-            label = { Text(text = "Unidad 3", fontWeight = FontWeight.Bold) },
+            label = {Text(text = stringResource(id = R.string.tema_unidad_3), fontSize = 8.sp, fontWeight = FontWeight.Bold) },
             selected = false,
             onClick = {
                 viewModel.setPantallaActual(AppScreen.Unidad3)
@@ -312,7 +311,7 @@ fun MenuItems(viewModel: AppViewModel, onItemMenuButtonClicked: () -> Unit) {
         Spacer(modifier = Modifier.padding(4.dp))
         NavigationDrawerItem(
             colors = colors,
-            label = { Text(text = "Unidad 4", fontWeight = FontWeight.Bold) },
+            label = {Text(text = stringResource(id = R.string.tema_unidad_4), fontSize = 8.sp, fontWeight = FontWeight.Bold) },
             selected = false,
             onClick = {
                 viewModel.setPantallaActual(AppScreen.Unidad4)
@@ -323,7 +322,24 @@ fun MenuItems(viewModel: AppViewModel, onItemMenuButtonClicked: () -> Unit) {
         Spacer(modifier = Modifier.padding(4.dp))
         NavigationDrawerItem(
             colors = colors,
-            label = { Text(text = stringResource(id = R.string.administracion), fontSize = 14.sp, fontWeight = FontWeight.Bold) },
+            label = { Text(text = "Evaluación", fontSize=10.sp, fontWeight = FontWeight.Bold) },
+            selected = false,
+            onClick = {
+                viewModel.setPantallaActual(AppScreen.Evaluacion)
+                viewModel.closeMenuLateral()
+                onItemMenuButtonClicked()
+            }
+        )
+        Spacer(modifier = Modifier.padding(4.dp))
+        NavigationDrawerItem(
+            colors = colors,
+            label = {
+                Text(
+                    text = stringResource(id = R.string.administracion),
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            },
             selected = false,
             onClick = {
                 viewModel.setPantallaActual(AppScreen.Administracion)
