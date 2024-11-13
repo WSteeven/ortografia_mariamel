@@ -2,6 +2,7 @@ package com.example.ortografiamariamel.ui.screens.unidad1
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,10 +16,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -42,6 +51,7 @@ fun Niveles1(
     viewModel: AppViewModel,
     onClick: () -> Unit = {},
 ) {
+    var mostrarInstrucciones by remember { mutableStateOf(false) }
     val soundManager = SoundManager(LocalContext.current)
     Box(modifier = modifier) {
         Image(
@@ -69,7 +79,9 @@ fun Niveles1(
                         .fillMaxHeight(.4f)
                 ) {
 //                    LottieAnimationInstrucciones()
-                    InstruccionesMarquee()
+                    InstruccionesMarquee(mostrarInstrucciones) {
+                        mostrarInstrucciones = !mostrarInstrucciones
+                    }
                 }
             }
             Column(
@@ -182,43 +194,70 @@ fun Niveles1(
 //}
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun InstruccionesMarquee() {
-    // Marquee only animates when the content doesn't fit in the max width.
-    Box(modifier = Modifier.fillMaxSize()) {
-        Image(
-            painter = painterResource(id = R.drawable.nube),
-            contentDescription = "nube instrucciones",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
-        )
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .padding(top = 112.dp)
-                .padding(horizontal = 20.dp)
+fun InstruccionesMarquee(mostrarInstrucciones: Boolean, onClick: () -> Unit) {
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp)
+            .padding(horizontal = 20.dp)
 //                .background(Color.White)
-        ) {
-            Text(
-                text = stringResource(id = R.string.instrucciones_1),
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 20.sp,
-                modifier = Modifier.basicMarquee()
+    ) {
+        Row(horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onClick() }
+                .background(color = Color.White)) {
+            Icon(
+                imageVector = Icons.Default.Info,
+                contentDescription = "Información"
             )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = stringResource(id = R.string.instrucciones_2),
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 20.sp,
-                modifier = Modifier.basicMarquee()
+            Text("INSTRUCCIONES", fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
+        }
+
+    }
+
+// Marquee only animates when the content doesn't fit in the max width.
+    Box(modifier = Modifier.fillMaxSize()) {
+        if (mostrarInstrucciones) {
+
+            Image(
+                painter = painterResource(id = R.drawable.nube),
+                contentDescription = "nube instrucciones",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
             )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = stringResource(id = R.string.instrucciones_3),
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 20.sp,
-                modifier = Modifier.basicMarquee()
-            )
-            Spacer(modifier = Modifier.height(16.dp))
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 112.dp)
+                    .padding(horizontal = 20.dp)
+//                .background(Color.White)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.instrucciones_1),
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 20.sp,
+                    modifier = Modifier.basicMarquee()
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = stringResource(id = R.string.instrucciones_2),
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 20.sp,
+                    modifier = Modifier.basicMarquee()
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = stringResource(id = R.string.instrucciones_3),
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 20.sp,
+                    modifier = Modifier.basicMarquee()
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+            }
         }
     }
 }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,9 +24,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ortografiamariamel.AppScreen
 import com.example.ortografiamariamel.R
@@ -73,7 +76,11 @@ fun MenuContent(
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
+        Text(
+            text = stringResource(id = R.string.unidad4),
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold
+        )
         Image(
             painter = painterResource(id = R.drawable.fondo_menu),
             contentDescription = null,
@@ -155,16 +162,23 @@ fun MenuItem(
 ) {
     Button(
         modifier = modifier.height(80.dp),
-        border = BorderStroke(4.dp, Color(244, 225, 220)),
-        shape = MaterialTheme.shapes.extraLarge,
+        border = BorderStroke(2.dp, Color(244, 225, 220)),
+//        shape = MaterialTheme.shapes.extraLarge,
+        shape = MaterialTheme.shapes.small,
         colors = ButtonDefaults.buttonColors(
             containerColor = Color(240, 150, 55), contentColor = Color.White
         ),
+        contentPadding = PaddingValues(horizontal = 4.dp),
         onClick = {
             viewModel.setPantallaActual(pantallaActual)
             onClick()
         }) {
-        Text(text = stringResource(id = textButton), textAlign = TextAlign.Center)
+        Text(
+            text = stringResource(id = textButton),
+            fontSize = 10.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }
 
@@ -186,6 +200,7 @@ fun BotonAtras(onClick: () -> Unit, imagen: Int) {
 }
 
 
+//@Preview(showBackground = true, widthDp = 300, heightDp = 967)
 @Preview(showBackground = true)
 @Composable
 fun MenuScreenPreview() {
