@@ -106,7 +106,7 @@ fun Actividad2U3(
     )
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, widthDp = 300)
 @Composable
 fun Actividad2U2ScreenPreview() {
     OrtografiaMariamelTheme {

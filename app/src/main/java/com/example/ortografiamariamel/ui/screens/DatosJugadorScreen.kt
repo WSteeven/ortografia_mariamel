@@ -1,24 +1,33 @@
 package com.example.ortografiamariamel.ui.screens
 
-import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,11 +38,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ortografiamariamel.AppScreen
 import com.example.ortografiamariamel.R
@@ -55,7 +66,9 @@ fun DatosJugadorScreen(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val firebase = FirebaseRepository(LocalContext.current)
     val localNombre = firebase.leerNombreLocalmente()
-
+    var showDialog by remember { mutableStateOf(false) }
+    var snackbarMessage by remember { mutableStateOf<String?>(null) }
+    val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -70,11 +83,13 @@ fun DatosJugadorScreen(
         }
     ) { innerPadding ->
         if(localNombre!=null){
+//        if (localNombre == null) {
             playerName = localNombre
             viewModel.setNombreJugador(playerName)
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = modifier.fillMaxWidth()
+                modifier = modifier
+                    .fillMaxWidth()
                     .padding(innerPadding)
             ) {
                 ContinuousSlideAnimation(
@@ -84,7 +99,12 @@ fun DatosJugadorScreen(
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(text="Bienvenido "+playerName)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(text = "Bienvenido $playerName")
+                    IconButton(onClick = { showDialog=true }) {
+                        Icon(imageVector = Icons.Filled.Edit, contentDescription = "Editar")
+                    }
+                }
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(
                     onClick = {
@@ -99,8 +119,23 @@ fun DatosJugadorScreen(
                 ) {
                     Text(text = stringResource(R.string.siguiente), fontSize = 30.sp)
                 }
+                if (showDialog) {
+                    EditarNombre(
+                        nombreAntiguo = playerName,
+                        viewModel = viewModel,
+                        firebase = firebase,
+                        onDismissRequest = {
+                            showDialog = false
+                            snackbarMessage = "¡Se ha modificado el nombre del jugador!"
+                        },
+                        onModificacion = {
+                            val nuevoNombre = firebase.leerNombreLocalmente()
+                            playerName = nuevoNombre?:it
+                            }
+                    )
+                }
             }
-        }else {
+        } else {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = modifier
@@ -149,6 +184,71 @@ fun DatosJugadorScreen(
                 ) {
                     Text(text = stringResource(R.string.siguiente), fontSize = 30.sp)
                 }
+            }
+        }
+        LaunchedEffect(snackbarMessage) {
+            snackbarMessage?.let {
+                snackbarHostState.showSnackbar(it)
+                snackbarMessage = null
+            }
+        }
+    }
+}
+
+@Composable
+fun EditarNombre(
+    firebase: FirebaseRepository,
+    nombreAntiguo: String,
+    viewModel: AppViewModel,
+    onDismissRequest: () -> Unit,
+    onModificacion: (String) -> Unit
+) {
+    var nuevoNombre by remember { mutableStateOf(nombreAntiguo) }
+    Dialog(onDismissRequest = onDismissRequest) {
+        Card(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            Column(modifier = Modifier.padding(4.dp)) {
+                Text("Modificar Nombre", fontWeight = FontWeight.Bold)
+                TextField(
+                    value = nuevoNombre,
+                    onValueChange = { nuevoNombre = it },
+                    singleLine = true,
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .border(BorderStroke(width = 2.dp, color = Color(255, 168, 0))),
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Sentences,
+                        autoCorrect = true,
+                        imeAction = ImeAction.Done
+                    ),
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(
+                    enabled = nuevoNombre.isNotEmpty(),
+                    onClick = {
+                        viewModel.setNombreJugador(nuevoNombre)
+                        firebase.guardarNombreToFirebase(nuevoNombre)
+                        firebase.guardarNombreLocalmente(nuevoNombre)
+                        onModificacion(nuevoNombre)
+
+                        onDismissRequest()
+                    },
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    border = BorderStroke(4.dp, Color(244, 225, 220)),
+                    shape = MaterialTheme.shapes.extraLarge,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(240, 150, 55), contentColor = Color.White
+                    ),
+                ) {
+                    Text(text = "Guardar", fontSize = 30.sp)
+                }
+
+
             }
         }
     }

@@ -37,12 +37,12 @@ import com.example.ortografiamariamel.service.SoundManager
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 
 val oracionesCorrectas = listOf(
-    "Compré tomates, cebollas y pimientos para la salsa",
-    "En la mochila llevo lápices, libros y cuadernos",
-    "Ana, Juan y Luis irán a la fiesta esta noche",
-    "Necesitamos tijeras, pegamento y papel para la manualidad",
-    "En el parque vi patos, perros y gatos jugando",
-    "Para el postre necesito azúcar, leche y vainilla",
+    "Compré tomates, cebollas y pimientos para la salsa.",
+    "En la mochila llevo lápices, libros y cuadernos.",
+    "Ana, Juan y Luis irán a la fiesta esta noche.",
+    "Necesitamos tijeras, pegamento y papel para la manualidad.",
+    "En el parque vi patos, perros y gatos jugando.",
+    "Para el postre necesito azúcar, leche y vainilla.",
 )
 val respondidasCorrectas = mutableListOf(false,false,false, false, false,false)
 

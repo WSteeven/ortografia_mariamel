@@ -157,18 +157,18 @@ fun Evaluacion(viewModel: AppViewModel, snackbarHostState: SnackbarHostState) {
         )
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(48.dp),
+            verticalArrangement = Arrangement.spacedBy(64.dp),
             modifier = Modifier
                 .fillMaxSize()
         ) {
             Spacer(modifier = Modifier.height(40.dp))
-            ComposableButton(
-                id = 5, onButtonClick = {
-                    selectedButton = it
-                    showDialog = true
-                }, modifier = Modifier
-//                .padding(end = 20.dp)
-            )
+//            ComposableButton(
+//                id = 5, onButtonClick = {
+//                    selectedButton = it
+//                    showDialog = true
+//                }, modifier = Modifier
+////                .padding(end = 20.dp)
+//            )
 
             ComposableButton(
                 id = 4, onButtonClick = {
@@ -281,8 +281,8 @@ fun EvaluacionUsoComa(
     var respuesta2 by remember { mutableStateOf("") }
     fun verificarRespuestas() {
         var score = 0
-        if (respuesta1 == "A) Conduzco") score++
-        if (respuesta2 == "B) azules, rojos, verdes, amarillos") score++
+        if (respuesta1 == "C) platos, vasos, servilletas, decoraciones.") score++
+        if (respuesta2 == "B) azules, rojos, verdes, amarillos.") score++
         if (score ==2) onVerification(true) else {
             onVerification(false)
             viewModel.restarEnergiasJuego2U1()
@@ -292,6 +292,7 @@ fun EvaluacionUsoComa(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(16.dp),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -309,9 +310,10 @@ fun EvaluacionUsoComa(
         )
         Text(
             text = "Elige la opción correcta que complete las oraciones con el uso adecuado de la coma en las enumeraciones.",
+            fontSize=10.sp
         )
         Text(
-            text = "Para la fiesta necesitamos, platos __________ vasos __________ servilletas __________ decoraciones.",
+            text = "1. Para la fiesta necesitamos, platos __________ vasos __________ servilletas __________ decoraciones.",
             fontWeight = FontWeight.Bold
         )
         Column {
@@ -329,20 +331,20 @@ fun EvaluacionUsoComa(
                 onOptionSelected = { respuesta1 = "C) platos, vasos, servilletas, decoraciones." })
         }
         Text(
-            text = "Me gustan los colores azules __________ rojos __________ verdes __________ amarillos.",
+            text = "2. Me gustan los colores azules __________ rojos __________ verdes __________ amarillos.",
             fontWeight = FontWeight.Bold
         )
         Column {
             RadioButtonOption(
                 text = "A) azules, rojos verdes amarillos.",
                 selectedOption = respuesta2,
-                onOptionSelected = { respuesta2 = "A) azules, rojos verdes amarillos" })
+                onOptionSelected = { respuesta2 = "A) azules, rojos verdes amarillos." })
             RadioButtonOption(
-                text = "B) azules, rojos, verdes, amarillos",
+                text = "B) azules, rojos, verdes, amarillos.",
                 selectedOption = respuesta2,
                 onOptionSelected = { respuesta2 = "B) azules, rojos, verdes, amarillos." })
             RadioButtonOption(
-                text = "C) azules, rojos verdes, amarillos",
+                text = "C) azules, rojos verdes, amarillos.",
                 selectedOption = respuesta2,
                 onOptionSelected = { respuesta2 = "C) azules, rojos verdes, amarillos." })
         }
@@ -363,7 +365,7 @@ fun EvaluacionUsoDeZ(
     var respuesta2 by remember { mutableStateOf("") }
     fun verificarRespuestas() {
         var score = 0
-        if (respuesta1 == "A) Conduzco") score++
+        if (respuesta1 == "A) conduzco") score++
         if (respuesta2 == "C) aparezco") score++
         if (score ==2) onVerification(true) else {
             onVerification(false)
@@ -374,6 +376,7 @@ fun EvaluacionUsoDeZ(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(16.dp),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -398,9 +401,9 @@ fun EvaluacionUsoDeZ(
         )
         Column {
             RadioButtonOption(
-                text = "A) Conduzco",
+                text = "A) conduzco",
                 selectedOption = respuesta1,
-                onOptionSelected = { respuesta1 = "A) Conduzco" })
+                onOptionSelected = { respuesta1 = "A) conduzco" })
             RadioButtonOption(
                 text = "B) conduco",
                 selectedOption = respuesta1,
@@ -463,6 +466,7 @@ fun EvaluacionUsoDeC(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(16.dp),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -552,9 +556,10 @@ fun EvaluacionTildeDiacritica(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(16.dp),
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(
             text = "La tilde diacrítica en los monosílabos",
@@ -641,7 +646,7 @@ fun RadioButtonOption(text: String, selectedOption: String, onOptionSelected: ()
             selected = selectedOption == text,
             onClick = onOptionSelected
         )
-        Text(text, modifier = Modifier.padding(start = 8.dp))
+        Text(text)
     }
 }
 
@@ -689,7 +694,7 @@ fun ComposableButton(
         )
     }
 }
-@Preview(showBackground = true)
+@Preview(showBackground = true, widthDp = 280)
 @Composable
 fun EvaluacionUsoComaPreview() {
     OrtografiaMariamelTheme {
