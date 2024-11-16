@@ -70,4 +70,6 @@ class FirebaseRepository(private val context: Context) {
         val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         return sharedPreferences.getString("nombre", null)
     }
+
+
 }

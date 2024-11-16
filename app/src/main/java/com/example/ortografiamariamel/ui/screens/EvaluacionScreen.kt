@@ -44,6 +44,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -506,7 +507,7 @@ fun FilaOpciones(opcion1: String, opcion2: String, onOptionSelected: (String) ->
         modifier = Modifier.fillMaxWidth()
     ) {
         ClickableText(
-            text = AnnotatedString(opcion1),
+            text = AnnotatedString(opcion1, spanStyle = SpanStyle(fontSize = 12.sp)),
             modifier = Modifier
                 .weight(0.45f) // 45% del espacio disponible
                 .background(
@@ -518,9 +519,9 @@ fun FilaOpciones(opcion1: String, opcion2: String, onOptionSelected: (String) ->
                 onOptionSelected(opcion1)
             }
         )
-        Text("VS", textAlign = TextAlign.Center, modifier = Modifier.weight(0.1f))
+        Text("VS", fontSize=12.sp, textAlign = TextAlign.Center, modifier = Modifier.weight(0.1f))
         ClickableText(
-            text = AnnotatedString(opcion2),
+            text = AnnotatedString(opcion2, spanStyle = SpanStyle(fontSize = 12.sp)),
             modifier = Modifier
                 .weight(0.45f) // 45% del espacio disponible
                 .background(if (respuestaSeleccionada == opcion2) Color.Green else Color.LightGray)
@@ -709,7 +710,7 @@ fun EvaluacionUsoDeZPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, widthDp = 280)
 @Composable
 fun EvaluacionUsoDeCPreview() {
     OrtografiaMariamelTheme {

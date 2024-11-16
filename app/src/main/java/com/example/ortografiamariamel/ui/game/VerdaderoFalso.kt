@@ -22,7 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
@@ -40,7 +39,7 @@ val oraciones = listOf(
 fun EscogeVerdaderoFalso(snackbarHostState: SnackbarHostState) {
     val wordsState = remember { mutableStateOf(oraciones.map { WordState3(it) }) }
     var showResult by remember { mutableStateOf<Pair<Boolean, List<WordState3>>?>(null) }
-    var snackbarMessage by remember { mutableStateOf<String?>(null) }
+//    var snackbarMessage by remember { mutableStateOf<String?>(null) }
 
     Column(
         modifier = Modifier
@@ -53,7 +52,7 @@ fun EscogeVerdaderoFalso(snackbarHostState: SnackbarHostState) {
                     Text(
                         "Oraciones",
                         style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier.fillMaxWidth(.7f)
+                        modifier = Modifier.weight(.7f)
                     )
                     Text(
                         "Opciones",
@@ -79,7 +78,7 @@ fun EscogeVerdaderoFalso(snackbarHostState: SnackbarHostState) {
             Text("Verificar")
         }
 
-        showResult?.let { (isCorrect, results) ->
+        showResult?.let { (isCorrect, _) ->
             AlertDialog(
                 onDismissRequest = { showResult = null },
                 title = { Text(if (isCorrect) "¡Correcto!" else "Incorrecto") },
@@ -105,14 +104,15 @@ fun Item(wordState: WordState3, snackbarHostState: SnackbarHostState, onAnswerSe
     val options = listOf("V", "F")
     var showSnackbar by remember { mutableStateOf(false) }
     var snackbarMessage by remember { mutableStateOf<String?>(null) }
-    Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier
+    Row(horizontalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier
         .fillMaxWidth()
         .padding(vertical = 8.dp)) {
         Text(
             wordState.word.text,
-            fontWeight = FontWeight.SemiBold,
+//            fontWeight = FontWeight.SemiBold,
             modifier = Modifier
-                .fillMaxWidth(.7f)
+//                .fillMaxWidth(.7f)
+                .weight(.7f)
                 .align(Alignment.CenterVertically)
                 .padding(end = 4.dp),
         )
@@ -132,6 +132,7 @@ fun Item(wordState: WordState3, snackbarHostState: SnackbarHostState, onAnswerSe
                         "Opción seleccionada: $option, Estado: ${wordState.selectedAnswer}"
                     )
                 },
+                modifier = Modifier.fillMaxWidth().weight(.15f)
             )
 //            Spacer(modifier = Modifier.padding(4.dp))
         }
@@ -148,7 +149,7 @@ fun Item(wordState: WordState3, snackbarHostState: SnackbarHostState, onAnswerSe
 }
 
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, widthDp = 270)
 @Composable
 fun EscogeVerdaderoFalsoPreview() {
     OrtografiaMariamelTheme {

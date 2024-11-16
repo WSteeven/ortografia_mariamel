@@ -69,7 +69,7 @@ import kotlin.random.Random
 fun FallingWordsGame(onPrevButtonClicked: () -> Unit) {
     val configuration = LocalConfiguration.current
     val density = LocalDensity.current
-    val screenWidthPx = with(density) { configuration.screenWidthDp.dp.toPx() }
+//    val screenWidthPx = with(density) { configuration.screenWidthDp.dp.toPx() }
     val screenHeightPx = with(density) { configuration.screenHeightDp.dp.toPx() }
 
     val startX = with(density) { 10.dp.toPx() } // Fixed horizontal position
@@ -96,7 +96,7 @@ fun FallingWordsGame(onPrevButtonClicked: () -> Unit) {
         "No sé la respuesta",
         "Ayer llovió mucho.",
     )
-    val coroutineScope = rememberCoroutineScope()
+//    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         while (!gameOver) {
@@ -197,7 +197,7 @@ fun FallingWordView(
             try {
                 animatableY.animateTo(
                     targetValue = screenHeightPx - 100, // Avoid the word going off-screen
-                    animationSpec = tween(durationMillis = 8000) // Increase duration as needed
+                    animationSpec = tween(durationMillis = 16000) // Increase duration as needed
                 )
                 onWordMissed() // Remove word if it reaches the bottom
             } catch (e: Exception) {

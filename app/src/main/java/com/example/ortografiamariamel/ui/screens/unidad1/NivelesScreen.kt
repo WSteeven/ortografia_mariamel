@@ -70,6 +70,7 @@ fun Niveles1(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
+                    .padding(top=40.dp)
             ) {
                 Column(
                     verticalArrangement = Arrangement.Center,

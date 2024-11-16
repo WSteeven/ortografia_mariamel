@@ -1,6 +1,7 @@
 package com.example.ortografiamariamel.ui.game
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,9 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -25,9 +26,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 
 data class Word3(
@@ -145,9 +149,11 @@ fun WordItem(wordState: WordState3, snackbarHostState: SnackbarHostState, onAnsw
             wordState.word.text,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier
-                .fillMaxWidth(.5f)
+                .fillMaxWidth(.6f)
                 .align(Alignment.CenterVertically),
         )
+        Row(horizontalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier.fillMaxWidth()) {
         options.forEach { option ->
             OptionButton(
                 text = option,
@@ -164,7 +170,7 @@ fun WordItem(wordState: WordState3, snackbarHostState: SnackbarHostState, onAnsw
                         "Opción seleccionada: $option, Estado: ${wordState.selectedAnswer}"
                     )
                 })
-        }
+        }}
         if (showSnackbar) {
             LaunchedEffect(snackbarMessage) {
                 snackbarMessage?.let {
@@ -180,27 +186,57 @@ fun WordItem(wordState: WordState3, snackbarHostState: SnackbarHostState, onAnsw
 
 @Composable
 fun OptionButton(text: String, isSelected: Boolean, isCorrect: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    Button(
+    ClickableText(
+        text = AnnotatedString(text, spanStyle = SpanStyle(fontSize = 15.sp, color = Color.White)),
+        modifier = Modifier
+            .padding(vertical = 8.dp)
+            .background(
+                when {
+                    isSelected && isCorrect -> Color.Green
+                    isSelected -> Color(240, 150, 55)
+                    else -> Color.Gray
+                }
+            )
+            .padding(8.dp),
         onClick = {
             onClick()
-            Log.d("Button", " Diste clic en $text, está seleccionado? $isSelected")
-        },
-        modifier = modifier
-            .padding(vertical = 4.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = when {
-                isSelected && isCorrect -> Color.Green
-                isSelected -> Color(240, 150, 55)
-                else -> Color.Gray
-            },
-            contentColor = Color.White,
-        )
-
-    ) {
-        Text(text)
-    }
+        }
+    )
+//    Button(
+//        onClick = {
+//            onClick()
+////            Log.d("Button", " Diste clic en $text, está seleccionado? $isSelected")
+//        },
+//        modifier = modifier
+//            .padding(vertical = 4.dp),
+//        colors = ButtonDefaults.buttonColors(
+//            containerColor = when {
+//                isSelected && isCorrect -> Color.Green
+//                isSelected -> Color(240, 150, 55)
+//                else -> Color.Gray
+//            },
+//            contentColor = Color.White,
+//        )
+//
+//    ) {
+//        Text(text)
+//    }
 }
 
+@Preview(showBackground = true)
+@Composable
+fun OptionButtonPreview(){
+    OrtografiaMariamelTheme {
+        Row(horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)){
+        Text("El boton personalizado")
+            OptionButton("cc", false, false, {})
+
+        }
+    }
+}
 
 @Preview(showBackground = true)
 @Composable
