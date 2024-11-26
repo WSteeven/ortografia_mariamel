@@ -28,15 +28,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.ortografiamariamel.repository.FirebaseRepository
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 import kotlin.random.Random
 
 @Composable
 fun SopaDeLetras() {
+    val firebase = FirebaseRepository(LocalContext.current)
     val palabras = listOf("OFREZCO", "EMBELLEZCO", "REDUZCO", "CAREZCO", "FORTALEZCO", "APETEZCA")
     val gridSize = 12
     // Estado de la cuadrícula
@@ -128,10 +131,11 @@ fun SopaDeLetras() {
 //            val foundWords = verificarPalabrasEncontradas(selectedCells, palabras, grid)
                 val foundWords = verificarPalabrasEncontradasEasy(selectedCells, palabras, grid)
 //            message = "Palabras encontradas: $foundWords de ${palabras.size}"
-                message = if (foundWords) {
-                    "¡Felicitaciones! Has encontrado todas las palabras."
+                if (foundWords) {
+                    message =     "¡Felicitaciones! Has encontrado todas las palabras."
+                    firebase.actualizarProgreso(3,1, 6)
                 } else {
-                    "Aún faltan palabras por completar."
+                    message = "Aún faltan palabras por completar."
                 }
                 showDialog = true
             },
@@ -178,54 +182,54 @@ fun verificarPalabrasEncontradasEasy(
     }
 }
 
-fun verificarPalabrasEncontradas(
-    selectedCells: Set<Pair<Int, Int>>,
-    palabras: List<String>,
-    grid: List<List<String>>
-): Int {
-    var foundCount = 0
-
-    palabras.forEach { palabra ->
-        val letras = palabra.toList()
-        val posiciones = mutableListOf<Pair<Int, Int>>()
-
-        // Obtener las posiciones de cada letra en las celdas seleccionadas
-        letras.forEach { letra ->
-            val foundPosition = selectedCells.firstOrNull {
-                grid[it.first][it.second].equals(
-                    letra.toString(),
-                    ignoreCase = true
-                )
-            }
-            if (foundPosition != null) {
-                posiciones.add(foundPosition)
-            }
-        }
-
-        // Comprobar si todas las letras fueron encontradas
-        if (posiciones.size == letras.size) {
-            // Ordenar posiciones por fila y columna
-            posiciones.sortWith(compareBy({ it.first }, { it.second }))
-
-            // Comprobar si son consecutivas en alguna dirección
-            val (rowStart, colStart) = posiciones[0]
-            val isHorizontal = posiciones.zipWithNext()
-                .all { (p1, p2) -> p1.first == p2.first && p1.second + 1 == p2.second }
-            val isVertical = posiciones.zipWithNext()
-                .all { (p1, p2) -> p1.second == p2.second && p1.first + 1 == p2.first }
-            val isDiagonalDescendente = posiciones.zipWithNext()
-                .all { (p1, p2) -> p1.first + 1 == p2.first && p1.second + 1 == p2.second }
-            val isDiagonalAscendente = posiciones.zipWithNext()
-                .all { (p1, p2) -> p1.first + 1 == p2.first && p1.second - 1 == p2.second }
-
-            if (isHorizontal || isVertical || isDiagonalDescendente || isDiagonalAscendente) {
-                foundCount++
-            }
-        }
-    }
-
-    return foundCount
-}
+//fun verificarPalabrasEncontradas(
+//    selectedCells: Set<Pair<Int, Int>>,
+//    palabras: List<String>,
+//    grid: List<List<String>>
+//): Int {
+//    var foundCount = 0
+//
+//    palabras.forEach { palabra ->
+//        val letras = palabra.toList()
+//        val posiciones = mutableListOf<Pair<Int, Int>>()
+//
+//        // Obtener las posiciones de cada letra en las celdas seleccionadas
+//        letras.forEach { letra ->
+//            val foundPosition = selectedCells.firstOrNull {
+//                grid[it.first][it.second].equals(
+//                    letra.toString(),
+//                    ignoreCase = true
+//                )
+//            }
+//            if (foundPosition != null) {
+//                posiciones.add(foundPosition)
+//            }
+//        }
+//
+//        // Comprobar si todas las letras fueron encontradas
+//        if (posiciones.size == letras.size) {
+//            // Ordenar posiciones por fila y columna
+//            posiciones.sortWith(compareBy({ it.first }, { it.second }))
+//
+//            // Comprobar si son consecutivas en alguna dirección
+//            val (rowStart, colStart) = posiciones[0]
+//            val isHorizontal = posiciones.zipWithNext()
+//                .all { (p1, p2) -> p1.first == p2.first && p1.second + 1 == p2.second }
+//            val isVertical = posiciones.zipWithNext()
+//                .all { (p1, p2) -> p1.second == p2.second && p1.first + 1 == p2.first }
+//            val isDiagonalDescendente = posiciones.zipWithNext()
+//                .all { (p1, p2) -> p1.first + 1 == p2.first && p1.second + 1 == p2.second }
+//            val isDiagonalAscendente = posiciones.zipWithNext()
+//                .all { (p1, p2) -> p1.first + 1 == p2.first && p1.second - 1 == p2.second }
+//
+//            if (isHorizontal || isVertical || isDiagonalDescendente || isDiagonalAscendente) {
+//                foundCount++
+//            }
+//        }
+//    }
+//
+//    return foundCount
+//}
 
 
 fun generateGrid(palabras: List<String>, gridSize: Int): List<List<String>> {

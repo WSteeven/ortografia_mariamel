@@ -216,7 +216,8 @@ fun OrtografiaMariamelAppNavHost(
                     navController.navigateUp()
                 },
                 onNextButtonClicked = {
-                    navController.navigate(viewModel.uiState.value.screenEndGame.name)
+                    navController.navigate(AppScreen.Actividad2U2.name)
+//                    navController.navigate(viewModel.uiState.value.screenEndGame.name)
                 },
                 onItemMenuButtonClicked = {
 //                    Log.d("AppNavGraph", "composable ActividadI: ${uiState.menu.name}")

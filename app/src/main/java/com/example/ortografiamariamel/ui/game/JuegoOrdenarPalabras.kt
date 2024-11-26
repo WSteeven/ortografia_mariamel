@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -40,11 +41,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ortografiamariamel.R
+import com.example.ortografiamariamel.repository.FirebaseRepository
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 
 
 @Composable
 fun OrdenarPalabras() {
+    val firebase = FirebaseRepository(LocalContext.current)
     val palabras = listOf("FLOREZCA", "LUZCO", "PERMANEZCO", "CONDUZCO")
     val respuestas = palabras.map { remember { mutableStateOf("") } } // Mantener el estado de entrada
 
@@ -81,7 +84,11 @@ fun OrdenarPalabras() {
             val allCorrect = respuestas.zip(palabras).all { (respuesta, palabra) ->
                 respuesta.value.equals(palabra, ignoreCase = true)
             }
-            message = if (allCorrect) "¡Felicitaciones! Todas las palabras están correctas." else "Algunas palabras están incorrectas."
+             if (allCorrect) {
+                 message = "¡Felicitaciones! Todas las palabras están correctas."
+                 firebase.actualizarProgreso(3, 2, 4)
+             }else
+                 message ="Algunas palabras están incorrectas."
             showDialog = true
         },
             modifier = Modifier.align(Alignment.CenterHorizontally),

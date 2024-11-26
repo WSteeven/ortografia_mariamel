@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Button
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,11 +33,13 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.ortografiamariamel.repository.FirebaseRepository
 import com.example.ortografiamariamel.ui.screens.unidad1.FinJuegoGanador
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 
@@ -51,14 +54,21 @@ val frasesOrdenadas = listOf(
 
 @Composable
 fun JuegoOrdenarOraciones(
+    snackbarHostState: SnackbarHostState,
     onPrevButtonClicked: () -> Unit = {},
 ) {
+    val firebase = FirebaseRepository(LocalContext.current)
     val shuffledFrases = remember { frasesOrdenadas.shuffled().toMutableStateList() }
     val userOrder = remember { mutableStateListOf<String>() }
     var solvedCount by remember { mutableIntStateOf(0) }
     var isGameOver by remember { mutableStateOf(false) }
-    var indice by remember {mutableIntStateOf(-1)}
+    var indice by remember { mutableIntStateOf(-1) }
+    var snackbarMessage by remember { mutableStateOf<String?>(null) }
 
+    LaunchedEffect(snackbarMessage) {
+        snackbarMessage?.let { snackbarHostState.showSnackbar(it)
+        snackbarMessage = null}
+    }
 
     LaunchedEffect(solvedCount) {
         if (solvedCount == palabras.size) {
@@ -67,6 +77,7 @@ fun JuegoOrdenarOraciones(
     }
 
     if (isGameOver) {
+        firebase.actualizarProgreso(2, 2, solvedCount)
         // Cuando el juego termina, muestra la pantalla de FinJuegoUnidad1
         FinJuegoGanador(
             respuestasCorrectas = solvedCount,
@@ -74,7 +85,6 @@ fun JuegoOrdenarOraciones(
             onClick = onPrevButtonClicked
         )
     } else {
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -89,7 +99,7 @@ fun JuegoOrdenarOraciones(
             )
             shuffledFrases.forEachIndexed { index, frase ->
                 indice = index
-                OracionDesordenada(oracion = frase, onClick = {
+                OracionDesordenada(oracion = frase, onMessage ={ snackbarMessage=it}, onClick = {
                     Log.d("OrdenarOracionesU2", "Palabra clickeada $it")
                     userOrder.add(it)
                 }) {
@@ -105,7 +115,7 @@ fun JuegoOrdenarOraciones(
 }
 
 @Composable
-fun OracionDesordenada(oracion: String, onClick: (String) -> Unit, onSolved: (Boolean) -> Unit) {
+fun OracionDesordenada(oracion: String, onMessage: (String)->Unit, onClick: (String) -> Unit, onSolved: (Boolean) -> Unit) {
     val originalWords = oracion.split(" ")
     val shuffledWords = remember { originalWords.shuffled().toMutableStateList() }
     val userOrder = remember { mutableStateListOf<String>() }
@@ -185,17 +195,21 @@ fun OracionDesordenada(oracion: String, onClick: (String) -> Unit, onSolved: (Bo
                 }
             }
 
-            Button(onClick = {
-                if (userOrder.toList() == originalWords) {
-                    isSolved = true
-                    onSolved(true)
+            if (shuffledWords.size == 0) {
+                Button(onClick = {
+                    if (userOrder.toList() == originalWords) {
+                        isSolved = true
+                        onSolved(true)
+                    }else{
+                        onMessage("No está ordenado,corrige e intenta nuevamente")
+                    }
+                }) {
+                    Text("Verificar")
                 }
-            }) {
-                Text("Verificar")
             }
         }
     } else {
-        Text(text = "OMG, Resuelto")
+        onMessage("Lo hiciste muy bien")
     }
 }
 
@@ -203,7 +217,7 @@ fun OracionDesordenada(oracion: String, onClick: (String) -> Unit, onSolved: (Bo
 @Composable
 fun JuegoOrdenarOracionesPreview() {
     OrtografiaMariamelTheme {
-        JuegoOrdenarOraciones()
+        JuegoOrdenarOraciones(snackbarHostState = SnackbarHostState())
     }
 }
 

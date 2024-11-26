@@ -40,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -54,6 +55,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ortografiamariamel.R
+import com.example.ortografiamariamel.repository.FirebaseRepository
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
@@ -66,9 +68,15 @@ fun EvaluacionScreen(
     onPrevButtonClicked: () -> Unit,
     onItemMenuButtonClicked: () -> Unit,
 ) {
+    val firebase = FirebaseRepository(LocalContext.current)
+    val localNombre = firebase.leerNombreLocalmente()
     val snackbarHostState = remember { SnackbarHostState() }
+    var juego3U4Desbloqueado by remember { mutableStateOf(false) }
+
+    LaunchedEffect(localNombre) {
+        firebase.verificarJuegoCompletado(4, 3) { juego3U4Desbloqueado = it }
+    }
     MenuLateral(
-//        title = R.string.blank, // AppScreen.Unidad2.title,
         title = R.string.blank, // AppScreen.Unidad2.title,
         content = {
             Column(
@@ -81,35 +89,20 @@ fun EvaluacionScreen(
                         .padding(4.dp)
                         .verticalScroll(rememberScrollState()) // Habilitar desplazamiento vertical
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Spacer(modifier = Modifier.weight(1f)) // Espacio flexible para centrar el texto
-                        Text(
-                            text = "EVALUACION",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 30.sp,
-                            modifier = Modifier.padding(start = 64.dp) // Espacio al final del texto
-                        )
-                        Spacer(modifier = Modifier.weight(1f)) // Espacio flexible para centrar el texto
-                    }
-
                     Text(
-                        text = "Aquí va la evaluación",
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 25.sp,
+                        text = "EVALUACION",
+                        fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
-                        fontFamily = FontFamily.SansSerif,
-                        letterSpacing = 3.sp,
+                        fontSize = 30.sp,
                         color = Color(230, 170, 75),
-                        modifier = modifier
-                            .align(Alignment.CenterHorizontally)
+                        modifier = Modifier.fillMaxWidth()
                     )
 
-                    Evaluacion(viewModel = viewModel, snackbarHostState = snackbarHostState)
-//                    Evaluacion()
+                    Evaluacion(
+                        viewModel = viewModel,
+                        snackbarHostState = snackbarHostState,
+                        firebase
+                    )
 
                 }
                 Column(
@@ -145,7 +138,11 @@ fun EvaluacionScreen(
 }
 
 @Composable
-fun Evaluacion(viewModel: AppViewModel, snackbarHostState: SnackbarHostState) {
+fun Evaluacion(
+    viewModel: AppViewModel,
+    snackbarHostState: SnackbarHostState,
+    firebase: FirebaseRepository
+) {
     var selectedButton by remember { mutableIntStateOf(-1) } // -1 para indicar que ningún botón está seleccionado
     var showDialog by remember { mutableStateOf(false) }
     var snackbarMessage by remember { mutableStateOf<String?>(null) }
@@ -163,14 +160,6 @@ fun Evaluacion(viewModel: AppViewModel, snackbarHostState: SnackbarHostState) {
                 .fillMaxSize()
         ) {
             Spacer(modifier = Modifier.height(40.dp))
-//            ComposableButton(
-//                id = 5, onButtonClick = {
-//                    selectedButton = it
-//                    showDialog = true
-//                }, modifier = Modifier
-////                .padding(end = 20.dp)
-//            )
-
             ComposableButton(
                 id = 4, onButtonClick = {
                     selectedButton = it
@@ -284,7 +273,7 @@ fun EvaluacionUsoComa(
         var score = 0
         if (respuesta1 == "C) platos, vasos, servilletas, decoraciones.") score++
         if (respuesta2 == "B) azules, rojos, verdes, amarillos.") score++
-        if (score ==2) onVerification(true) else {
+        if (score == 2) onVerification(true) else {
             onVerification(false)
             viewModel.restarEnergiasJuego2U1()
         }
@@ -311,7 +300,7 @@ fun EvaluacionUsoComa(
         )
         Text(
             text = "Elige la opción correcta que complete las oraciones con el uso adecuado de la coma en las enumeraciones.",
-            fontSize=10.sp
+            fontSize = 10.sp
         )
         Text(
             text = "1. Para la fiesta necesitamos, platos __________ vasos __________ servilletas __________ decoraciones.",
@@ -368,7 +357,7 @@ fun EvaluacionUsoDeZ(
         var score = 0
         if (respuesta1 == "A) conduzco") score++
         if (respuesta2 == "C) aparezco") score++
-        if (score ==2) onVerification(true) else {
+        if (score == 2) onVerification(true) else {
             onVerification(false)
             viewModel.restarEnergiasJuego2U1()
         }
@@ -458,7 +447,7 @@ fun EvaluacionUsoDeC(
         if (respuesta3 == "Conocimiento") score++
         if (respuesta4 == "Establecimiento") score++
         if (respuesta5 == "Fortalecimiento") score++
-        if (score ==5) onVerification(true) else {
+        if (score == 5) onVerification(true) else {
             onVerification(false)
             viewModel.restarEnergiasJuego2U1()
         }
@@ -519,7 +508,7 @@ fun FilaOpciones(opcion1: String, opcion2: String, onOptionSelected: (String) ->
                 onOptionSelected(opcion1)
             }
         )
-        Text("VS", fontSize=12.sp, textAlign = TextAlign.Center, modifier = Modifier.weight(0.1f))
+        Text("VS", fontSize = 12.sp, textAlign = TextAlign.Center, modifier = Modifier.weight(0.1f))
         ClickableText(
             text = AnnotatedString(opcion2, spanStyle = SpanStyle(fontSize = 12.sp)),
             modifier = Modifier
@@ -622,7 +611,8 @@ fun EvaluacionTildeDiacritica(
 
 @Composable
 fun BotonVerificarRespuesta(onClick: () -> Unit) {
-    Row(horizontalArrangement = Arrangement.Center,
+    Row(
+        horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth() // Asegura que el Row ocupe todo el ancho disponible
     ) {
@@ -633,7 +623,7 @@ fun BotonVerificarRespuesta(onClick: () -> Unit) {
             ),
             onClick = { onClick() },
             modifier = Modifier
-                //.align(Alignment.CenterHorizontally) // Centra el botón horizontalmente
+            //.align(Alignment.CenterHorizontally) // Centra el botón horizontalmente
         ) {
             Text("Verificar respuesta", textAlign = TextAlign.Center)
         }
@@ -695,6 +685,21 @@ fun ComposableButton(
         )
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun EvaluacionPreview() {
+    OrtografiaMariamelTheme {
+        Evaluacion(
+            viewModel = viewModel(factory = AppViewModelProvider.Factory),
+            snackbarHostState = SnackbarHostState(),
+            firebase = FirebaseRepository(
+                LocalContext.current
+            )
+        )
+    }
+}
+
 @Preview(showBackground = true, widthDp = 280)
 @Composable
 fun EvaluacionUsoComaPreview() {
@@ -702,6 +707,7 @@ fun EvaluacionUsoComaPreview() {
         EvaluacionUsoComa(viewModel = viewModel(factory = AppViewModelProvider.Factory), {}, {})
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun EvaluacionUsoDeZPreview() {

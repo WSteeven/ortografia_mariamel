@@ -29,16 +29,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.ortografiamariamel.R
+import com.example.ortografiamariamel.repository.FirebaseRepository
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 
 @SuppressLint("MutableCollectionMutableState")
 @Composable
 fun AhorcadoGame() {
+    val firebase = FirebaseRepository(LocalContext.current)
     val palabraCorrecta by remember { mutableStateOf("ENUMERACION") }
     var letrasAdivinadas by remember { mutableStateOf(mutableStateListOf<Char>()) }
     var intentosFallidos by remember { mutableIntStateOf(0) }
@@ -99,6 +102,7 @@ fun AhorcadoGame() {
         } else {
             // Mostrar resultado
             val resultText = if (seAdivinoPalabra()) "¡Ganaste!" else "Perdiste. La palabra era: "
+            if(seAdivinoPalabra()) firebase.actualizarProgreso(4,1,letrasAdivinadas.size)
             Text(text = resultText)
             Text(text = palabraCorrecta, style = MaterialTheme.typography.headlineMedium)
             Button(onClick = {

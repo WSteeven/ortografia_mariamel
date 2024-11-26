@@ -26,6 +26,7 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -33,6 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.ortografiamariamel.repository.FirebaseRepository
 import com.example.ortografiamariamel.ui.screens.unidad1.FinJuegoGanador
 import com.example.ortografiamariamel.ui.screens.unidad1.FinJuegoPerdedor
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
@@ -62,6 +64,7 @@ val frases = listOf(
 fun EmparejarFrases(
     onPrevButtonClicked: () -> Unit = {},
 ) {
+    val firebase = FirebaseRepository(LocalContext.current)
     var shuffledPalabras = remember { palabras.shuffled().toMutableStateList() }
     var shuffledFrases = remember { frases.shuffled().toMutableStateList() }
     val colors = listOf(Color.Red, Color.Green, Color.Blue, Color.Yellow, Color.Magenta)
@@ -86,6 +89,7 @@ fun EmparejarFrases(
     }
 
     if (isGameOver) {
+        firebase.actualizarProgreso(2,1, solvedCount)
         // Cuando el juego termina, muestra la pantalla de FinJuegoUnidad1
         FinJuegoGanador(
             respuestasCorrectas = solvedCount,
@@ -163,7 +167,6 @@ fun EmparejarFrases(
                         .fillMaxWidth(.8f)
                         .align(Alignment.End)
                 ) {
-//            Text("Estoy en la columna principal")
                     LazyColumn(
                         horizontalAlignment = Alignment.Start,
                         verticalArrangement = Arrangement.spacedBy(8.dp),

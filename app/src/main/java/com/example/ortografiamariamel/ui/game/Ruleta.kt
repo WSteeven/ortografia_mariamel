@@ -33,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -45,6 +46,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieAnimatable
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.ortografiamariamel.R
+import com.example.ortografiamariamel.repository.FirebaseRepository
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -52,6 +54,7 @@ import kotlin.random.Random
 
 @Composable
 fun GiraYJuega() {
+    val firebase = FirebaseRepository(LocalContext.current)
     val palabras = listOf("MERECER", "CRECER", "EMBELLECER", "PRODUCIR", "ACONTECER", "ESTREMECER")
     val palabrasCorrectas =
         listOf("MEREZCO", "CREZCO", "EMBELLEZCO", "PRODUZCO", "ACONTEZCO", "ESTREMEZCO")
@@ -79,40 +82,7 @@ fun GiraYJuega() {
     ) {
         // Mostrar palabras tachadas
         // Mostrar las palabras con un estilo tachado si ya fueron adivinadas
-//        Column {
-//            palabras.forEach { palabra ->
-//                Text(
-//                    text = palabra,
-//                    fontWeight = if (palabrasTachadas.contains(palabra)) FontWeight.Bold else FontWeight.Normal,
-//                    color = if (palabrasTachadas.contains(palabra)) Color.Gray else Color.Black,
-//                    modifier = Modifier.padding(2.dp).border(BorderStroke(1.dp, Color.LightGray))
-//                )
-//            }
-//        }
         Box(modifier = Modifier.height(100.dp)) { // Ocupa el espacio restante
-//            LazyHorizontalGrid(rows = GridCells.Fixed(2),
-//                modifier = Modifier.fillMaxSize(),
-//                content = {
-//                    items(palabras.size) { index ->
-//                        val palabra = palabras[index]
-//                        Text(
-//                            text = palabra,
-//                            fontWeight = if (palabrasTachadas.contains(palabra)) FontWeight.Bold else FontWeight.Normal,
-//                            color = if (palabrasTachadas.contains(palabra)) Color.Gray else Color.Black,
-//                            maxLines = 1,
-//                            modifier = Modifier
-//                                .padding(2.dp)
-//                                .border(BorderStroke(1.dp, Color.LightGray))
-//                                .fillMaxWidth()
-//                                .width(150.dp)
-//                                .widthIn(max = 150.dp) // Limita el ancho máximo
-//                                .wrapContentWidth(Alignment.CenterHorizontally)
-//
-//                        )
-//                    }
-//                }
-//            )
-
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 modifier = Modifier.fillMaxSize(),
@@ -159,6 +129,7 @@ fun GiraYJuega() {
                     }}else{
                         message = "¡Felicidades! Ya has resuelto todas las palabras."
                         showDialog = true
+                        firebase.actualizarProgreso(3,3,6)
                     }
                 },
                 border = BorderStroke(4.dp, Color(244, 225, 220)),

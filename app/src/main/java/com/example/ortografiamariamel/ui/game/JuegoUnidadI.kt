@@ -47,6 +47,7 @@ import com.example.ortografiamariamel.AppScreen
 import com.example.ortografiamariamel.R
 import com.example.ortografiamariamel.data.Datasource
 import com.example.ortografiamariamel.model.Carta
+import com.example.ortografiamariamel.repository.FirebaseRepository
 import com.example.ortografiamariamel.service.SoundManager
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
@@ -57,6 +58,7 @@ import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun MatchPairs(viewModel:AppViewModel,onNextButtonClicked: () -> Unit) {
+    val firebase = FirebaseRepository(LocalContext.current)
     val datasource = Datasource()
     var definiciones by remember { mutableStateOf(datasource.loadDefiniciones()) }
     var respuestas by remember { mutableStateOf(datasource.loadRespuestas()) }
@@ -122,6 +124,7 @@ fun MatchPairs(viewModel:AppViewModel,onNextButtonClicked: () -> Unit) {
                         }
                         if (allMatched(definiciones, respuestas)) {
                             viewModel.setScreenEndGame(AppScreen.FinJuegoActividad1)
+                            firebase.actualizarProgreso(1, 1, 4)
                             onNextButtonClicked()
                         }
                     }

@@ -10,8 +10,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,6 +44,7 @@ fun Actividad2U2(
     onNextButtonClicked: () -> Unit,
     onItemMenuButtonClicked: () -> Unit
 ) {
+    val snackbarHostState = remember { SnackbarHostState()}
     MenuLateral(
         title = R.string.blank,
         content = {
@@ -75,7 +79,7 @@ fun Actividad2U2(
                     modifier = modifier
                         .align(Alignment.CenterHorizontally)
                 )
-                JuegoOrdenarOraciones(onPrevButtonClicked = onPrevButtonClicked)
+                JuegoOrdenarOraciones(onPrevButtonClicked = onPrevButtonClicked, snackbarHostState = snackbarHostState)
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -104,6 +108,8 @@ fun Actividad2U2(
         onItemMenuButtonClicked = onItemMenuButtonClicked,
         modifier = modifier
     )
+    
+    SnackbarHost(hostState = snackbarHostState)
 }
 
 @Preview(showBackground = true, widthDp = 325, heightDp = 967)

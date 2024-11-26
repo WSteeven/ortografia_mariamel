@@ -33,6 +33,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.ortografiamariamel.R
+import com.example.ortografiamariamel.repository.FirebaseRepository
 import com.example.ortografiamariamel.service.SoundManager
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 
@@ -48,6 +49,7 @@ val respondidasCorrectas = mutableListOf(false,false,false, false, false,false)
 
 @Composable
 fun Dictado() {
+    val firebase = FirebaseRepository(LocalContext.current)
     val soundManager = SoundManager(LocalContext.current)
     var showResult by remember { mutableStateOf(false) }
     fun getAudio(index: Int): Int {
@@ -74,7 +76,9 @@ fun Dictado() {
         }
 
         Button(
-            onClick = { showResult = true },
+            onClick = { showResult = true
+                val totalCorrectas = respondidasCorrectas.count{it}
+                if(totalCorrectas ==oracionesCorrectas.size) firebase.actualizarProgreso(4,3,totalCorrectas)},
             modifier = Modifier.align(Alignment.CenterHorizontally),
             border = BorderStroke(4.dp, Color(244, 225, 220)),
             shape = MaterialTheme.shapes.extraLarge,

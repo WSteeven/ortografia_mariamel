@@ -26,9 +26,11 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -40,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ortografiamariamel.R
+import com.example.ortografiamariamel.repository.FirebaseRepository
 import com.example.ortografiamariamel.ui.screens.unidad1.FinJuegoGanador
 import com.example.ortografiamariamel.ui.screens.unidad1.FinJuegoPerdedor
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
@@ -47,6 +50,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun CompletarParrafo(onPrevButtonClicked: () -> Unit = {}) {
+    val firebase = FirebaseRepository(LocalContext.current)
     val words = remember {
         mutableStateListOf(
             "crecimiento",
@@ -57,13 +61,13 @@ fun CompletarParrafo(onPrevButtonClicked: () -> Unit = {}) {
             "entendimiento"
         )
     }
-    // Párrafo con los espacios marcados como [vacío]
+    // Párrafo con los espacios marcados como _______
     val originalText = remember {
-        "El [vacío] personal es un proceso continuo que se manifiesta a lo largo de la vida. " +
-                "Desde el [vacío], cada experiencia nos brinda [vacío] que nos ayuda a enfrentar " +
-                "los retos diarios. La educación juega un papel fundamental en el [vacío] de un buen futuro. " +
-                "Sin embargo, no todo es fácil; el [vacío] y las dificultades también forman parte del camino " +
-                "hacia el [vacío] de uno mismo."
+        "El _______ personal es un proceso continuo que se manifiesta a lo largo de la vida. " +
+                "Desde el _______, cada experiencia nos brinda _______ que nos ayuda a enfrentar " +
+                "los retos diarios. La educación juega un papel fundamental en el _______ de un buen futuro. " +
+                "Sin embargo, no todo es fácil; el _______ y las dificultades también forman parte del camino " +
+                "hacia el _______ de uno mismo."
     }
 
     val paragraph = remember {
@@ -77,7 +81,7 @@ fun CompletarParrafo(onPrevButtonClicked: () -> Unit = {}) {
     }
 
 
-
+    var shuffledWords = remember { words.shuffled().toMutableStateList()}
     var currentText by remember { mutableStateOf(originalText) } // El texto actualizado
     val selectedWord by remember { mutableStateOf<String?>(null) }
     var isCorrect by remember { mutableIntStateOf(-1) }
@@ -92,10 +96,10 @@ fun CompletarParrafo(onPrevButtonClicked: () -> Unit = {}) {
         }
     }
 
-    // Función para reemplazar el primer marcador [vacío] con la palabra seleccionada
+    // Función para reemplazar el primer marcador _______ con la palabra seleccionada
     fun replacePlaceholderWithWord(word: String) {
-        // Reemplazar el primer "[vacío]" con la palabra seleccionada
-        currentText = currentText.replaceFirst("[vacío]", word)
+        // Reemplazar el primer "_______" con la palabra seleccionada
+        currentText = currentText.replaceFirst("_______", word)
     }
 
     if (!isGameOver) {
@@ -121,8 +125,10 @@ fun CompletarParrafo(onPrevButtonClicked: () -> Unit = {}) {
                             shape = RoundedCornerShape(4.dp)
                         )
                 ) {
-                    items(words.size) { index ->
-                        val word = words[index]
+//                    items(words.size) { index ->
+                    items(shuffledWords.size) { index ->
+                        val word = shuffledWords[index]
+//                        val word = words[index]
                         ClickableText(
                             text = AnnotatedString(word),
                             modifier = Modifier
@@ -130,7 +136,8 @@ fun CompletarParrafo(onPrevButtonClicked: () -> Unit = {}) {
                                 .padding(8.dp),
                             onClick = {
                                 replacePlaceholderWithWord(word)
-                                words.remove(word)
+                                shuffledWords.remove(word)
+//                                words.remove(word)
                             }
                         )
                     }
@@ -172,7 +179,7 @@ fun CompletarParrafo(onPrevButtonClicked: () -> Unit = {}) {
                         isCorrect = if (paragraph.value == currentText) {
                             1
                         } else 0
-//                        if (isCorrect == 1) isGameOver = true
+                        if (isCorrect == 1) firebase.actualizarProgreso(2,3, 6)
                         isGameOver = true
                     },
                     modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -186,6 +193,9 @@ fun CompletarParrafo(onPrevButtonClicked: () -> Unit = {}) {
                 onRestartButtonCliked = {
                     isGameOver = false
                     timer = 60
+                    isCorrect=-1
+                    shuffledWords.clear() // Limpiar la lista
+                    shuffledWords.addAll(words.shuffled())
                     currentText = originalText
                 },
                 onNextButtonClicked = onPrevButtonClicked
@@ -197,7 +207,6 @@ fun CompletarParrafo(onPrevButtonClicked: () -> Unit = {}) {
                 6, 6, onClick = onPrevButtonClicked
             )
         } else {
-
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -232,6 +241,9 @@ fun CompletarParrafo(onPrevButtonClicked: () -> Unit = {}) {
                             isGameOver = false
                             timer = 60
                             isCorrect = -1
+                            shuffledWords.clear() // Limpiar la lista
+                            shuffledWords.addAll(words.shuffled())
+                            currentText = originalText
                         }
                     ) {
                         Text(stringResource(R.string.reintentar))

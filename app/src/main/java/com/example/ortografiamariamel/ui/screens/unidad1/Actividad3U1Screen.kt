@@ -55,6 +55,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ortografiamariamel.R
+import com.example.ortografiamariamel.repository.FirebaseRepository
 import com.example.ortografiamariamel.service.SoundManager
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
@@ -67,6 +68,7 @@ import kotlin.random.Random
 
 @Composable
 fun FallingWordsGame(onPrevButtonClicked: () -> Unit) {
+    val firebase = FirebaseRepository(LocalContext.current)
     val configuration = LocalConfiguration.current
     val density = LocalDensity.current
 //    val screenWidthPx = with(density) { configuration.screenWidthDp.dp.toPx() }
@@ -150,6 +152,9 @@ fun FallingWordsGame(onPrevButtonClicked: () -> Unit) {
                 .align(Alignment.TopStart),
             style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold)
         )
+        if(correctCount>5){
+            firebase.actualizarProgreso(1, 3, correctCount)
+        }
 
         fallingWords.forEach { fallingWord ->
             FallingWordView(
@@ -281,7 +286,7 @@ fun Actividad3U1(
                 }
 
                 Text(
-                    text = "Actividad 3",
+                    text = "Señale las oraciones que necesitan la tilde diacrítica.",
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 18.sp,
                     textAlign = TextAlign.Justify,
@@ -291,9 +296,8 @@ fun Actividad3U1(
                     modifier = modifier
                         .align(Alignment.CenterHorizontally)
                 )
-                Text("Señale las oraciones que necesitan la tilde diacrítica.", fontWeight = FontWeight.Bold)
 
-                // Aquí va todo el contenido
+                // Aquí va el contenido
                 FallingWordsGame(onPrevButtonClicked = onPrevButtonClicked)
 
                 Column(

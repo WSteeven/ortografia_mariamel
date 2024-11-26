@@ -1,6 +1,7 @@
 package com.example.ortografiamariamel.ui.game
 
 import android.util.Log
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -22,8 +24,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.ortografiamariamel.repository.FirebaseRepository
 import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 
 val oraciones = listOf(
@@ -37,6 +42,7 @@ val oraciones = listOf(
 
 @Composable
 fun EscogeVerdaderoFalso(snackbarHostState: SnackbarHostState) {
+    val firebase = FirebaseRepository(LocalContext.current)
     val wordsState = remember { mutableStateOf(oraciones.map { WordState3(it) }) }
     var showResult by remember { mutableStateOf<Pair<Boolean, List<WordState3>>?>(null) }
 //    var snackbarMessage by remember { mutableStateOf<String?>(null) }
@@ -71,9 +77,15 @@ fun EscogeVerdaderoFalso(snackbarHostState: SnackbarHostState) {
         Spacer(modifier = Modifier.height(16.dp))
 
         // Botón para verificar respuestas
-        Button(onClick = {
+        Button(border = BorderStroke(4.dp, Color(244, 225, 220)),
+            shape = MaterialTheme.shapes.extraLarge,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(240, 150, 55), contentColor = Color.White
+            ),
+            onClick = {
             val isCorrect = wordsState.value.all { it.selectedAnswer.value == it.word.correctAnswer }
             showResult = Pair(isCorrect, wordsState.value)
+                if(isCorrect) firebase.actualizarProgreso(4,2,6)
         }) {
             Text("Verificar")
         }

@@ -74,7 +74,7 @@ fun Actividad1U2(
                         .align(Alignment.CenterHorizontally)
                 )
 //                CrosswordApp()
-                EmparejarFrases(onPrevButtonClicked = onPrevButtonClicked)
+                EmparejarFrases(onPrevButtonClicked = onNextButtonClicked)
                 Column(
                     modifier = Modifier
                         .fillMaxSize()

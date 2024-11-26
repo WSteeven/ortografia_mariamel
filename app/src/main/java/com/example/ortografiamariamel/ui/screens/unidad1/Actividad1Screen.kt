@@ -67,13 +67,6 @@ fun Actividad1(
                         LottieAnimationScreen()
                     }
                 }
-//                Text(
-//                    text = "ACTIVIDAD",
-//                    fontWeight = FontWeight.Bold,
-//                    fontSize = 30.sp,
-//                    modifier = modifier
-//                        .align(Alignment.CenterHorizontally)
-//                )
                 Text(
                     text = "Elija la carta correcta de acuerdo al monosílabo",
                     fontWeight = FontWeight.SemiBold,

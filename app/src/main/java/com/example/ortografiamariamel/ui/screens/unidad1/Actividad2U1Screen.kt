@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -70,7 +68,7 @@ fun Actividad2U1(
                 }
 
                 Text(
-                    text = "Seleccione el monosílabo en cada oración",
+                    text = "Selecciona las palabras en orden para formar la oración",
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 18.sp,
                     textAlign = TextAlign.Justify,
@@ -82,8 +80,7 @@ fun Actividad2U1(
                 )
 
                 // aqui va el juego
-                SentencePuzzleGame()
-
+                SentencePuzzleGame(onPrevButtonClicked=onNextButtonClicked)
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
