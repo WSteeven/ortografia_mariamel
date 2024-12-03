@@ -3,7 +3,7 @@ package com.example.ortografiamariamel.ui.screens.unidad1
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Icon
@@ -103,13 +104,12 @@ fun Niveles1(
                         .padding(top = 40.dp)
                 ) {
                     Column(
-                        verticalArrangement = Arrangement.Center,
+                        verticalArrangement = Arrangement.Top,
                         horizontalAlignment = Alignment.End,
                         modifier = modifier
                             .fillMaxWidth()
                             .fillMaxHeight(.4f)
                     ) {
-//                    LottieAnimationInstrucciones()
                         InstruccionesMarquee(mostrarInstrucciones) {
                             mostrarInstrucciones = !mostrarInstrucciones
                         }
@@ -131,7 +131,8 @@ fun Niveles1(
                         },
                         onClickBloqueado = {
 //                            Log.d("ACTIVIDAD2-U1", "Click en el boton bloqueado $it")
-                            snackbarMessage = "Juego Bloqueado, debes completar el juego anterior primero para desbloquear este juego"
+                            snackbarMessage =
+                                "Juego Bloqueado, debes completar el juego anterior primero para desbloquear este juego"
                         },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -145,7 +146,10 @@ fun Niveles1(
                             soundManager.playSound(R.raw.correct_card_sound)
                             onClick()
                         },
-                        onClickBloqueado = { snackbarMessage = "Juego Bloqueado, debes completar el juego anterior primero para desbloquear este juego" },
+                        onClickBloqueado = {
+                            snackbarMessage =
+                                "Juego Bloqueado, debes completar el juego anterior primero para desbloquear este juego"
+                        },
                         modifier = Modifier
                             .align(Alignment.End)
                             .fillMaxWidth()
@@ -230,45 +234,59 @@ fun InstruccionesMarquee(mostrarInstrucciones: Boolean, onClick: () -> Unit) {
     }
 
 // Marquee only animates when the content doesn't fit in the max width.
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 34.dp)
+            .background(Color.LightGray)
+            .border(width = 2.dp, color = Color.Black, shape = RoundedCornerShape(4.dp))
+    ) {
         if (mostrarInstrucciones) {
-
-            Image(
-                painter = painterResource(id = R.drawable.nube),
-                contentDescription = "nube instrucciones",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-            )
+//            Image(
+//                painter = painterResource(id = R.drawable.nube),
+//                contentDescription = "nube instrucciones",
+//                contentScale = ContentScale.Crop,
+//                modifier = Modifier.fillMaxSize()
+//            )
             Column(
                 Modifier
                     .fillMaxWidth()
-                    .padding(top = 112.dp)
-                    .padding(horizontal = 20.dp)
+                    .padding(4.dp)
 //                .background(Color.White)
             ) {
                 Text(
                     text = stringResource(id = R.string.instrucciones_1),
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 20.sp,
-                    modifier = Modifier.basicMarquee()
+//                        modifier = Modifier.basicMarquee()
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     text = stringResource(id = R.string.instrucciones_2),
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 20.sp,
-                    modifier = Modifier.basicMarquee()
+//                        modifier = Modifier.basicMarquee()
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     text = stringResource(id = R.string.instrucciones_3),
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 20.sp,
-                    modifier = Modifier.basicMarquee()
+//                        modifier = Modifier.basicMarquee()
                 )
                 Spacer(modifier = Modifier.height(16.dp))
             }
+
         }
+
+    }
+}
+
+@Preview(showBackground = false)
+@Composable
+fun InstruccionesMarqueePreview() {
+    OrtografiaMariamelTheme {
+        InstruccionesMarquee(true, {})
     }
 }
 

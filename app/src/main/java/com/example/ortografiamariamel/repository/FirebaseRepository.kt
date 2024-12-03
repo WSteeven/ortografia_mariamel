@@ -9,9 +9,15 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import java.util.UUID
 
-data class User(val id:String="", val nombre: String="")
+data class User(
+    val id: String = "",
+    val nombre: String = "",
+    val unidad: String = "",
+    val juego: String = ""
+)
 
 val usersList = mutableStateListOf<User>()
+
 class FirebaseRepository(private val context: Context) {
 
     fun getOrCreateUniqueId(): String {
@@ -37,20 +43,20 @@ class FirebaseRepository(private val context: Context) {
             }
             .addOnFailureListener { e ->
                 // Manejo de errores
-                Log.d("guardarNombreToFirebase","Hubo un error $e")
+                Log.d("guardarNombreToFirebase", "Hubo un error $e")
             }
     }
 
-    fun leerNombresFromFirebase(){
+    fun leerNombresFromFirebaseOld() {
         val database = FirebaseDatabase.getInstance().reference
 
-        database.child("users").addValueEventListener(object :ValueEventListener{
+        database.child("users").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 usersList.clear() // limpia la lista antes de llenarla
-                for (user in snapshot.children){
-                    val userId = user.key?:""
-                    val nombre = user.child("nombre").getValue(String::class.java)?:""
-                    usersList.add(User(id = userId, nombre=nombre))
+                for (user in snapshot.children) {
+                    val userId = user.key ?: ""
+                    val nombre = user.child("nombre").getValue(String::class.java) ?: ""
+                    usersList.add(User(id = userId, nombre = nombre))
 
                 }
             }
@@ -61,19 +67,77 @@ class FirebaseRepository(private val context: Context) {
             }
         })
     }
-     fun guardarNombreLocalmente(nombre: String) {
+
+    fun leerNombresFromFirebase() {
+        val database = FirebaseDatabase.getInstance().reference
+
+        database.child("users").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                usersList.clear() // limpia la lista antes de llenarla
+                for (user in snapshot.children) {
+                    val userId = user.key ?: ""
+                    val nombre = user.child("nombre").getValue(String::class.java) ?: ""
+                    val progreso = user.child("progreso")
+                    val unidad = obtenerUltimaUnidad(progreso)
+                    val juego = obtenerUltimoJuegoCompletado(progreso.child(unidad))
+                    usersList.add(
+                        User(
+                            id = userId,
+                            nombre = nombre,
+                            unidad = unidad,
+                            juego = juego
+                        )
+                    )
+
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Manejo de errores
+                Log.d("leerNombresFromFirebase", "Error: $error")
+            }
+        })
+    }
+
+    private fun obtenerUltimaUnidad(progreso: DataSnapshot): String {
+        val unidades = listOf("unidad1", "unidad2", "unidad3", "unidad4") // Las unidades que tienes
+
+        // Itera sobre las unidades y busca la ultima completada
+        for (unidad in unidades.reversed()) {
+            val unidadCompletada = progreso.child(unidad).child("juego1").child("completado").getValue(Boolean::class.java) ?: false
+            if (unidadCompletada) {
+                return unidad // Retorna la unidad completada más reciente
+            }
+        }
+        return "" // Si no se encuentra ninguna unidad completada, retorna una cadena vacía
+    }
+
+    private fun obtenerUltimoJuegoCompletado(unidad: DataSnapshot): String {
+        val juegos = listOf("juego1", "juego2", "juego3")
+        for (juego in juegos.reversed()) {
+            val completado =
+                unidad.child(juego).child("completado").getValue(Boolean::class.java) ?: false
+            if (completado) {
+                return juego
+            }
+        }
+        return ""
+    }
+
+    fun guardarNombreLocalmente(nombre: String) {
         val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         with(sharedPreferences.edit()) {
             putString("nombre", nombre)
             apply()
         }
     }
-    fun leerNombreLocalmente(): String?{
+
+    fun leerNombreLocalmente(): String? {
         val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         return sharedPreferences.getString("nombre", null)
     }
 
-    fun actualizarProgreso(unidad: Int, juego:Int, puntaje:Int=0){
+    fun actualizarProgreso(unidad: Int, juego: Int, puntaje: Int = 0) {
         val userId = getOrCreateUniqueId()
         val database = FirebaseDatabase.getInstance()
         val progresoRef = database.getReference("users/$userId/progreso")
@@ -86,13 +150,13 @@ class FirebaseRepository(private val context: Context) {
         juegoRef.child("completado").setValue(true)
 
         //Desbloquear el siguiente juego de la misma unidad si corresponde
-        if(juego<3){
-            val siguienteJuegoRef = progresoRef.child("unidad$unidad").child("juego${juego+1}")
+        if (juego < 3) {
+            val siguienteJuegoRef = progresoRef.child("unidad$unidad").child("juego${juego + 1}")
             siguienteJuegoRef.child("completado").setValue(false)
-        }
-        else if(unidad<4){
+        } else if (unidad < 4) {
             val siguienteUnidadRef = progresoRef.child("unidad${unidad + 1}").child("juego1")
-            siguienteUnidadRef.child("completado").setValue(false) // Habilitar el primer juego de la siguiente unidad
+            siguienteUnidadRef.child("completado")
+                .setValue(false) // Habilitar el primer juego de la siguiente unidad
         }
     }
 
@@ -119,16 +183,16 @@ class FirebaseRepository(private val context: Context) {
         })
     }
 
-    fun cargarProgreso( onProgresoCargado: (Progreso)->Unit){
+    fun cargarProgreso(onProgresoCargado: (Progreso) -> Unit) {
         val userId = getOrCreateUniqueId()
         val database = FirebaseDatabase.getInstance()
         val progresoRef = database.getReference("users/$userId/progreso")
 
-        progresoRef.addListenerForSingleValueEvent(object : ValueEventListener{
+        progresoRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val progreso = snapshot.getValue(Progreso::class.java)
                 // Llamamos al callback con el progreso cargado
-                if(progreso!=null){
+                if (progreso != null) {
                     onProgresoCargado(progreso)
                 }
             }
@@ -139,7 +203,7 @@ class FirebaseRepository(private val context: Context) {
         })
     }
 
-    fun habilitarJuegosSegunProgreso(){
+    fun habilitarJuegosSegunProgreso() {
         cargarProgreso { progreso ->
             // Revisamos si el primer juego de la unidad 1 está completado, si es así, habilitamos el segundo juego
             if (progreso.unidad1?.juego1?.completado == true) {
@@ -154,11 +218,11 @@ class FirebaseRepository(private val context: Context) {
             // Y así sucesivamente para las demás unidades y juegos
         }
     }
+
     fun habilitarJuego(unidad: String, juego: Int) {
         // Aquí puedes habilitar el juego en la UI (mostrarlo o permitirlo jugar)
-        Log.d("habilitarJuego","Habilitar $unidad - Juego $juego")
+        Log.d("habilitarJuego", "Habilitar $unidad - Juego $juego")
     }
-
 
 
 }

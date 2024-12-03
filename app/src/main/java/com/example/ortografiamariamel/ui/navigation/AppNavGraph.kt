@@ -7,9 +7,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.ortografiamariamel.AppScreen
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
@@ -19,6 +21,7 @@ import com.example.ortografiamariamel.ui.screens.InicioScreen
 import com.example.ortografiamariamel.ui.screens.MenuScreen
 import com.example.ortografiamariamel.ui.screens.admin.AdminLoginScreen
 import com.example.ortografiamariamel.ui.screens.admin.AdminScreen
+import com.example.ortografiamariamel.ui.screens.admin.UserDetailsScreen
 import com.example.ortografiamariamel.ui.screens.unidad1.Actividad1
 import com.example.ortografiamariamel.ui.screens.unidad1.Actividad2U1
 import com.example.ortografiamariamel.ui.screens.unidad1.Actividad3U1
@@ -193,7 +196,7 @@ fun OrtografiaMariamelAppNavHost(
                     navController.navigateUp()
                 },
                 onNextButtonClicked = {
-                        navController.navigate(AppScreen.MenuJuego2.name)
+                    navController.navigate(AppScreen.MenuJuego2.name)
                 },
                 onItemMenuButtonClicked = {
                     navController.navigate(viewModel.uiState.value.menu.name)
@@ -393,20 +396,25 @@ fun OrtografiaMariamelAppNavHost(
                     navController.navigate(viewModel.uiState.value.screenEndGame.name)
                 },
                 onItemMenuButtonClicked = {
-//                    Log.d("AppNavGraph", "composable ActividadI: ${uiState.menu.name}")
                     navController.navigate(viewModel.uiState.value.menu.name)
                 },
                 modifier = Modifier
             )
         }
         //pantallas para el login
-        composable(route = AppScreen.Administracion.name){
-            AdminLoginScreen(onLoginSuccess = {
-                navController.navigate(AppScreen.PantallaAdministracion.name)
-            })
+        composable(route = AppScreen.Administracion.name) {
+            AdminLoginScreen(
+                viewModel = viewModel,
+                onLoginSuccess = {
+                    navController.navigate(AppScreen.PantallaAdministracion.name)
+                },
+                onItemMenuButtonClicked = {
+                    navController.navigate(viewModel.uiState.value.menu.name)
+                },
+            )
         }
         //pantallas para el login
-        composable(route = AppScreen.Evaluacion.name){
+        composable(route = AppScreen.Evaluacion.name) {
             EvaluacionScreen(
                 viewModel = viewModel,
                 onPrevButtonClicked = {
@@ -415,10 +423,21 @@ fun OrtografiaMariamelAppNavHost(
                 onItemMenuButtonClicked = {
                     navController.navigate(viewModel.uiState.value.menu.name)
                 },
-                )
+            )
         }
-        composable(route = AppScreen.PantallaAdministracion.name){
-            AdminScreen()
+        composable(route = AppScreen.PantallaAdministracion.name) {
+            AdminScreen(
+                viewModel = viewModel,
+                onItemMenuButtonClicked = {
+                    navController.navigate(viewModel.uiState.value.menu.name)
+                },
+                navController = navController
+            )
+        }
+        composable(route = "user_details/{userId}", arguments =  listOf(navArgument("userId"){type = NavType.StringType})){
+            backStackEntry ->
+            val userId = backStackEntry.arguments?.getString("userId")?:""
+            UserDetailsScreen(userId = userId )
         }
     }
 }
