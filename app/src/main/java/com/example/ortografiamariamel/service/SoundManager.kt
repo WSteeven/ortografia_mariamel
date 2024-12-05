@@ -19,7 +19,14 @@ class SoundManager(private val context: Context) {
     fun setVolume(volume: Float){
         mediaPlayer?.setVolume(volume, volume)
     }
+    // metodo para detener la musica
+    fun stopSound(){
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer=null
+    }
 
+    // metodo para liberar recursos
     fun release() {
         mediaPlayer?.release()
         mediaPlayer = null

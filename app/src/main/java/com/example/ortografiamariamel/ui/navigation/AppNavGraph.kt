@@ -1,18 +1,24 @@
 package com.example.ortografiamariamel.ui.navigation
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.ortografiamariamel.AppScreen
+import com.example.ortografiamariamel.MainActivity
+import com.example.ortografiamariamel.service.SoundManager
 import com.example.ortografiamariamel.ui.AppViewModel
 import com.example.ortografiamariamel.ui.AppViewModelProvider
 import com.example.ortografiamariamel.ui.screens.DatosJugadorScreen
@@ -51,8 +57,17 @@ import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 fun OrtografiaMariamelAppNavHost(
     viewModel: AppViewModel,
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
+    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+
+    // Utilizamos un launchedEffect para observar cambios de ruta
+    LaunchedEffect(currentRoute) {
+        // Llamamos al método de MainActivity para controlar la música según la ruta
+        (context as? MainActivity)?.playMusicBasedOnScreen(currentRoute ?: "")
+
+    }
 
     NavHost(
         navController = navController,
