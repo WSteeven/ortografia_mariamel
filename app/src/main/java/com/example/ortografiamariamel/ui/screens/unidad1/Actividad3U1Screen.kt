@@ -78,6 +78,7 @@ fun FallingWordsGame(onPrevButtonClicked: () -> Unit) {
 
     var fallingWords by remember { mutableStateOf<List<FallingWord>>(listOf()) }
     var gameOver by remember { mutableStateOf(false) }
+    var juegoGanado by remember { mutableStateOf(false) }
     var hearts by remember { mutableIntStateOf(3) }
     var correctCount by remember { mutableIntStateOf(0) }
 
@@ -107,7 +108,7 @@ fun FallingWordsGame(onPrevButtonClicked: () -> Unit) {
         }
     }
 
-    if (gameOver) {
+    if (gameOver && !juegoGanado) {
         Dialog(onDismissRequest = { /* Handle dialog dismissal */ }) {
             Surface(
                 modifier = Modifier.padding(16.dp),
@@ -117,6 +118,26 @@ fun FallingWordsGame(onPrevButtonClicked: () -> Unit) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
                         text = "¡Perdiste!",
+                        style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold)
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    OutlinedButton(onClick = { onPrevButtonClicked() }) {
+                        Text("Volver al Menú")
+                    }
+                }
+            }
+        }
+    }
+    if (gameOver && juegoGanado) {
+        Dialog(onDismissRequest = { /* Handle dialog dismissal */ }) {
+            Surface(
+                modifier = Modifier.padding(16.dp),
+                shape = MaterialTheme.shapes.medium,
+                color = MaterialTheme.colorScheme.background
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        text = "¡Felicidades, ganaste!",
                         style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold)
                     )
                     Spacer(modifier = Modifier.height(16.dp))
@@ -152,8 +173,10 @@ fun FallingWordsGame(onPrevButtonClicked: () -> Unit) {
                 .align(Alignment.TopStart),
             style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold)
         )
-        if(correctCount>5){
+        if(correctCount>14){
             firebase.actualizarProgreso(1, 3, correctCount)
+            gameOver=true
+            juegoGanado = true
         }
 
         fallingWords.forEach { fallingWord ->

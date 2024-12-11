@@ -1,6 +1,8 @@
 package com.example.ortografiamariamel.repository
 
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import com.google.firebase.database.DataSnapshot
@@ -104,7 +106,8 @@ class FirebaseRepository(private val context: Context) {
 
         // Itera sobre las unidades y busca la ultima completada
         for (unidad in unidades.reversed()) {
-            val unidadCompletada = progreso.child(unidad).child("juego1").child("completado").getValue(Boolean::class.java) ?: false
+            val unidadCompletada = progreso.child(unidad).child("juego1").child("completado")
+                .getValue(Boolean::class.java) ?: false
             if (unidadCompletada) {
                 return unidad // Retorna la unidad completada más reciente
             }
@@ -224,7 +227,14 @@ class FirebaseRepository(private val context: Context) {
         Log.d("habilitarJuego", "Habilitar $unidad - Juego $juego")
     }
 
+    fun isNetworkAvailable(): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork = connectivityManager.activeNetwork
+        val networkCapabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
 
+        return networkCapabilities != null && networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+    }
 }
 
 data class Progreso(

@@ -21,8 +21,10 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -57,7 +59,7 @@ import com.example.ortografiamariamel.ui.theme.OrtografiaMariamelTheme
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun MatchPairs(viewModel:AppViewModel,onNextButtonClicked: () -> Unit) {
+fun MatchPairs(viewModel:AppViewModel,onNextButtonClicked: () -> Unit, snackbarHostState: SnackbarHostState) {
     val firebase = FirebaseRepository(LocalContext.current)
     val datasource = Datasource()
     var definiciones by remember { mutableStateOf(datasource.loadDefiniciones()) }
@@ -65,7 +67,8 @@ fun MatchPairs(viewModel:AppViewModel,onNextButtonClicked: () -> Unit) {
     var selectedMonosilaba: Carta? by remember { mutableStateOf(null) }
     var selectedDefinicion: Carta? by remember { mutableStateOf(null) }
     var intento by remember { mutableIntStateOf(0) }
-
+//    val snackbarHostState = remember { SnackbarHostState() }
+    var snackbarMessage by remember { mutableStateOf<String?>(null) }
     val soundManager = SoundManager(LocalContext.current)
 
     Column(modifier = Modifier.padding(top = 16.dp)) {
@@ -124,11 +127,22 @@ fun MatchPairs(viewModel:AppViewModel,onNextButtonClicked: () -> Unit) {
                         }
                         if (allMatched(definiciones, respuestas)) {
                             viewModel.setScreenEndGame(AppScreen.FinJuegoActividad1)
-                            firebase.actualizarProgreso(1, 1, 4)
-                            onNextButtonClicked()
+                            if(firebase.isNetworkAvailable()) {
+                                firebase.actualizarProgreso(1, 1, 4)
+                            }else{
+                                Log.d("Conexión", "No hay conexión a Internet")
+                                snackbarMessage = "No hay conexión a Internet. No se guardará el progreso, ni tampoco podrás avanzar al siguiente nivel. Reintenta cuando tengas señal."
+                            }
+                                onNextButtonClicked()
                         }
                     }
                 })
+            LaunchedEffect(snackbarMessage) {
+                snackbarMessage?.let {
+                    snackbarHostState.showSnackbar(it)
+                    snackbarMessage = null
+                }
+            }
         }
     }
 
@@ -331,6 +345,6 @@ fun CardCarta(
 @Composable
 fun ActividadScreenPreview() {
     OrtografiaMariamelTheme {
-        MatchPairs(onNextButtonClicked = {}, viewModel = viewModel(factory = AppViewModelProvider.Factory))
+        MatchPairs(onNextButtonClicked = {}, viewModel = viewModel(factory = AppViewModelProvider.Factory), snackbarHostState = SnackbarHostState())
     }
 }

@@ -9,9 +9,12 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -72,6 +75,29 @@ fun UnidadIII(
                             modifier = Modifier.padding(start = 64.dp) // Espacio al final del texto
                         )
                         Spacer(modifier = Modifier.weight(1f)) // Espacio flexible para centrar el texto
+                        Row(
+                            verticalAlignment = Alignment.Bottom // Alineación de los botones al fondo
+                        ) {
+                            IconButton(
+                                onClick = { soundManager.playSound(R.raw.audio_tema3) },
+                                modifier = Modifier.padding(end = 0.dp) // Espacio entre los botones
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.speaker_filled),
+                                    contentDescription = "audio_speaker",
+                                    modifier = Modifier
+                                        .padding(end = 20.dp) // Espacio a la derecha de la imagen
+                                )
+                                Image(
+                                    painter = painterResource(id = R.drawable.lapiz6),
+                                    contentDescription = "Audio",
+                                    modifier = Modifier
+                                        .padding(start= 20.dp) // Espacio a la derecha de la imagen
+                                        .size(48.dp) // Tamaño deseado de la imagen
+                                )
+
+                            }
+                        }
                     }
 
                     Text(
