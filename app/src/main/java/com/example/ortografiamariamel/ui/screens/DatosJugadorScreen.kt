@@ -62,9 +62,9 @@ fun DatosJugadorScreen(
     onNextButtonClicked: () -> Unit,
     modifier: Modifier
 ) {
-//    var playerName by remember { mutableStateOf(viewModel.uiState.value.nombreJugador) }
     val uiState = viewModel.uiState.collectAsState().value
-    var playerName = uiState.nombreJugador
+    var playerName by remember { mutableStateOf(uiState.nombreJugador?:"") }
+//    var playerName = uiState.nombreJugador
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val firebase = FirebaseRepository(LocalContext.current)
@@ -74,6 +74,7 @@ fun DatosJugadorScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(localNombre) {
         if(localNombre!=null && playerName!=localNombre){
+            playerName = localNombre
             viewModel.setNombreJugador(localNombre)
         }
     }

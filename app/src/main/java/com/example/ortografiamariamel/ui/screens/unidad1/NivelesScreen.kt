@@ -1,6 +1,11 @@
 package com.example.ortografiamariamel.ui.screens.unidad1
 
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -17,10 +22,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -33,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -210,9 +212,21 @@ fun NivelJuego(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+//@Composable
+//fun RotatingImage(){
+//    // InfiniteTransition para animación continua
+//    val infiniteTransition = rememberInfiniteTransition()
+//    val rotationAngle by infiniteTransition.animateFloat(initialValue = -45f, targetValue = 45f, animationSpec = infiniteRepeatable(animation = tween(1000, easing = LinearEasing), repeatMode = RepeatMode.Reverse),
+//        label = ""
+//    )
+//}
+
 @Composable
 fun InstruccionesMarquee(mostrarInstrucciones: Boolean, onClick: () -> Unit) {
+    val infiniteTransition = rememberInfiniteTransition(label = "")
+    val rotationAngle by infiniteTransition.animateFloat(initialValue = -45f, targetValue = 45f, animationSpec = infiniteRepeatable(animation = tween(1000, easing = LinearEasing), repeatMode = RepeatMode.Reverse),
+        label = ""
+    )
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -234,7 +248,8 @@ fun InstruccionesMarquee(mostrarInstrucciones: Boolean, onClick: () -> Unit) {
                 contentDescription = "Instrucciones",
                 modifier = Modifier
                     .padding(start = 20.dp) // Espacio a la derecha de la imagen
-                    .size(64.dp) // Tamaño deseado de la imagen
+                    .size(72.dp) // Tamaño deseado de la imagen
+                    .rotate(rotationAngle)
             )
 
 
@@ -296,7 +311,7 @@ fun InstruccionesMarquee(mostrarInstrucciones: Boolean, onClick: () -> Unit) {
 @Composable
 fun InstruccionesMarqueePreview() {
     OrtografiaMariamelTheme {
-        InstruccionesMarquee(false, {})
+        InstruccionesMarquee(false){}
     }
 }
 
