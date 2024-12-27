@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -104,7 +105,7 @@ fun Niveles3(
 //                horizontalAlignment = Alignment.CenterHorizontally // Alinear botones al centro
             ) {
                 NivelJuego(
-                    isUnlocked = juego2Desbloqueado, descripcion = "Juego 3",
+                    isUnlocked = juego2Desbloqueado, descripcion = stringResource(id = R.string.nivel_experto),
                     onClick = {
                         viewModel.setPantallaJuegoU3(AppScreen.Actividad3U3)
                         soundManager.playSound(R.raw.correct_card_sound)
@@ -120,7 +121,7 @@ fun Niveles3(
                 )
                 NivelJuego(
                     isUnlocked = juego1Desbloqueado,
-                    descripcion = "Juego 2", onClick = {
+                    descripcion = stringResource(id = R.string.nivel_intermedio), onClick = {
                         viewModel.setPantallaJuegoU3(AppScreen.Actividad2U3)
                         soundManager.playSound(R.raw.correct_card_sound)
                         onClick()
@@ -132,7 +133,7 @@ fun Niveles3(
                         .padding(start = 200.dp)
                 )
                 NivelJuego(
-                    isUnlocked = juego3U2Desbloqueado, descripcion = "Juego 1", onClick = {
+                    isUnlocked = juego3U2Desbloqueado, descripcion = stringResource(id = R.string.nivel_basico), onClick = {
                         viewModel.setPantallaJuegoU3(AppScreen.Actividad1U3)
                         soundManager.playSound(R.raw.correct_card_sound)
                         onClick()

@@ -47,6 +47,9 @@
     <string name="administracion">Administración</string>
     <string name="administracion_app">Administración de la aplicación</string>
     <string name="blank">""</string>
+    <string name="nivel_basico">"Nivel Básico"</string>
+    <string name="nivel_intermedio">"Nivel Intermedio"</string>
+    <string name="nivel_experto">"Nivel Experto"</string>
 
 
 </resources>

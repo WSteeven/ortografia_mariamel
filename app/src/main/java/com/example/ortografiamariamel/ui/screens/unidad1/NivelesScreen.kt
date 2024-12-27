@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -123,7 +124,8 @@ fun Niveles1(
                     horizontalAlignment = Alignment.CenterHorizontally // Alinear botones al centro
                 ) {
                     NivelJuego(
-                        isUnlocked = juego2Desbloqueado, descripcion = "Juego 3",
+                        isUnlocked = juego2Desbloqueado,
+                        descripcion = stringResource(id = R.string.nivel_experto),
                         onClick = {
                             viewModel.setPantallaJuego(AppScreen.Actividad3U1)
                             soundManager.playSound(R.raw.correct_card_sound)
@@ -141,7 +143,7 @@ fun Niveles1(
                     )
                     NivelJuego(
                         isUnlocked = juego1Desbloqueado,
-                        descripcion = "Juego 2", onClick = {
+                        descripcion = stringResource(id = R.string.nivel_intermedio), onClick = {
                             viewModel.setPantallaJuego(AppScreen.Actividad2U1)
                             soundManager.playSound(R.raw.correct_card_sound)
                             onClick()
@@ -156,7 +158,9 @@ fun Niveles1(
                             .padding(start = 200.dp)
                     )
                     NivelJuego(
-                        isUnlocked = true, descripcion = "Juego 1", onClick = {
+                        isUnlocked = true,
+                        descripcion = stringResource(id = R.string.nivel_basico),
+                        onClick = {
                             viewModel.setPantallaJuego(AppScreen.Actividad1U1)
                             soundManager.playSound(R.raw.correct_card_sound)
                             onClick()
@@ -224,10 +228,16 @@ fun InstruccionesMarquee(mostrarInstrucciones: Boolean, onClick: () -> Unit) {
                 .fillMaxWidth()
                 .clickable { onClick() }
                 .background(color = Color.White)) {
-            Icon(
-                imageVector = Icons.Default.Info,
-                contentDescription = "Información"
+
+            Image(
+                painter = painterResource(id = R.drawable.lapiz6),
+                contentDescription = "Instrucciones",
+                modifier = Modifier
+                    .padding(start = 20.dp) // Espacio a la derecha de la imagen
+                    .size(64.dp) // Tamaño deseado de la imagen
             )
+
+
             Text("INSTRUCCIONES", fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
         }
 
@@ -286,7 +296,7 @@ fun InstruccionesMarquee(mostrarInstrucciones: Boolean, onClick: () -> Unit) {
 @Composable
 fun InstruccionesMarqueePreview() {
     OrtografiaMariamelTheme {
-        InstruccionesMarquee(true, {})
+        InstruccionesMarquee(false, {})
     }
 }
 

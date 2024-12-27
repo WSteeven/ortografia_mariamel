@@ -62,13 +62,21 @@ fun DatosJugadorScreen(
     onNextButtonClicked: () -> Unit,
     modifier: Modifier
 ) {
-    var playerName by remember { mutableStateOf(viewModel.uiState.value.nombreJugador) }
+//    var playerName by remember { mutableStateOf(viewModel.uiState.value.nombreJugador) }
+    val uiState = viewModel.uiState.collectAsState().value
+    var playerName = uiState.nombreJugador
+
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val firebase = FirebaseRepository(LocalContext.current)
     val localNombre = firebase.leerNombreLocalmente()
     var showDialog by remember { mutableStateOf(false) }
     var snackbarMessage by remember { mutableStateOf<String?>(null) }
     val snackbarHostState = remember { SnackbarHostState() }
+    LaunchedEffect(localNombre) {
+        if(localNombre!=null && playerName!=localNombre){
+            viewModel.setNombreJugador(localNombre)
+        }
+    }
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -84,8 +92,8 @@ fun DatosJugadorScreen(
     ) { innerPadding ->
         if(localNombre!=null){
 //        if (localNombre == null) {
-            playerName = localNombre
-            viewModel.setNombreJugador(playerName)
+//            playerName = localNombre
+//            viewModel.setNombreJugador(playerName)
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = modifier
@@ -131,6 +139,7 @@ fun DatosJugadorScreen(
                         onModificacion = {
                             val nuevoNombre = firebase.leerNombreLocalmente()
                             playerName = nuevoNombre?:it
+                            viewModel.setNombreJugador(playerName)
                             }
                     )
                 }
