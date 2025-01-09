@@ -3,6 +3,7 @@ package com.example.ortografiamariamel.ui.screens.unidad1
 //noinspection UsingMaterialAndMaterial3Libraries
 
 //noinspection UsingMaterialAndMaterial3Libraries
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -11,16 +12,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.BasicText
-//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -32,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -67,7 +66,7 @@ import kotlin.random.Random
 
 
 @Composable
-fun FallingWordsGame(onPrevButtonClicked: () -> Unit) {
+fun FallingWordsGame(onPrevButtonClicked: () -> Unit, onNextButtonClicked: () -> Unit) {
     val firebase = FirebaseRepository(LocalContext.current)
     val configuration = LocalConfiguration.current
     val density = LocalDensity.current
@@ -75,7 +74,7 @@ fun FallingWordsGame(onPrevButtonClicked: () -> Unit) {
     val screenHeightPx = with(density) { configuration.screenHeightDp.dp.toPx() }
 
     val startX = with(density) { 10.dp.toPx() } // Fixed horizontal position
-
+    val palabrasSeleccionadas = remember { mutableStateListOf<String>() }
     var fallingWords by remember { mutableStateOf<List<FallingWord>>(listOf()) }
     var gameOver by remember { mutableStateOf(false) }
     var juegoGanado by remember { mutableStateOf(false) }
@@ -101,10 +100,11 @@ fun FallingWordsGame(onPrevButtonClicked: () -> Unit) {
     )
 //    val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(Unit) {
+//    LaunchedEffect(Unit) {
+    LaunchedEffect(gameOver) {
         while (!gameOver) {
-            fallingWords = fallingWords + generateFallingWord(words, startX)
-            delay(1000) // Adjust delay as needed
+            fallingWords = fallingWords + generateFallingWord(words, startX, palabrasSeleccionadas)
+            delay(1800) // Adjust delay as needed
         }
     }
 
@@ -115,16 +115,28 @@ fun FallingWordsGame(onPrevButtonClicked: () -> Unit) {
                 shape = MaterialTheme.shapes.medium,
                 color = MaterialTheme.colorScheme.background
             ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        text = "¡Perdiste!",
-                        style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold)
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    OutlinedButton(onClick = { onPrevButtonClicked() }) {
-                        Text("Volver al Menú")
-                    }
-                }
+                FinJuegoPerdedor(
+                    texto = "¡Oh no! Te quedaste sin vidas \uD83D\uDE25.",
+                    onRestartButtonCliked = {
+                        palabrasSeleccionadas.clear()
+                        fallingWords = listOf()
+                        correctCount = 0
+                        gameOver = false
+                        juegoGanado = false
+                        hearts = 3
+                    },
+                    onNextButtonClicked = onPrevButtonClicked
+                )
+//                Column(modifier = Modifier.padding(16.dp)) {
+//                    Text(
+//                        text = "¡Perdiste!",
+//                        style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold)
+//                    )
+//                    Spacer(modifier = Modifier.height(16.dp))
+//                    OutlinedButton(onClick = { onPrevButtonClicked() }) {
+//                        Text("Volver al Menú")
+//                    }
+//                }
             }
         }
     }
@@ -135,75 +147,81 @@ fun FallingWordsGame(onPrevButtonClicked: () -> Unit) {
                 shape = MaterialTheme.shapes.medium,
                 color = MaterialTheme.colorScheme.background
             ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        text = "¡Felicidades, ganaste!",
-                        style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold)
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    OutlinedButton(onClick = { onPrevButtonClicked() }) {
-                        Text("Volver al Menú")
-                    }
-                }
+                FinJuegoGanador(
+                    respuestasCorrectas = correctCount,
+                    totalRespuestas = 7,
+                    onClick = onNextButtonClicked
+                )
+//                Column(modifier = Modifier.padding(16.dp)) {
+//                    Text(
+//                        text = "¡Felicidades, ganaste!",
+//                        style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold)
+//                    )
+//                    Spacer(modifier = Modifier.height(16.dp))
+//                    OutlinedButton(onClick = { onPrevButtonClicked() }) {
+//                        Text("Volver al Menú")
+//                    }
+//                }
             }
         }
     }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-    ) {
-        // Display hearts
-        Row(
-            modifier = Modifier
-                .padding(16.dp)
-                .align(Alignment.TopEnd)
-        ) {
-            repeat(3) { index ->
-                HeartIcon(isFilled = index < hearts)
-            }
-        }
-
+    Column {
         // Display correct count
         Text(
             text = "Aciertos: $correctCount",
             modifier = Modifier
                 .padding(16.dp)
-                .align(Alignment.TopStart),
+                .align(Alignment.Start),
             style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold)
         )
-        if(correctCount>14){
-            firebase.actualizarProgreso(1, 3, correctCount)
-            gameOver=true
-            juegoGanado = true
-        }
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+        ) {
+            // Display hearts
+            Row(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .align(Alignment.TopEnd)
+            ) {
+                repeat(3) { index ->
+                    HeartIcon(isFilled = index < hearts)
+                }
+            }
 
-        fallingWords.forEach { fallingWord ->
-            FallingWordView(
-                fallingWord = fallingWord,
-                screenHeightPx = screenHeightPx,
-                onWordClicked = { word ->
-                    if (isTildeDiacritic(word)) {
-                        soundManager.playSound(R.raw.correct_card_sound)
-                        correctCount++
-                        if (correctCount % 3 == 0 && hearts < 3) {
-                            hearts++
+            if (correctCount >= 7) {
+                firebase.actualizarProgreso(1, 3, correctCount)
+                gameOver = true
+                juegoGanado = true
+            }
+
+            fallingWords.forEach { fallingWord ->
+                FallingWordView(
+                    fallingWord = fallingWord,
+                    screenHeightPx = screenHeightPx,
+                    onWordClicked = { word ->
+                        if (isTildeDiacritic(word)) {
+                            soundManager.playSound(R.raw.correct_card_sound)
+                            correctCount++
+                            palabrasSeleccionadas.add(word)
+                            if (correctCount % 3 == 0 && hearts < 3) {
+                                hearts++
+                            }
+                        } else {
+                            soundManager.playSound(R.raw.incorrect_card_sound)
+                            hearts--
+                            if (hearts <= 0) {
+                                gameOver = true
+                            }
                         }
                         fallingWords = fallingWords - fallingWord
-                    } else {
-                        soundManager.playSound(R.raw.incorrect_card_sound)
-                        hearts--
-                        if (hearts <= 0) {
-                            gameOver = true
-                        }
+                    },
+                    onWordMissed = {
                         fallingWords = fallingWords - fallingWord
                     }
-                },
-                onWordMissed = {
-                    fallingWords = fallingWords - fallingWord
-                }
-            )
+                )
+            }
         }
     }
 }
@@ -247,8 +265,17 @@ fun FallingWordView(
     )
 }
 
-fun generateFallingWord(words: List<String>, startX: Float): FallingWord {
-    val word = words[Random.nextInt(words.size)]
+fun generateFallingWord(
+    words: List<String>,
+    startX: Float,
+    palabrasSeleccionadas: List<String>
+): FallingWord {
+    val palabrasDisponibles = words.filter { it !in palabrasSeleccionadas }
+    if (palabrasDisponibles.isEmpty()) return FallingWord(
+        "",
+        Offset(startX, 0f)
+    ) // Evita errores si ya no hay palabras
+    val word = palabrasDisponibles[Random.nextInt(palabrasDisponibles.size)]
     return FallingWord(word, Offset(startX, 0f)) // Fixed horizontal position
 }
 
@@ -282,6 +309,7 @@ fun Actividad3U1(
     viewModel: AppViewModel,
     modifier: Modifier = Modifier,
     onPrevButtonClicked: () -> Unit,
+    onNextButtonClicked: () -> Unit,
     onItemMenuButtonClicked: () -> Unit
 ) {
 
@@ -321,7 +349,10 @@ fun Actividad3U1(
                 )
 
                 // Aquí va el contenido
-                FallingWordsGame(onPrevButtonClicked = onPrevButtonClicked)
+                FallingWordsGame(
+                    onPrevButtonClicked = onPrevButtonClicked,
+                    onNextButtonClicked = onNextButtonClicked
+                )
 
                 Column(
                     modifier = Modifier
@@ -360,6 +391,7 @@ fun Actividad3ScreenPreview() {
         Actividad3U1(
             viewModel = viewModel(factory = AppViewModelProvider.Factory),
             onPrevButtonClicked = { /*TODO*/ },
+            onNextButtonClicked = {},
             onItemMenuButtonClicked = {})
     }
 }

@@ -9,6 +9,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.snapshots
 import java.util.UUID
 
 data class User(
@@ -17,6 +18,9 @@ data class User(
     val unidad: String = "",
     val juego: String = ""
 )
+
+data class UnidadMap(val juegos: Map<String, Juego> = emptyMap())
+data class Usuario(val nombre:String="", val progreso: Map<String, UnidadMap> = emptyMap())
 
 val usersList = mutableStateListOf<User>()
 
@@ -32,6 +36,7 @@ class FirebaseRepository(private val context: Context) {
         }
         return uniqueId ?: ""
     }
+
 
     fun guardarNombreToFirebase(nombre: String) {
         val database = FirebaseDatabase.getInstance().reference
@@ -69,6 +74,41 @@ class FirebaseRepository(private val context: Context) {
             }
         })
     }
+
+    fun obtenerDetallesUsuario(userId: String, onComplete: (Usuario?)->Unit){
+            val database = FirebaseDatabase.getInstance().reference
+//            database.child("users").child(userId).addValueEventListener(object :ValueEventListener{
+            database.child("users").child(userId).addListenerForSingleValueEvent(object :ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+//                    for (data in snapshot.children){
+//                        Log.d("obtenerDetallesUsuario", "Data: $data")
+//                    }
+                    val nombre = snapshot.child("nombre").getValue(String::class.java)?:""
+                    val progresoSnapshot = snapshot.child("progreso")
+                    val progreso = mutableMapOf<String, UnidadMap>()
+                    for (unidadSnapshot in progresoSnapshot.children){
+                        val juegos = mutableMapOf<String, Juego>()
+                        for (juegoSnapshot in unidadSnapshot.children){
+                            val puntaje = juegoSnapshot.child("puntaje").getValue(Int::class.java)?:0
+                            val completado = juegoSnapshot.child("completado").getValue(Boolean::class.java)?:false
+                            juegos[juegoSnapshot.key?:""] = Juego(puntaje, completado)
+                        }
+
+                        progreso[unidadSnapshot.key?:"" ] = UnidadMap(juegos)
+                    }
+                    val usuario = Usuario(nombre, progreso)
+                    onComplete(usuario)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.d("obtenerDetallesUsuario", "Error: $error")
+                    onComplete(null)
+                }
+            })
+
+    }
+
+
 
     fun leerNombresFromFirebase() {
         val database = FirebaseDatabase.getInstance().reference

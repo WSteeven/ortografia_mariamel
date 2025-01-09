@@ -42,7 +42,7 @@ fun SentencePuzzleGame(onPrevButtonClicked: () -> Unit = {}) {
     val firebase = FirebaseRepository(LocalContext.current)
     var solvedCount by remember { mutableIntStateOf(0) }
     var isGameOver by remember { mutableStateOf(false) }
-    var timer by remember { mutableIntStateOf(60) } // Tiempo en segundos
+    var timer by remember { mutableIntStateOf(120) } // Tiempo en segundos
 
     LaunchedEffect(solvedCount) {
         if (solvedCount == oracionesOriginales.size) {

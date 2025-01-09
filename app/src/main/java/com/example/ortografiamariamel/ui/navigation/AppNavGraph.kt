@@ -167,6 +167,10 @@ fun OrtografiaMariamelAppNavHost(
                 onPrevButtonClicked = {
                     navController.navigateUp()
                 },
+                onNextButtonClicked = {
+                    navController.navigate(AppScreen.Unidad2.name)
+//                    navController.navigate(AppScreen.Menu.name)
+                },
                 onItemMenuButtonClicked = {
                     navController.navigate(viewModel.uiState.value.menu.name)
                 },
@@ -452,7 +456,7 @@ fun OrtografiaMariamelAppNavHost(
         composable(route = "user_details/{userId}", arguments =  listOf(navArgument("userId"){type = NavType.StringType})){
             backStackEntry ->
             val userId = backStackEntry.arguments?.getString("userId")?:""
-            UserDetailsScreen(userId = userId )
+            UserDetailsScreen(userId = userId, viewModel, onItemMenuButtonClicked = {navController.navigate(viewModel.uiState.value.menu.name)} )
         }
     }
 }

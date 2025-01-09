@@ -30,6 +30,7 @@ fun FinJuegoPerdedor(
     modifier: Modifier = Modifier,
     onRestartButtonCliked: () -> Unit = {},
     onNextButtonClicked: () -> Unit = {},
+    texto: String = "¡Oh no! Se agotó el tiempo \uD83D\uDE25."
 ) {
     Column(
         modifier = Modifier
@@ -52,7 +53,7 @@ fun FinJuegoPerdedor(
             }
         }
         Text(
-            text = "¡Oh no! Se agotó el tiempo \uD83D\uDE25.",
+            text = texto,
 //            text = " Respuesta equivocada. Te has quedado sin energías.",// \uD83D\uDE25.",
             fontWeight = FontWeight.SemiBold,
             fontSize = 18.sp,
