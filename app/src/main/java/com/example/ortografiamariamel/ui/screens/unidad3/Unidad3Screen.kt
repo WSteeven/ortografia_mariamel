@@ -53,7 +53,7 @@ fun UnidadIII(
     MenuLateral(
         title =R.string.blank, // AppScreen.Unidad2.title,
         content = {
-            val tildeDiacrita = painterResource(R.drawable.imagen_unidad_2)
+            val tildeDiacrita = painterResource(R.drawable.img_unidad2)//imagen_unidad_2)
             val soundManager = SoundManager(LocalContext.current)
             Column(modifier = Modifier.fillMaxSize()) {
                 Column(
