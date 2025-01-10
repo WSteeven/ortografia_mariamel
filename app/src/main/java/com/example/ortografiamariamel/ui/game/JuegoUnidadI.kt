@@ -159,7 +159,7 @@ fun ListaDefinificiones(
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(4),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         items(cartas) { carta ->
             CardSimple(
@@ -238,9 +238,9 @@ fun calculateFontSize(text: String): TextUnit {
         maxWidth.value / 4 // Approximate maximum number of characters that fit in one line
 
     return when {
-        text.length > maxLength * 2 -> 10.sp // If the text is very long, set a smaller font size
-        text.length > maxLength -> 12.sp // If the text is long, set a medium font size
-        else -> 14.sp // Default font size
+        text.length > maxLength * 2 -> 8.sp // If the text is very long, set a smaller font size
+        text.length > maxLength -> 10.sp // If the text is long, set a medium font size
+        else -> 12.sp // Default font size
     }
 }
 
@@ -252,7 +252,7 @@ fun ListaMonosilabas(
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(4),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         items(cartas) { carta ->
             CardCarta(
@@ -309,7 +309,7 @@ fun CardCarta(
                 Image(
                     painter = painterResource(imagenCarta),
                     contentScale = ContentScale.FillBounds,
-                    contentDescription = null
+                    contentDescription = "monosilaba"
                 )
 
             }
@@ -323,7 +323,7 @@ fun CardCarta(
 //fun CardSimplePreview() {
 //    OrtografiaMariamelTheme {
 //        CardSimple(
-//            Carta(id = 1, "Articulo", isSelected = false, isMatched = false),
+//            Carta(id = 1, "Sustantivo", isSelected = true, isMatched = false),
 //            modifier = Modifier.width(80.dp).height(120.dp)
 //        )
 //    }
@@ -334,14 +334,15 @@ fun CardCarta(
 //fun CardCartaPreview() {
 //    OrtografiaMariamelTheme {
 //        CardCarta(
-//            Carta(id = 1, "tu", isSelected = false, isMatched = false),
+//            Carta(id = 1, "Sustantivo", isSelected = true, isMatched = false),
 //            soundManager = SoundManager(LocalContext.current),
 //            modifier = Modifier.height(120.dp)
 //        )
 //    }
 //}
 
-@Preview(showBackground = true, widthDp = 370, heightDp = 967)
+//@Preview(showBackground = true, widthDp = 330, heightDp = 967)
+@Preview(showBackground = true)
 @Composable
 fun ActividadScreenPreview() {
     OrtografiaMariamelTheme {
