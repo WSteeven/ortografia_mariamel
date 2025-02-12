@@ -20,38 +20,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             OrtografiaMariamelTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    /* Column(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        // Botón para controlar la música
-                        Button(onClick = {
-                            if (isMusicPlaying) {
-                                soundManager.release() // Detener música
-                                isMusicPlaying = false
-                            } else {
-                                soundManager.playSound(R.raw.musica_fondo_app) // Reiniciar música
-                                isMusicPlaying = true
-                            }
-                        }) {
-                            Text(if (isMusicPlaying) "Detener Música" else "Reanudar Música")
-                        }
-
-                        Spacer(modifier = Modifier.height(20.dp))
-
-                        // Control deslizante para ajustar el volumen
-                        Text("Ajustar Volumen")
-                        Slider(
-                            value = volume,
-                            onValueChange = { newVolume ->
-                                volume = newVolume
-                                soundManager.setVolume(volume) // Ajustar volumen
-                            },
-                            valueRange = 0f..1f,
-                            steps = 10
-                        )
-                    }*/
 
                     OrtografiaMariamelApp()
                 }
@@ -60,11 +28,6 @@ class MainActivity : ComponentActivity() {
         // Initializing the sound manager
         soundManager = SoundManager(this)
     }
-
-//    override fun onStart() {
-//        super.onStart()
-//        soundManager.playSound(R.raw.musica_fondo_app, true)
-//    }
 
     override fun onStop() {
         super.onStop()

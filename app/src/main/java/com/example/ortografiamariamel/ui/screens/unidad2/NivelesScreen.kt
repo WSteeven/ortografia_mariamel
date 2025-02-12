@@ -45,7 +45,6 @@ fun Niveles2(
     onClick: () -> Unit = {},
 ) {
     val firebase = FirebaseRepository(LocalContext.current)
-    firebase.habilitarJuegosSegunProgreso()
     val localNombre = firebase.leerNombreLocalmente()
     var mostrarInstrucciones by remember { mutableStateOf(false) }
     val soundManager = SoundManager(LocalContext.current)

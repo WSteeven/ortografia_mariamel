@@ -91,11 +91,7 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer-dash:1.3.1")
     implementation("androidx.media3:media3-ui:1.3.1")
     implementation("androidx.media3:media3-common:1.3.1")
-    //Room
-    implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.room:room-ktx:2.6.1")
-    ksp("androidx.room:room-compiler:2.6.1")
     val material3Version = "1.2.1"
     implementation("androidx.compose.material3:material3-window-size-class:$material3Version")
 

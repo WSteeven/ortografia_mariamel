@@ -1,7 +1,6 @@
 package com.example.ortografiamariamel.service
 
 import android.content.Context
-import android.health.connect.datatypes.units.Volume
 import android.media.MediaPlayer
 
 class SoundManager(private val context: Context) {
@@ -16,9 +15,6 @@ class SoundManager(private val context: Context) {
         }
     }
 
-    fun setVolume(volume: Float){
-        mediaPlayer?.setVolume(volume, volume)
-    }
     // metodo para detener la musica
     fun stopSound(){
         mediaPlayer?.stop()

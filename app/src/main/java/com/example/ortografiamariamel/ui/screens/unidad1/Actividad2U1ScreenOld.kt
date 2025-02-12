@@ -171,7 +171,7 @@ fun LadderScreenOld(viewModel: AppViewModel, snackbarHostState: SnackbarHostStat
         modifier = Modifier.fillMaxSize()
     ) {
         Image(
-            painter = painterResource(id = R.drawable.juego_2_2),
+            painter = painterResource(id = R.drawable.juego2_1),
             contentDescription = "Juego",
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()

@@ -61,7 +61,6 @@ fun Niveles1(
     onClick: () -> Unit = {},
 ) {
     val firebase = FirebaseRepository(LocalContext.current)
-    firebase.habilitarJuegosSegunProgreso()
     val localNombre = firebase.leerNombreLocalmente()
     var mostrarInstrucciones by remember { mutableStateOf(false) }
     val soundManager = SoundManager(LocalContext.current)
@@ -102,16 +101,14 @@ fun Niveles1(
                 Row(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 40.dp)
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     Column(
                         verticalArrangement = Arrangement.Top,
                         horizontalAlignment = Alignment.End,
                         modifier = modifier
                             .fillMaxWidth()
-                            .fillMaxHeight(.4f)
+                            .fillMaxHeight(.5f)
                     ) {
                         InstruccionesMarquee(mostrarInstrucciones) {
                             mostrarInstrucciones = !mostrarInstrucciones
@@ -267,12 +264,6 @@ fun InstruccionesMarquee(mostrarInstrucciones: Boolean, onClick: () -> Unit) {
             .border(width = 2.dp, color = Color.Black, shape = RoundedCornerShape(4.dp))
     ) {
         if (mostrarInstrucciones) {
-//            Image(
-//                painter = painterResource(id = R.drawable.nube),
-//                contentDescription = "nube instrucciones",
-//                contentScale = ContentScale.Crop,
-//                modifier = Modifier.fillMaxSize()
-//            )
             Column(
                 Modifier
                     .fillMaxWidth()

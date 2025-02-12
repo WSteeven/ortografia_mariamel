@@ -9,7 +9,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.snapshots
 import java.util.UUID
 
 data class User(
@@ -52,27 +51,6 @@ class FirebaseRepository(private val context: Context) {
                 // Manejo de errores
                 Log.d("guardarNombreToFirebase", "Hubo un error $e")
             }
-    }
-
-    fun leerNombresFromFirebaseOld() {
-        val database = FirebaseDatabase.getInstance().reference
-
-        database.child("users").addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                usersList.clear() // limpia la lista antes de llenarla
-                for (user in snapshot.children) {
-                    val userId = user.key ?: ""
-                    val nombre = user.child("nombre").getValue(String::class.java) ?: ""
-                    usersList.add(User(id = userId, nombre = nombre))
-
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                // Manejo de errores
-
-            }
-        })
     }
 
     fun obtenerDetallesUsuario(userId: String, onComplete: (Usuario?)->Unit){
@@ -226,46 +204,6 @@ class FirebaseRepository(private val context: Context) {
         })
     }
 
-    fun cargarProgreso(onProgresoCargado: (Progreso) -> Unit) {
-        val userId = getOrCreateUniqueId()
-        val database = FirebaseDatabase.getInstance()
-        val progresoRef = database.getReference("users/$userId/progreso")
-
-        progresoRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val progreso = snapshot.getValue(Progreso::class.java)
-                // Llamamos al callback con el progreso cargado
-                if (progreso != null) {
-                    onProgresoCargado(progreso)
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-        })
-    }
-
-    fun habilitarJuegosSegunProgreso() {
-        cargarProgreso { progreso ->
-            // Revisamos si el primer juego de la unidad 1 está completado, si es así, habilitamos el segundo juego
-            if (progreso.unidad1?.juego1?.completado == true) {
-                habilitarJuego("unidad1", 2)
-            }
-            if (progreso.unidad1?.juego2?.completado == true) {
-                habilitarJuego("unidad1", 3)
-            }
-            if (progreso.unidad2?.juego1?.completado == true) {
-                habilitarJuego("unidad2", 1)
-            }
-            // Y así sucesivamente para las demás unidades y juegos
-        }
-    }
-
-    fun habilitarJuego(unidad: String, juego: Int) {
-        // Aquí puedes habilitar el juego en la UI (mostrarlo o permitirlo jugar)
-        Log.d("habilitarJuego", "Habilitar $unidad - Juego $juego")
-    }
 
     fun isNetworkAvailable(): Boolean {
         val connectivityManager =
@@ -277,18 +215,7 @@ class FirebaseRepository(private val context: Context) {
     }
 }
 
-data class Progreso(
-    val unidad1: Unidad? = null,
-    val unidad2: Unidad? = null,
-    val unidad3: Unidad? = null,
-    val unidad4: Unidad? = null
-)
 
-data class Unidad(
-    val juego1: Juego? = null,
-    val juego2: Juego? = null,
-    val juego3: Juego? = null
-)
 
 data class Juego(
     val puntaje: Int = 0,

@@ -25,13 +25,6 @@ class AppViewModel : ViewModel() {
         }
     }
 
-//    fun setEdad(edad: Int) {
-//        _uiState.update { currentState ->
-//            currentState.copy(
-//                edad = edad,
-//            )
-//        }
-//    }
 
     fun setPantallaActual(unidad: AppScreen) {
         _uiState.update { currentState ->
