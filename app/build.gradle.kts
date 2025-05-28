@@ -102,4 +102,10 @@ dependencies {
     // firebase
     implementation("com.google.firebase:firebase-database-ktx:20.3.0") // Revisa la última versión
     implementation("com.google.firebase:firebase-auth-ktx:21.0.1") // Para autenticación
+
+    // pusher para las notificaciones de laravel
+    implementation("com.pusher:pusher-java-client:2.2.7")
+    implementation("com.google.firebase:firebase-messaging:23.4.1")
+
+
 }
